@@ -1,12 +1,9 @@
---IN PROGRESS DATABASE
---First Commit
-
 -- Create the database
-CREATE DATABASE IF NOT EXISTS db_scholarshiptracker;
+CREATE DATABASE IF NOT EXISTS db_scholarshiptracker CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE db_scholarshiptracker;
 
--- Table for scholarship opportunities
-CREATE TABLE scholarships (
+-- Table for Scholarships
+CREATE TABLE IF NOT EXISTS `scholarships` (
     scholarship_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -14,20 +11,66 @@ CREATE TABLE scholarships (
     requirements TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
--- Table for applications
-CREATE TABLE applications (
+-- Table for Students
+CREATE TABLE IF NOT EXISTS `students` (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    date_of_birth DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Table for Applications
+CREATE TABLE IF NOT EXISTS `applications` (
     application_id INT AUTO_INCREMENT PRIMARY KEY,
     scholarship_id INT,
-    student_name VARCHAR(255) NOT NULL,
-    student_email VARCHAR(255) NOT NULL,
+    student_id INT,
     status ENUM('Not Started', 'In Progress', 'Submitted', 'Awarded', 'Rejected') DEFAULT 'Not Started',
     application_date DATE,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (scholarship_id) REFERENCES scholarships(scholarship_id) ON DELETE CASCADE
-);
+    FOREIGN KEY (scholarship_id) REFERENCES scholarships(scholarship_id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+-- Table for Scholarship Requirements
+CREATE TABLE IF NOT EXISTS `scholarship_requirements` (
+    requirement_id INT AUTO_INCREMENT PRIMARY KEY,
+    scholarship_id INT,
+    requirement_text TEXT NOT NULL,
+    FOREIGN KEY (scholarship_id) REFERENCES scholarships(scholarship_id) ON DELETE CASCADE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Table for Application Status History
+CREATE TABLE IF NOT EXISTS `application_status_history` (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    application_id INT,
+    status ENUM('Not Started', 'In Progress', 'Submitted', 'Awarded', 'Rejected') NOT NULL,
+    status_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (application_id) REFERENCES applications(application_id) ON DELETE CASCADE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Table for Reviewers
+CREATE TABLE IF NOT EXISTS `reviewers` (
+    reviewer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Table for Application Reviews
+CREATE TABLE IF NOT EXISTS `application_reviews` (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    application_id INT,
+    reviewer_id INT,
+    score INT,
+    comments TEXT,
+    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (application_id) REFERENCES applications(application_id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewer_id) REFERENCES reviewers(reviewer_id) ON DELETE CASCADE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Insert Data into Scholarships Table
 INSERT INTO scholarships (name, description, deadline, requirements) VALUES
 ('CHED Scholarship', 'A government scholarship for deserving college students.', '2024-11-15', 'GPA above 3.0, Proof of income'),
 ('OWWA Scholarships', 'Scholarship for dependents of OFWs provided by OWWA.', '2025-01-10', 'OFW parent, GPA above 2.5, Proof of enrollment'),
@@ -46,20 +89,112 @@ INSERT INTO scholarships (name, description, deadline, requirements) VALUES
 ('PHINMA Scholarship', 'Scholarship for students in PHINMA partner schools with financial need.', '2025-01-15', 'PHINMA school enrollment, Financial need, Essay'),
 ('CHED CoScho Scholarship', 'Co-sponsored scholarship under CHED for deserving students.', '2025-03-10', 'GPA above 3.2, Sponsorship agreement');
 
-INSERT INTO applications (scholarship_id, student_name, student_email, status, application_date) VALUES
-(1, 'Jose Cruz', 'jose.cruz@example.com', 'Submitted', '2024-10-15'),
-(2, 'Maria Santos', 'maria.santos@example.com', 'In Progress', '2024-10-12'),
-(3, 'Mark Bautista', 'mark.bautista@example.com', 'Awarded', '2024-09-25'),
-(4, 'Ana Dela Cruz', 'ana.delacruz@example.com', 'Submitted', '2024-10-05'),
-(5, 'Carla Ramirez', 'carla.ramirez@example.com', 'Not Started', '2024-10-29'),
-(6, 'Miguel Reyes', 'miguel.reyes@example.com', 'Rejected', '2024-09-20'),
-(7, 'Isabel Flores', 'isabel.flores@example.com', 'In Progress', '2024-10-20'),
-(8, 'Paolo Garcia', 'paolo.garcia@example.com', 'Submitted', '2024-10-22'),
-(9, 'Christine Lim', 'christine.lim@example.com', 'Submitted', '2024-10-28'),
-(10, 'Juan Dela Cruz', 'juan.delacruz@example.com', 'Awarded', '2024-10-10'),
-(11, 'Carlos Santos', 'carlos.santos@example.com', 'In Progress', '2024-10-18'),
-(12, 'Julia Roldan', 'julia.roldan@example.com', 'Submitted', '2024-10-19'),
-(13, 'Ramon Lopez', 'ramon.lopez@example.com', 'Rejected', '2024-09-22'),
-(14, 'Teresa Castillo', 'teresa.castillo@example.com', 'In Progress', '2024-10-24'),
-(15, 'Eric Mendoza', 'eric.mendoza@example.com', 'Awarded', '2024-10-26'),
-(16, 'Angelica Tan', 'angelica.tan@example.com', 'Submitted', '2024-10-27');
+-- Insert Data into Students Table
+INSERT INTO students (name, email, date_of_birth) VALUES
+('Jose Cruz', 'jose.cruz@gmail.com', '2000-05-20'),
+('Maria Santos', 'maria.santos@gmail.com', '1999-08-15'),
+('Mark Bautista', 'mark.bautista@gmail.com', '2001-03-10'),
+('Ana Dela Cruz', 'ana.delacruz@gmail.com', '2000-11-30'),
+('Carla Ramirez', 'carla.ramirez@gmail.com', '2002-07-19'),
+('Miguel Reyes', 'miguel.reyes@gmail.com', '1998-02-28'),
+('Isabel Flores', 'isabel.flores@gmail.com', '2000-12-05'),
+('Paolo Garcia', 'paolo.garcia@gmail.com', '1999-04-14'),
+('Christine Lim', 'christine.lim@gmail.com', '2001-01-25'),
+('Juan Dela Cruz', 'juan.delacruz@gmail.com', '2000-06-10'),
+('Carlos Santos', 'carlos.santos@gmail.com', '1999-09-30'),
+('Julia Roldan', 'julia.roldan@gmail.com', '2002-03-22'),
+('Ramon Lopez', 'ramon.lopez@gmail.com', '1998-12-18'),
+('Teresa Castillo', 'teresa.castillo@gmail.com', '2001-07-07'),
+('Eric Mendoza', 'eric.mendoza@gmail.com', '1999-10-11'),
+('Angelica Tan', 'angelica.tan@gmail.com', '2000-05-03'),
+('Jerome Alcantara', 'jerome.alcantara@gmail.com', '1999-03-15'),
+('Lyka Mendoza', 'lyka.mendoza@gmail.com', '2001-04-25'),
+('Carlos Aquino', 'carlos.aquino@gmail.com', '2000-01-05'),
+('Karla Garcia', 'karla.garcia@gmail.com', '2002-07-12'),
+('Miguel Fernandez', 'miguel.fernandez@gmail.com', '1998-11-20'),
+('Roselle Bautista', 'roselle.bautista@gmail.com', '1999-02-10'),
+('Patrick Reyes', 'patrick.reyes@gmail.com', '2001-09-30'),
+('Angela Marquez', 'angela.marquez@gmail.com', '2002-03-18'),
+('Emilio Navarro', 'emilio.navarro@gmail.com', '1998-12-24'),
+('Diana Santos', 'diana.santos@gmail.com', '2000-06-29'),
+('Leah Cortez', 'leah.cortez@gmail.com', '2001-05-17'),
+('Felix Cruz', 'felix.cruz@gmail.com', '1999-10-14'),
+('Sandra Diaz', 'sandra.diaz@gmail.com', '2002-01-09'),
+('Raymond Mercado', 'raymond.mercado@gmail.com', '2000-08-03'),
+('Carmen Ortiz', 'carmen.ortiz@gmail.com', '1999-03-28');
+
+-- Insert Data into Applications Table
+INSERT INTO applications (scholarship_id, student_id, status, application_date) VALUES
+(1, 1, 'Submitted', '2024-10-15'),
+(2, 2, 'In Progress', '2024-11-01'),
+(3, 3, 'Not Started', '2024-10-05'),
+(4, 4, 'Submitted', '2024-10-10'),
+(5, 5, 'Awarded', '2024-09-30'),
+(1, 6, 'Rejected', '2024-10-20'),
+(7, 7, 'In Progress', '2024-11-10'),
+(8, 8, 'Not Started', '2024-11-01'),
+(9, 9, 'Submitted', '2024-10-15'),
+(10, 10, 'Not Started', '2024-10-12');
+
+-- Insert Data into Scholarship Requirements Table
+INSERT INTO scholarship_requirements (scholarship_id, requirement_text) VALUES
+(1, 'GPA above 3.0'),
+(1, 'Proof of income'),
+(2, 'OFW parent'),
+(2, 'GPA above 2.5'),
+(2, 'Proof of enrollment'),
+(3, 'GPA above 3.5'),
+(3, 'STEM course enrollment'),
+(4, 'GPA above 3.0'),
+(4, 'Proof of financial need'),
+(5, 'Engineering or business course'),
+(5, 'GPA above 3.2'),
+(5, 'Recommendation letter'),
+(6, 'GPA above 3.3'),
+(6, 'Essay on career goals'),
+(7, 'Partner school enrollment'),
+(7, 'GPA above 3.0'),
+(7, 'Financial need proof'),
+(8, 'Medical school enrollment'),
+(8, 'GPA above 3.2'),
+(9, 'Healthcare field enrollment'),
+(9, 'GPA above 3.0'),
+(10, 'Leadership experience'),
+(10, 'GPA above 3.4'),
+(10, 'Essay on community impact');
+
+-- Insert Data into Application Status History Table
+INSERT INTO application_status_history (application_id, status) VALUES
+(1, 'Submitted'),
+(1, 'In Progress'),
+(2, 'In Progress'),
+(3, 'Not Started'),
+(4, 'Submitted'),
+(5, 'Awarded'),
+(6, 'Rejected'),
+(7, 'In Progress'),
+(8, 'Not Started'),
+(9, 'Submitted'),
+(10, 'Not Started');
+
+-- Insert Data into Reviewers Table
+INSERT INTO reviewers (name, email) VALUES
+('Dr. John Smith', 'john.smith@example.com'),
+('Ms. Jane Doe', 'jane.doe@example.com'),
+('Prof. Albert Johnson', 'albert.johnson@example.com'),
+('Dr. Sarah Lee', 'sarah.lee@example.com'),
+('Mr. Paul Adams', 'paul.adams@example.com');
+
+-- Insert Data into Application Reviews Table
+INSERT INTO application_reviews (application_id, reviewer_id, score, comments) VALUES
+(1, 1, 85, 'Strong application, but needs more community involvement.'),
+(2, 2, 78, 'Good academic record, but lower GPA.'),
+(3, 3, 92, 'Excellent qualifications.'),
+(4, 4, 88, 'Very promising candidate.'),
+(5, 5, 90, 'Well-rounded application.'),
+(6, 1, 70, 'Financial need is significant.'),
+(7, 2, 75, 'Decent application, but GPA is borderline.'),
+(8, 3, 80, 'Shows potential but lacks extracurriculars.'),
+(9, 4, 95, 'Outstanding candidate.'),
+(10, 5, 82, 'Good academic standing.');
+

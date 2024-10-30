@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarship Tracker System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="new_style.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="nav">
+            <div class="nav_logo" style="display: flex; align-items: center;">
+                <img src="logo.png" alt="Scholarship Tracker System Logo" style="height: 60px; margin-right: 10px;"> <!-- Adjust the height and margin as needed -->
+                <span style="color: red; font-size: 30px;">Scholarship Tracker System</span>
+            </div> <!-- Logo Section -->
+            <div class="nav_item">
+                <a href="index.html" class="nav_link">Home</a> 
+                <a href="about.html" class="nav_link">About</a>
+                <a href="contact us.html" class="nav_link">Contact Us</a>
+                <a href="admin.html" class="nav_link">Admin</a>
+            </div>            
+        </div>
+    </div>
+<div class="container" id="signup">
+    <h1 class="form-title">Sign up</h1>
+    <form method="post" action="">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="Name" id="Name" placeholder=" Name" required>
+            <label for="Name">Name</label>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" id="email" placeholder="Email" required>
+            <label for="Email">Email</label>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="tel" name="Mobile Number" id="num" placeholder="Mobile Number" required>
+            <label for="mobile number"> Mobile Number</label>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <label for="password">Password</label>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+            <label for="confirm_password">Confirm Password</label>
+        </div>
+        <input type="submit" class="btn" value="Sign Up" name="SignUp">
+    </form>
+    
+    <div class="links">
+    <p>Already Have an Account?</p>
+    <button id="logInButton" onclick="window.location.href='user_login.html';">Log In</button>
+</div> 
+
+</body>
+</html>

@@ -10,26 +10,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         /* Custom styles for the layout */
-        body {
+         /* Custom styles for the layout */
+         body {
             font-family: Arial, sans-serif;
-            background-color: #F7F8FA; /* Light grey background */
+            background-color: #F7F8FA;
         }
         #sidebar {
-            background-color: #AA2E25; /* Darker red for sidebar */
-            color: white;
+            background-color: white; /* White background for sidebar */
+            color: black; /* Black text color for sidebar items */
             height: 100vh;
             padding-top: 20px;
         }
         #sidebar .nav-link {
-            color: white;
+            color: black; /* Black text by default */
             font-size: 1.1em;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
         }
         #sidebar .nav-link img {
             width: 20px;
             margin-right: 10px;
         }
+        #sidebar .nav-link:hover,
+        #sidebar .nav-link.active {
+            background-color: #d1182d; /* Red background when active or hovered */
+            color: white; /* White text when active or hovered */
+        }
         #header {
-            background-color: #AA2E25; /* Darker red for header */
+            background-color: #d1182d;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -43,8 +52,28 @@
         #header .logo img {
             margin-right: 10px;
         }
-        #dashboard-container {
+        #header .logo span {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        #main-content {
+            background-color: #d9dfdb; /* Light background for main content */
             padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .dashboard-section {
+            background-color: white; /* White background for emphasis */
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .dashboard-section h2 {
+            color: #333; /* Darker text color for section headers */
+        }
+        .dashboard-section hr {
+            border-color: #8C1D1A;
+            border-width: 2px;
         }
         .card {
             border-radius: 8px;
@@ -54,21 +83,8 @@
             color: white;
             font-weight: bold;
             text-align: center;
-            background-color: #D94C48; /* Adjusted lighter red for dashboard cards */
+            background-color: #d1182d;
             border-radius: 8px;
-        }
-        .dashboard-section {
-            margin-bottom: 20px;
-        }
-        /* Darker lines below sections */
-        .dashboard-section hr {
-            border-color: #8C1D1A; /* Darker red for section lines */
-            border-width: 2px;
-        }
-        /* Small gap between logo and dashboard title */
-        .logo-container {
-            padding: 1rem;
-            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -92,78 +108,78 @@
             <nav id="sidebar" class="col-md-3 col-lg-2 sidebar d-md-block">
                 <ul class="nav flex-column p-3">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link active" href="#dashboard">
                             <img src="icons/dashboard.png" alt="Dashboard Icon">
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="#scholars.html">
                             <img src="icons/scholars.png" alt="Scholars Icon">
                             Scholars
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/scholarship.png" alt="Scholarship Icon">
                             Scholarship
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/scholarship_request.png" alt="Scholarship Request Icon">
                             Scholarship Request
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/exam_management.png" alt="Exam Management Icon">
                             Exam Management
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/announcement.png" alt="Announcement Icon">
                             Announcement
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/feedback.png" alt="Feedback Icon">
                             Feedback
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/featured_scholars.png" alt="Featured Scholars Icon">
                             Featured Scholars
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/setting.png" alt="Settings Icon">
                             Settings
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/useraccount.png" alt="User Account Icon">
                             User Account
-                        </a>
+                        </span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <span class="nav-link">
                             <img src="icons/userlogs.png" alt="User Logs Icon">
                             User Logs
-                        </a>
+                        </span>
                     </li>
                 </ul>
             </nav>
 
             <!-- Main Content (Dashboard) -->
-            <main class="col-md-9 col-lg-10 px-md-4" id="dashboard-container">
+            <main class="col-md-9 col-lg-10 px-md-4" id="main-content">
                 <div class="dashboard-section">
-                    <h2 class="mt-4">Dash Board</h2>
+                    <h2 class="mt-4">Dashboard</h2>
                     <hr>
                     <div class="row">
                         <div class="col-md-4 mb-4">
@@ -195,7 +211,7 @@
                 <div class="dashboard-section">
                     <h2>Scholars Report</h2>
                     <hr>
-                    <!-- Add additional content for Scholars Report here -->
+                    <!-- Additional content for Scholars Report here -->
                 </div>
             </main>
         </div>

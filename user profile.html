@@ -1,0 +1,153 @@
+'use client'
+
+import { Bell, ChevronDown, Lock, Menu } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+export default function Component() {
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-red-600 text-white p-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <img src="/placeholder.svg" alt="Logo" className="w-12 h-12" />
+          <h1 className="text-2xl font-bold">Scholarship Tracker System</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <button className="relative">
+            <Bell className="w-6 h-6" />
+            <span className="absolute -top-1 -right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">
+              2
+            </span>
+          </button>
+          <div className="flex items-center gap-2">
+            <img src="/placeholder.svg" alt="Profile" className="w-10 h-10 rounded-full" />
+            <div className="hidden sm:block">
+              <span>Welcome</span>
+              <h2 className="font-semibold">John Doe</h2>
+            </div>
+            <ChevronDown className="w-4 h-4" />
+          </div>
+        </div>
+      </header>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-64 bg-white shadow-lg min-h-[calc(100vh-64px)]">
+          <nav className="p-4">
+            <ul className="space-y-2">
+              <li className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
+                <span className="mr-2">🎛️</span>
+                Dash Board
+              </li>
+              <li className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
+                <span className="mr-2">📄</span>
+                View Schema
+              </li>
+              <li className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
+                <span className="mr-2">📝</span>
+                Application History
+              </li>
+              <li className="flex items-center p-2 bg-red-600 text-white rounded-lg">
+                <span className="mr-2">👤</span>
+                Profile
+              </li>
+              <li className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
+                <span className="mr-2">⚙️</span>
+                Settings
+              </li>
+              <li className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
+                <span className="mr-2">🚪</span>
+                Logout
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 p-6">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col md:flex-row gap-8">
+                  <div className="flex-shrink-0">
+                    <img
+                      src="/placeholder.svg"
+                      alt="Profile"
+                      className="w-32 h-32 rounded-full"
+                    />
+                  </div>
+                  <div className="flex-1 grid gap-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="fullName">Full name:</Label>
+                        <Input id="fullName" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="contactNumber">Contact Number</Label>
+                        <Input id="contactNumber" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="username">Username:</Label>
+                        <Input id="username" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="registrationDate">Registration Date</Label>
+                        <Input id="registrationDate" type="date" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email:</Label>
+                        <Input id="email" type="email" />
+                      </div>
+                    </div>
+                    <div className="flex justify-end">
+                      <Button className="bg-gray-600 hover:bg-gray-700">
+                        <Lock className="w-4 h-4 mr-2" />
+                        Update
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Exam Result</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-lg text-gray-700">
+                    Congratulations, you passed the exam!
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Feedback</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Message</Label>
+                    <Textarea
+                      id="message"
+                      className="min-h-[100px]"
+                      placeholder="Type your feedback here..."
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+}

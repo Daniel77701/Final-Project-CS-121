@@ -89,92 +89,125 @@
     </style>
 </head>
 <body>
-        <!-- Header Section -->
-        <header id="header">
-            <div class="logo">
-                <img src="icons/logo.png" alt="Logo" width="40">
-                <span>Scholarship Tracker System</span>
-            </div>
-            <div class="welcome">
-                <i class="fas fa-bell"></i> <span class="badge badge-light">1</span>
-                <span class="ml-4">Welcome, Admin</span>
-                <i class="fas fa-user ml-2"></i>
-            </div>
-        </header>
-    
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Sidebar (Left Column) -->
-                <nav id="sidebar" class="col-md-3 col-lg-2 sidebar d-md-block">
-                    <ul class="nav flex-column p-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#dashboard.html">
-                                <img src="icons/dashboard.png" alt="Dashboard Icon">
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#scholars">
-                                <img src="icons/scholars.png" alt="Scholars Icon">
-                                Scholars
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/scholarship.png" alt="Scholarship Icon">
-                                Scholarship
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/scholarship_request.png" alt="Scholarship Request Icon">
-                                Scholarship Request
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/exam_management.png" alt="Exam Management Icon">
-                                Exam Management
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/announcement.png" alt="Announcement Icon">
-                                Announcement
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/feedback.png" alt="Feedback Icon">
-                                Feedback
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/featured_scholars.png" alt="Featured Scholars Icon">
-                                Featured Scholars
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/setting.png" alt="Settings Icon">
-                                Settings
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/useraccount.png" alt="User Account Icon">
-                                User Account
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">
-                                <img src="icons/userlogs.png" alt="User Logs Icon">
-                                User Logs
-                            </span>
-                        </li>
-                    </ul>
-                </nav>
+    <!-- Header Section -->
+    <header id="header">
+        <div class="logo">
+            <img src="icons/logo.png" alt="Logo" width="40">
+            <span>Scholarship Tracker System</span>
+        </div>
+        <div class="welcome">
+            <i class="fas fa-bell"></i> <span class="badge badge-light">1</span>
+            <span class="ml-4">Welcome, Admin</span>
+            <i class="fas fa-user ml-2"></i>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar (Left Column) -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 sidebar d-md-block">
+                <ul class="nav flex-column p-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin-dashboard.html">
+                            <img src="icons/dashboard.png" alt="Dashboard Icon">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="scholars.html">
+                            <img src="icons/scholars.png" alt="Scholars Icon">
+                            Scholars
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="scholarship.html">
+                            <img src="icons/scholarship.png" alt="Scholarship Icon">
+                            Scholarship
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="scholarship-request.html">
+                            <img src="icons/scholarship_request.png" alt="Scholarship Request Icon">
+                            Scholarship Request
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/exam_management.png" alt="Exam Management Icon">
+                            Exam Management
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/announcement.png" alt="Announcement Icon">
+                            Announcement
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/feedback.png" alt="Feedback Icon">
+                            Feedback
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/featured_scholars.png" alt="Featured Scholars Icon">
+                            Featured Scholars
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/setting.png" alt="Settings Icon">
+                            Settings
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/useraccount.png" alt="User Account Icon">
+                            User Account
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <img src="icons/userlogs.png" alt="User Logs Icon">
+                            User Logs
+                        </span>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main Content (Scholar) -->
+            <main class="col-md-9 col-lg-10 px-md-4" id="main-content">
+                <div class="dashboard-section">
+                    <h2 class="mt-4">Scholar</h2>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <h5>import here a list of scholars</h5>
+                                <p>Choose file</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>Import</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>Add Scholar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-section">
+                    <h2>List of Scholars in Batangas State University </h2>
+                    <hr>
+                    <!-- Additional content for Scholars Report here -->
                 </div>
             </main>
         </div>
@@ -186,5 +219,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-

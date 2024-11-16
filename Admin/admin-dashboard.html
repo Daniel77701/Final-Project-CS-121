@@ -6,93 +6,14 @@
     <title>Scholarship Tracker System</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome for Icons (optional) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Custom styles for the layout */
-         /* Custom styles for the layout */
-         body {
-            font-family: Arial, sans-serif;
-            background-color: #F7F8FA;
-        }
-        #sidebar {
-            background-color: white; /* White background for sidebar */
-            color: black; /* Black text color for sidebar items */
-            height: 100vh;
-            padding-top: 20px;
-        }
-        #sidebar .nav-link {
-            color: black; /* Black text by default */
-            font-size: 1.1em;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        #sidebar .nav-link img {
-            width: 20px;
-            margin-right: 10px;
-        }
-        #sidebar .nav-link:hover,
-        #sidebar .nav-link.active {
-            background-color: #d1182d; /* Red background when active or hovered */
-            color: white; /* White text when active or hovered */
-        }
-        #header {
-            background-color: #d1182d;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        #header .logo {
-            display: flex;
-            align-items: center;
-        }
-        #header .logo img {
-            margin-right: 10px;
-        }
-        #header .logo span {
-            font-size: 1.8em;
-            font-weight: bold;
-        }
-        #main-content {
-            background-color: #d9dfdb; /* Light background for main content */
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        .dashboard-section {
-            background-color: white; /* White background for emphasis */
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .dashboard-section h2 {
-            color: #333; /* Darker text color for section headers */
-        }
-        .dashboard-section hr {
-            border-color: #8C1D1A;
-            border-width: 2px;
-        }
-        .card {
-            border-radius: 8px;
-            border: none;
-        }
-        .card-body {
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            background-color: #d1182d;
-            border-radius: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="admin.css">
+
 </head>
 <body>
     <!-- Header Section -->
     <header id="header">
         <div class="logo">
-            <img src="icons/logo.png" alt="Logo" width="40">
+            <img src="icons_admin/logo.png" alt="Logo" width="40">
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome">
@@ -109,69 +30,69 @@
                 <ul class="nav flex-column p-3">
                     <li class="nav-item">
                         <a class="nav-link active" href="admin-dashboard.html">
-                            <img src="icons/dashboard.png" alt="Dashboard Icon">
+                            <img src="icons_admin/dashboard.png" alt="Dashboard Icon">
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="scholars.html">
-                            <img src="icons/scholars.png" alt="Scholars Icon">
+                            <img src="icons_admin/scholars.png" alt="Scholars Icon">
                             Scholars
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="scholarship.html">
-                            <img src="icons/scholarship.png" alt="Scholarship Icon">
+                            <img src="icons_admin/scholarship.png" alt="Scholarship Icon">
                             Scholarship
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="scholarship-request.html">
-                            <img src="icons/scholarship_request.png" alt="Scholarship Request Icon">
+                            <img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon">
                             Scholarship Request
                         </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/exam_management.png" alt="Exam Management Icon">
+                        <a class="nav-link" href="exam-management.html">
+                            <img src="icons_admin/exam_management.png" alt="Exam Management Icon">
                             Exam Management
-                        </span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/announcement.png" alt="Announcement Icon">
+                        <a class="nav-link" href="announcement.html">
+                            <img src="icons_admin/announcement.png" alt="Announcement Icon">
                             Announcement
-                        </span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/feedback.png" alt="Feedback Icon">
+                        <a class="nav-link" href="feedback.html">
+                            <img src="icons_admin/feedback.png" alt="Feedback Icon">
                             Feedback
-                        </span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/featured_scholars.png" alt="Featured Scholars Icon">
+                        <a class="nav-link" href="featured-scholars.html">
+                            <img src="icons_admin/featured_scholars.png" alt="Featured Scholars Icon">
                             Featured Scholars
-                        </span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/setting.png" alt="Settings Icon">
+                        <a class="nav-link" href="settings.html">
+                            <img src="icons_admin/setting.png" alt="Settings Icon">
                             Settings
-                        </span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/useraccount.png" alt="User Account Icon">
+                        <a class="nav-link" href="useraccount.html">
+                            <img src="icons_admin/useraccount.png" alt="User Account Icon">
                             User Account
-                        </span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <span class="nav-link">
-                            <img src="icons/userlogs.png" alt="User Logs Icon">
+                        <a class="nav-link" href="userlogs.html">
+                            <img src="icons_admin/userlogs.png" alt="User Logs Icon">
                             User Logs
-                        </span>
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -179,7 +100,7 @@
             <!-- Main Content (Dashboard) -->
             <main class="col-md-9 col-lg-10 px-md-4" id="main-content">
                 <div class="dashboard-section">
-                    <h2 class="mt-4">Dashboard</h2>
+                    <h1 class="mt-4">Dashboard</h1>
                     <hr>
                     <div class="row">
                         <div class="col-md-4 mb-4">
@@ -209,7 +130,7 @@
                     </div>
                 </div>
                 <div class="dashboard-section">
-                    <h2>Scholars Report</h2>
+                    <h1>Scholars Report</h1>
                     <hr>
                     <!-- Additional content for Scholars Report here -->
                 </div>

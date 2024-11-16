@@ -1,0 +1,94 @@
+/* Custom styles for the layout */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #F7F8FA;
+    font-size: 0.95rem; 
+}
+
+#sidebar {
+    background-color: white;
+    color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem; 
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem; 
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+#sidebar .nav-link:hover,
+#sidebar .nav-link.active {
+    background-color: #d1182d;
+    color: white;
+}
+
+#header {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 20px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem; 
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em; 
+    font-weight: bold;
+}
+
+#main-content {
+    background-color: #d9dfdb;
+    padding: 15px; 
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.dashboard-section {
+    background-color: white;
+    padding: 15px; 
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.dashboard-section h2 {
+    color: #333;
+    font-size: 1.30em; 
+}
+
+.dashboard-section hr {
+    border-color: #8C1D1A;
+    border-width: 2px;
+}
+
+.card {
+    border-radius: 8px;
+    border: none;
+}
+
+.card-body {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    background-color: #d1182d;
+    border-radius: 8px;
+}

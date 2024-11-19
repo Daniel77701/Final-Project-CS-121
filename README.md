@@ -18,7 +18,7 @@ Allocation of Assignments:
 
 Login- Joan
 
-Sign in - Joan
+Sign up - Joan
 
 Create - Trisha
 

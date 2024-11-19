@@ -2,8 +2,8 @@
 
 class Signup extends Dbh {
 
-    protected function setUser($Name, $email, $Sr_code, $Mobilenum, $password) {
-        $stmt = $this->connect()->prepare('INSERT INTO users (Name, email, Sr_code, Mobilenum, password) VALUES (?, ?, ?, ?, ?)');
+    protected function setStudent($Name, $email, $Sr_code, $Mobilenum, $password) {
+        $stmt = $this->connect()->prepare('INSERT INTO students (Name, email, Sr_code, Mobilenum, password) VALUES (?, ?, ?, ?, ?)');
 
         $hashedPwd = password_hash($password, PASSWORD_DEFAULT);
 
@@ -16,10 +16,10 @@ class Signup extends Dbh {
         $stmt = null;
     }
 
-    protected function checkUser($Name, $email) {
-        $stmt = $this->connect()->prepare('SELECT * FROM users WHERE Name = ? OR email = ?');
+    protected function checkStudent($Sr_code, $email) {
+        $stmt = $this->connect()->prepare('SELECT * FROM students WHERE Sr_code = ? OR email = ?');
 
-        if (!$stmt->execute([$Name, $email])) {
+        if (!$stmt->execute([$Sr_code, $email])) {
             $stmt = null;
             header("location: ../index.php?error=stmtfailed");
             exit();
@@ -28,3 +28,5 @@ class Signup extends Dbh {
         return $stmt->rowCount() > 0;
     }
 }
+
+?>

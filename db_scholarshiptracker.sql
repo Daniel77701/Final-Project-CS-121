@@ -15,14 +15,16 @@ CREATE TABLE IF NOT EXISTS `scholarships` (
 
 -- Table for Students
 CREATE TABLE IF NOT EXISTS `students` (
-    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    date_of_birth DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    sr_code VARCHAR(100) NOT NULL,
+    mobile_number VARCHAR(15) NOT NULL,
+    password VARCHAR(255) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- Table for Applications
+-- Table for Applications (Already Correct)
 CREATE TABLE IF NOT EXISTS `applications` (
     application_id INT AUTO_INCREMENT PRIMARY KEY,
     scholarship_id INT,
@@ -31,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `applications` (
     application_date DATE,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (scholarship_id) REFERENCES scholarships(scholarship_id) ON DELETE CASCADE,
-    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- Table for Scholarship Requirements
@@ -90,38 +92,45 @@ INSERT INTO scholarships (name, description, deadline, requirements) VALUES
 ('CHED CoScho Scholarship', 'Co-sponsored scholarship under CHED for deserving students.', '2025-03-10', 'GPA above 3.2, Sponsorship agreement');
 
 -- Insert Data into Students Table
-INSERT INTO students (name, email, date_of_birth) VALUES
-('Jose Cruz', 'jose.cruz@gmail.com', '2000-05-20'),
-('Maria Santos', 'maria.santos@gmail.com', '1999-08-15'),
-('Mark Bautista', 'mark.bautista@gmail.com', '2001-03-10'),
-('Ana Dela Cruz', 'ana.delacruz@gmail.com', '2000-11-30'),
-('Carla Ramirez', 'carla.ramirez@gmail.com', '2002-07-19'),
-('Miguel Reyes', 'miguel.reyes@gmail.com', '1998-02-28'),
-('Isabel Flores', 'isabel.flores@gmail.com', '2000-12-05'),
-('Paolo Garcia', 'paolo.garcia@gmail.com', '1999-04-14'),
-('Christine Lim', 'christine.lim@gmail.com', '2001-01-25'),
-('Juan Dela Cruz', 'juan.delacruz@gmail.com', '2000-06-10'),
-('Carlos Santos', 'carlos.santos@gmail.com', '1999-09-30'),
-('Julia Roldan', 'julia.roldan@gmail.com', '2002-03-22'),
-('Ramon Lopez', 'ramon.lopez@gmail.com', '1998-12-18'),
-('Teresa Castillo', 'teresa.castillo@gmail.com', '2001-07-07'),
-('Eric Mendoza', 'eric.mendoza@gmail.com', '1999-10-11'),
-('Angelica Tan', 'angelica.tan@gmail.com', '2000-05-03'),
-('Jerome Alcantara', 'jerome.alcantara@gmail.com', '1999-03-15'),
-('Lyka Mendoza', 'lyka.mendoza@gmail.com', '2001-04-25'),
-('Carlos Aquino', 'carlos.aquino@gmail.com', '2000-01-05'),
-('Karla Garcia', 'karla.garcia@gmail.com', '2002-07-12'),
-('Miguel Fernandez', 'miguel.fernandez@gmail.com', '1998-11-20'),
-('Roselle Bautista', 'roselle.bautista@gmail.com', '1999-02-10'),
-('Patrick Reyes', 'patrick.reyes@gmail.com', '2001-09-30'),
-('Angela Marquez', 'angela.marquez@gmail.com', '2002-03-18'),
-('Emilio Navarro', 'emilio.navarro@gmail.com', '1998-12-24'),
-('Diana Santos', 'diana.santos@gmail.com', '2000-06-29'),
-('Leah Cortez', 'leah.cortez@gmail.com', '2001-05-17'),
-('Felix Cruz', 'felix.cruz@gmail.com', '1999-10-14'),
-('Sandra Diaz', 'sandra.diaz@gmail.com', '2002-01-09'),
-('Raymond Mercado', 'raymond.mercado@gmail.com', '2000-08-03'),
-('Carmen Ortiz', 'carmen.ortiz@gmail.com', '1999-03-28');
+-- Insert Data into Students Table with Unique SR Codes (Including 23-XXXX for 6 students)
+INSERT INTO students (name, email, sr_code, mobile_number, password) VALUES
+('Jose Cruz', 'jose.cruz@gmail.com', '21-20930', '09123456789', 'password123'),
+('Maria Santos', 'maria.santos@gmail.com', '21-89012', '09123456780', 'password123'),
+('Mark Bautista', 'mark.bautista@gmail.com', '21-23456', '09123456781', 'password123'),
+('Ana Dela Cruz', 'ana.delacruz@gmail.com', '21-34567', '09123456782', 'password123'),
+('Carla Ramirez', 'carla.ramirez@gmail.com', '22-45678', '09123456783', 'password123'),
+('Miguel Reyes', 'miguel.reyes@gmail.com', '21-56789', '09123456784', 'password123'),
+('Isabel Flores', 'isabel.flores@gmail.com', '21-67890', '09123456785', 'password123'),
+('Paolo Garcia', 'paolo.garcia@gmail.com', '21-78901', '09123456786', 'password123'),
+('Christine Lim', 'christine.lim@gmail.com', '21-89012', '09123456787', 'password123'),
+('Juan Dela Cruz', 'juan.delacruz@gmail.com', '21-90123', '09123456788', 'password123'),
+('Carlos Santos', 'carlos.santos@gmail.com', '21-01234', '09123456789', 'password123'),
+('Julia Roldan', 'julia.roldan@gmail.com', '22-12345', '09123456790', 'password123'),
+('Ramon Lopez', 'ramon.lopez@gmail.com', '21-23456', '09123456791', 'password123'),
+('Teresa Castillo', 'teresa.castillo@gmail.com', '21-34567', '09123456792', 'password123'),
+('Eric Mendoza', 'eric.mendoza@gmail.com', '21-45678', '09123456793', 'password123'),
+('Angelica Tan', 'angelica.tan@gmail.com', '21-56789', '09123456794', 'password123'),
+('Jerome Alcantara', 'jerome.alcantara@gmail.com', '21-67890', '09123456795', 'password123'),
+('Lyka Mendoza', 'lyka.mendoza@gmail.com', '21-78901', '09123456796', 'password123'),
+('Carlos Aquino', 'carlos.aquino@gmail.com', '21-89012', '09123456797', 'password123'),
+('Karla Garcia', 'karla.garcia@gmail.com', '22-90123', '09123456798', 'password123'),
+('Miguel Fernandez', 'miguel.fernandez@gmail.com', '21-01234', '09123456799', 'password123'),
+('Roselle Bautista', 'roselle.bautista@gmail.com', '21-12345', '09123456800', 'password123'),
+('Patrick Reyes', 'patrick.reyes@gmail.com', '21-23456', '09123456801', 'password123'),
+('Angela Marquez', 'angela.marquez@gmail.com', '22-34567', '09123456802', 'password123'),
+('Emilio Navarro', 'emilio.navarro@gmail.com', '21-45678', '09123456803', 'password123'),
+('Diana Santos', 'diana.santos@gmail.com', '21-56789', '09123456804', 'password123'),
+('Leah Cortez', 'leah.cortez@gmail.com', '21-67890', '09123456805', 'password123'),
+('Felix Cruz', 'felix.cruz@gmail.com', '21-78901', '09123456806', 'password123'),
+('Sandra Diaz', 'sandra.diaz@gmail.com', '22-89012', '09123456807', 'password123'),
+('Raymond Mercado', 'raymond.mercado@gmail.com', '21-90123', '09123456808', 'password123'),
+('Carmen Ortiz', 'carmen.ortiz@gmail.com', '21-01234', '09123456809', 'password123'),
+('Sophia Cruz', 'sophia.cruz@gmail.com', '23-09231', '09123456810', 'password123'),
+('Liam Garcia', 'liam.garcia@gmail.com', '23-09232', '09123456811', 'password123'),
+('Oliver Reyes', 'oliver.reyes@gmail.com', '23-09233', '09123456812', 'password123'),
+('Emma Santos', 'emma.santos@gmail.com', '23-09234', '09123456813', 'password123'),
+('Lucas Fernandez', 'lucas.fernandez@gmail.com', '23-09235', '09123456814', 'password123'),
+('Mia Lopez', 'mia.lopez@gmail.com', '23-09236', '09123456815', 'password123');
 
 -- Insert Data into Applications Table
 INSERT INTO applications (scholarship_id, student_id, status, application_date) VALUES
@@ -134,7 +143,28 @@ INSERT INTO applications (scholarship_id, student_id, status, application_date) 
 (7, 7, 'In Progress', '2024-11-10'),
 (8, 8, 'Not Started', '2024-11-01'),
 (9, 9, 'Submitted', '2024-10-15'),
-(10, 10, 'Not Started', '2024-10-12');
+(10, 10, 'Not Started', '2024-10-12'),
+(1, 11, 'Submitted', '2024-10-11'),
+(2, 12, 'In Progress', '2024-11-05'),
+(3, 13, 'Not Started', '2024-10-12'),
+(4, 14, 'Submitted', '2024-10-20'),
+(5, 15, 'Awarded', '2024-09-25'),
+(1, 16, 'Rejected', '2024-10-30'),
+(7, 17, 'In Progress', '2024-11-15'),
+(8, 18, 'Not Started', '2024-11-03'),
+(9, 19, 'Submitted', '2024-10-18'),
+(10, 20, 'Not Started', '2024-10-13'),
+(1, 21, 'Submitted', '2024-10-14'),
+(2, 22, 'In Progress', '2024-11-02'),
+(3, 23, 'Not Started', '2024-10-07'),
+(4, 24, 'Submitted', '2024-10-08'),
+(5, 25, 'Awarded', '2024-09-29'),
+(1, 26, 'Rejected', '2024-10-19'),
+(7, 27, 'In Progress', '2024-11-08'),
+(8, 28, 'Not Started', '2024-11-06'),
+(9, 29, 'Submitted', '2024-10-17'),
+(10, 30, 'Not Started', '2024-10-09');
+
 
 -- Insert Data into Scholarship Requirements Table
 INSERT INTO scholarship_requirements (scholarship_id, requirement_text) VALUES

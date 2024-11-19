@@ -18,7 +18,8 @@ class SignupContr extends Signup {
         $this->passwordRepeat = $passwordRepeat;
     }
 
-    public function signupUser() {
+    //Error Handling
+    public function signupStudent() {
         if ($this->emptyInput() == false) {
             header("location: ../index.php?error=emptyinput");
             exit();
@@ -35,13 +36,14 @@ class SignupContr extends Signup {
             header("location: ../index.php?error=invalidsrcode");
             exit();
         }
-        if ($this->nameTakenCheck() == false) {
-            header("location: ../index.php?error=nametaken");
+        if ($this->studentExists() == true) {
+            header("location: ../index.php?error=studentexists");
             exit();
         }
 
-        // Add user to the database
-        $this->setUser($this->Name, $this->email, $this->Sr_code, $this->Mobilenum, $this->password);
+        //Add students
+
+        $this->setStudent($this->Name, $this->email, $this->Sr_code, $this->Mobilenum, $this->password);
     }
 
     private function validateSrCode($Sr_code) {
@@ -68,7 +70,10 @@ class SignupContr extends Signup {
         return $this->password === $this->passwordRepeat;
     }
 
-    private function nameTakenCheck() {
-        return !$this->checkUser($this->Name, $this->email);
+    private function studentExists() {
+        return $this->checkStudent($this->Sr_code, $this->email);
     }
 }
+
+
+?>

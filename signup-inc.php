@@ -1,8 +1,8 @@
 <?php 
 
-if(isset($_POST["submit"]))
-{
-    //Get Data
+if (isset($_POST["submit"])) {
+    
+    // Get Data
     $Name = $_POST["Name"];
     $email = $_POST["email"];
     $Sr_code = $_POST["Sr-code"];
@@ -10,10 +10,8 @@ if(isset($_POST["submit"]))
     $password = $_POST["password"];
     $passwordRepeat = $_POST["confirm_password"];
 
-
-    //Instantiate
+    // Instantiate
     include "../classes/signup.classes.php";
     include "../classes/signup_contr.class.php";
     $signup = new SignupContr($Name, $email, $Sr_code, $Mobilenum, $password, $passwordRepeat);
-
 }

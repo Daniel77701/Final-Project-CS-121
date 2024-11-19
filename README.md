@@ -28,15 +28,24 @@ Update - Jezrev
 
 Read - Trisha
 
-Assignment of Core Functionalities:
+• Assignment of Core Functionalities:
+
 Login & Signup (HTML/CSS)- Joan.
+
 Admin Interface (HTML/CSS)- Jezrev & Joan.
+
 User Interface (HTML/CSS)- Trisha & Joan.
+
 Backend Development (PHP and Four Pillars of OOP)- Jezrev.
+
 Database Connectivity- Trisha & Jezrev.
 
-Additional Contributions
+• Additional Contributions:
+
 Presentation (PPT)- Joan.
+
 Documentation (DOCU)- Joan.
+
 Flowchart- Jezrev, Trisha, Joan.
+
 Entity Relationship Diagram (ERD)- Jezrev, Trisha, Joan.

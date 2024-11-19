@@ -130,7 +130,20 @@ INSERT INTO students (name, email, sr_code, mobile_number, password) VALUES
 ('Oliver Reyes', 'oliver.reyes@gmail.com', '23-09233', '09123456812', 'password123'),
 ('Emma Santos', 'emma.santos@gmail.com', '23-09234', '09123456813', 'password123'),
 ('Lucas Fernandez', 'lucas.fernandez@gmail.com', '23-09235', '09123456814', 'password123'),
-('Mia Lopez', 'mia.lopez@gmail.com', '23-09236', '09123456815', 'password123');
+('Mia Lopez', 'mia.lopez@gmail.com', '23-09236', '09123456815', 'password123'),
+('Hannah Cruz', 'hannah.cruz@gmail.com', '23-09237', '09123456816', 'password123'),
+('Noah Bautista', 'noah.bautista@gmail.com', '23-09238', '09123456817', 'password123'),
+('Ava Santos', 'ava.santos@gmail.com', '23-09239', '09123456818', 'password123'),
+('Ethan Garcia', 'ethan.garcia@gmail.com', '23-09240', '09123456819', 'password123'),
+('Isabella Reyes', 'isabella.reyes@gmail.com', '23-09241', '09123456820', 'password123'),
+('Jacob Ramirez', 'jacob.ramirez@gmail.com', '23-09242', '09123456821', 'password123'),
+('Sophia Castillo', 'sophia.castillo@gmail.com', '23-09243', '09123456822', 'password123'),
+('Mason Tan', 'mason.tan@gmail.com', '23-09244', '09123456823', 'password123'),
+('Charlotte Lopez', 'charlotte.lopez@gmail.com', '23-09245', '09123456824', 'password123'),
+('Logan Mendoza', 'logan.mendoza@gmail.com', '23-09246', '09123456825', 'password123'),
+('Amelia Fernandez', 'amelia.fernandez@gmail.com', '23-09247', '09123456826', 'password123'),
+('Benjamin Ortiz', 'benjamin.ortiz@gmail.com', '23-09248', '09123456827', 'password123'),
+('Ella Marquez', 'ella.marquez@gmail.com', '23-09249', '09123456828', 'password123');
 
 -- Insert Data into Applications Table
 INSERT INTO applications (scholarship_id, student_id, status, application_date) VALUES

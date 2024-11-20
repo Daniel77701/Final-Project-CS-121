@@ -160,8 +160,15 @@
             width: 90%;
             max-width: 500px;
             position: relative;
+            max-height: 80vh; /* Set a max height */
+            overflow-y: auto;
         }
 
+        .modal-body {
+            max-height: 60vh; /* Set a height for the body */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin-top: 1rem; /* Add some space above */
+    }
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -329,41 +336,43 @@
             </div>
             <img src="/placeholder.svg" alt="Student Photo" class="student-photo">
             <div class="scholarship-type">Academic Excellence</div>
-            <div class="form-group">
-                <label>Name:</label>
-                <input type="text" value="John Doe" readonly>
-            </div>
-            <div class="form-group">
-                <label>Date of birth:</label>
-                <input type="text" value="mm/dd/yyyy" readonly>
-            </div>
-            <div class="form-group">
-                <label>Gender:</label>
-                <input type="text" value="Male" readonly>
-            </div>
-            <div class="form-group">
-                <label>Mobile no:</label>
-                <input type="text" value="09778455634" readonly>
-            </div>
-            <div class="form-group">
-                <label>Application no:</label>
-                <input type="text" value="98765" readonly>
-            </div>
-            <div class="form-group">
-                <label>Email:</label>
-                <input type="text" value="22-36298@g.batstate-u.edu.ph" readonly>
-            </div>
-            <div class="form-group">
-                <label>Sr-Code:</label>
-                <input type="text" value="22-36298" readonly>
-            </div>
-            <div class="form-group">
-                <label>Year Level:</label>
-                <input type="text" value="1st Year" readonly>
-            </div>
-            <div class="form-group">
-                <label>Status:</label>
-                <input type="text" value="Approved" readonly>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" value="John Doe" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Date of birth:</label>
+                    <input type="text" value="mm/dd/yyyy" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Gender:</label>
+                    <input type="text" value="Male" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Mobile no:</label>
+                    <input type="text" value="09778455634" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Application no:</label>
+                    <input type="text" value="98765" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="text" value="22-36298@g.batstate-u.edu.ph" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Sr-Code:</label>
+                    <input type="text" value="22-36298" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Year Level:</label>
+                    <input type="text" value="1st Year" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <input type="text" value="Approved" readonly>
+                </div>
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
                 <button class="close-btn" onclick="hideModal()">Close</button>
@@ -371,6 +380,7 @@
             </div>
         </div>
     </div>
+    
 
     <script>
         function showModal() {

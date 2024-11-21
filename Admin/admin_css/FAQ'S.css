@@ -1,0 +1,238 @@
+/* General Styles */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
+}
+
+#header {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: white;
+    color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem;
+    margin-right: 8; /* Added margin to the right to separate from the main content */
+    /* Optional: you can also add padding-right if you want space inside the sidebar */
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Only apply background color on hover */
+#sidebar .nav-link:hover {
+    background-color: #d1182d; /* Red background on hover */
+    color: white;
+}
+
+/* Apply background color and white text to "Scholars" */
+#sidebar .nav-link.active {
+    background-color: #d1182d; /* Red background */
+    color: white; /* White font */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Main Content Container */
+.main-content {
+    padding: 20px;
+    max-width: 1200px;
+}
+.title-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure title box is full width */
+    max-width: 1200px; /* Optional max-width for a more contained box */
+    margin: 10px auto 20px auto; /* Adjust margin-top to create more space from the top */
+}
+
+
+.title-box h2 {
+    color: #333;
+    font-size: 2.5rem;
+    padding-bottom: 15px;
+    margin-bottom: 0;
+}
+
+.title-box hr {
+    border: none;
+    border-top: 2px solid #8C1D1A;
+    margin-top: 15px; /* Adjust margin-top to create space between the title and the line */
+    padding: 0;
+}
+.add-question-container {
+    text-align: center; /* Centers the button horizontally */
+    margin-top: 20px;
+}
+
+.add-question {
+    font-size: 1.1rem;
+    background-color: #d1182d;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-question:hover {
+    background-color: blue;
+}
+/* Accordion Styles */
+.accordion-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+/* Accordion Styles */
+.accordion-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.accordion {
+    background-color: whitesmoke;
+    color: #444;
+    cursor: pointer;
+    padding: 15px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #ccc; /* Added border for a "box" effect */
+    outline: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accordion:hover {
+    background-color: white;
+}
+
+.accordion.active {
+    background-color: #d1182d;
+    color: white;
+}
+
+/* Title Box for FAQ's */
+.faq-title-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px #ccc(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto 15px auto; /* Adjust margin for proper spacing */
+}
+
+.faq-title-box h1 {
+    color: #333;
+    font-size: 2.5rem;
+    padding-bottom: 15px;
+    margin-bottom: 0;
+}
+
+.faq-title-box hr {
+    border: none;
+    border-top: 2px solid #8C1D1A;
+    margin-top: 15px; /* Adjust margin-top to create space between title and line */
+    padding: 0;
+}
+
+/* Default state of the accordion (question) */
+.accordion {
+    background-color: #f1f1f1; /* Gray background */
+    color: #444;
+    cursor: pointer;
+    padding: 15px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #ccc; /* Added border for a "box" effect */
+    outline: none;
+    font-size: 17px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Hover state for accordion */
+.accordion:hover {
+    background-color: #ddd; /* Slightly darker gray on hover */
+}
+
+.accordion.active {
+    background-color: #d1182d !important; /* Red background */
+    color: white !important; /* White text */
+}
+
+
+/* Panel (answer) remains the same */
+.panel {
+    display: none;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-left: 2px solid #ccc;
+    margin-bottom: 15px;
+    border-radius: 5px; /* Added border-radius to match the accordion's corners */
+}
+
+/* When the accordion is active, show the panel */
+.accordion.active + .panel {
+    display: block;
+}
+
+/* Add the plus/minus sign for the accordion */
+.accordion::after {
+    content: "\002B"; /* Unicode for the plus symbol */
+    font-size: 20px;
+    font-weight: bold;
+    color: #444;
+}
+
+/* When the accordion is active, change the sign to minus */
+.accordion.active::after {
+    content: "\2212"; /* Unicode for the minus symbol */
+}

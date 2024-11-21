@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="icons_admin/logo.png" type="image/x-icon">
-    <title>Scholarship Tracker System</title>
+    <title>Scholarship Tracker System</title> 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="admin_css/userlogs.css">
-
+    <link rel="stylesheet" href="admin_css/FAQ'S.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header id="header">
-        <div class="logo">
+    <header id="header" class="d-flex justify-content-between" style="background-color: #d1182d; padding: 8px 20px;">
+        <div class="logo d-flex align-items-center">
             <img src="icons_admin/logo.png" alt="Logo" width="40">
             <span>Scholarship Tracker System</span>
         </div>
@@ -26,15 +24,16 @@
             </a> 
         </div>
     </header>
-
     
+
+    <!-- Main Container to hold sidebar and main content -->
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+            <!-- Sidebar (Left Column) -->
             <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3 collapse d-md-block">
                 <ul class="nav flex-column">
-                        <li class="nav-item">
-                        <a class="nav-link " href="admin-dashboard.html">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-dashboard.html">
                             <img src="icons_admin/dashboard.png" alt="Dashboard Icon" width="20">
                             Dashboard
                         </a>
@@ -58,7 +57,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="FAQ'S.html">
+                        <a class="nav-link active" href="FAQ'S.html">
                             <img src="icons_admin/exam_management.png" alt="FAQ'S Icon" width="20">
                             FAQ'S
                         </a>
@@ -94,7 +93,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="userlogs.html">
+                        <a class="nav-link" href="userlogs.html">
                             <img src="icons_admin/userlogs.png" alt="User Logs Icon" width="20">
                             User Logs
                         </a>
@@ -102,68 +101,81 @@
                 </ul>
             </nav>
 
-            <main>
+            <!-- Main Content (Right Column) -->
+            <div class="col-md-9 col-lg-10 main-content">
                 <div class="title-box">
-                <h1>User Logs <a href="settings.html">
-                    <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
-                </a> </h1>
-                <hr>
-                <button class="delete">Delete</button> </div>
-
-                <div class="action-container">
-                    <button class="print">Print</button>
-                    <div class="search-container d-flex align-items-center ml-auto">
-                        <label for="search">Search:</label>
-                        <input type="text" id="search" placeholder="Search...">
+                    <h1>Scholarship FAQ's <a href="settings.html">
+                        <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
+                    </a> </h1>
+                    <hr>
+                    <div class="add-question-container">
+                        <button class="add-question btn btn-primary">Add Question</button>
                     </div>
-                </div>                
-                <div class="table-box"> <!-- Added class table-box for table styling -->
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Scholarships</th>
-                                <th>Description</th>
-                                <th>Author</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2024-03-27 08:13:43</td>
-                                <td>03-1920-00000 student has been created</td>
-                                <td>Admin</td>
-                            </tr>
-                            <tr>
-                                <td>2024-03-27 08:27:47</td>
-                                <td>BSU scholarships has been added</td>
-                                <td>Admin</td>
-                            </tr>
-                            <tr>
-                                <td>2024-03-27 08:28:13</td>
-                                <td>School Year and Semester has been set to 2023 1st Semester</td>
-                                <td>Admin</td>
-                            </tr>
-                            <tr>
-                                <td>2024-03-27 08:32:18</td>
-                                <td>School Year and Semester has been set to 2023 1st Semester</td>
-                                <td>Admin</td>
-                            </tr>
-                            <tr>
-                                <td>2024-03-27 00:00:00</td>
-                                <td>School Year and Semester has been set to 2024 1st Semester</td>
-                                <td>Admin</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </main>
-            
-    
 
+                <!-- FAQ Section -->
+                <div class="faq-title-box">
+                    <div class="accordion-container">
+                        <!-- Accordion Item 1 -->
+                        <button class="accordion btn btn-light text-left">1. How do I apply for a scholarship at Batangas State University?</button>
+                        <div class="panel">
+                            <p>You can apply for a scholarship through the "Scholarship Application Tracker" by visiting our website. The application process is done entirely online, where you can submit your application, track its progress, and check scholarship eligibility.</p>
+                        </div>
+
+                        <!-- Accordion Item 2 -->
+                        <button class="accordion btn btn-light text-left">2. Do I need to maintain a certain GPA to keep my scholarship?</button>
+                        <div class="panel">
+                            <p>Yes, most scholarships at Batangas State University require students to maintain a specific GPA to retain their scholarship for the following semesters.</p>
+                        </div>
+
+                        <!-- Accordion Item 3 -->
+                        <button class="accordion btn btn-light text-left">3. Can incoming freshmen apply for scholarships?</button>
+                        <div class="panel">
+                            <p>Yes, incoming freshmen can apply for scholarships, especially those for first-year students. Make sure to check the available scholarships for new students.</p>
+                        </div>
+
+                        <!-- Accordion Item 4 -->
+                        <button class="accordion btn btn-light text-left">4. Do I need to be an honor student to apply for a scholarship?</button>
+                        <div class="panel">
+                            <p>Not all scholarships require honor status. Some are based on financial need or other criteria. It depends on the specific scholarship.</p>
+                        </div>
+
+                        <!-- Accordion Item 5 -->
+                        <button class="accordion btn btn-light text-left">5. Who can apply for scholarships at Batangas State University?</button>
+                        <div class="panel">
+                            <p>All enrolled students at Batangas State University who meet the eligibility requirements can apply for scholarships.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End Main Content -->
+        </div> <!-- End Row -->
+    </div> <!-- End Main Container -->
+ <!-- Sidebar Toggle Button for smaller screens -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
     <!-- Bootstrap and jQuery Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+
+    <!-- Accordion Functionality Script -->
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
 </body>
-</html
+</html>

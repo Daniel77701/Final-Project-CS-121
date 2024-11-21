@@ -1,0 +1,197 @@
+/* General Styles */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
+}
+
+#header {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: white !important;   
+     color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem;
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Only apply background color on hover */
+#sidebar .nav-link:hover {
+    background-color: #d1182d; /* Red background on hover */
+    color: white;
+}
+
+/* Remove the red background from the active state */
+#sidebar .nav-link.active {
+    background-color: #d1182d; /* No background for active state */
+    color: white; /* Optional: change text color when active */
+}
+
+/* Main Content */
+#main-content {
+    background-color:d9dfdb  ;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Dashboard Section */
+ .dashboard-section {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.dashboard-section h2 {
+    color: #333;
+}
+
+.dashboard-section hr {
+    border-color: #d1182d;
+    border-width: 2px;
+}
+
+/* Cards */
+.card {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.card h5 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.card .form-label,
+.card input,
+.card button {
+    font-size: 1rem;
+}
+
+.card-body {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    background-color:#d1182d;
+    border-radius: 8px;
+}
+
+/* Buttons */
+.btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #d1182d;
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: blue;
+}
+
+.btn-secondary {
+    background-color:#d1182d;
+    border: none;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: blue;
+}
+/* Print Button */
+.print-btn {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.print-btn:hover {
+    background-color: blue;
+}
+/* Table Box Styling */
+.table-box {
+    background-color: white; /* White background */
+    padding: 30px; /* Add padding around the box */
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 20px; /* Margin at the bottom of the box */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important; /* Subtle box shadow */
+}
+
+/* Table Styling */
+.table-box table {
+    width: 100%;
+    border-collapse: collapse; /* Use collapse for merged borders, or use border-spacing if you want separate borders */
+}
+
+th, td {
+    border: 1px solid lightgrey; /* Light gray border for cells */
+    padding: 8px; /* Padding inside cells */
+    text-align: center; /* Center the text inside the cells */
+}
+
+thead tr {
+    border: 1px solid whitesmoke !important; /* White border for the header row */
+}
+
+th {
+    background-color: darkred; /* Background color for the header */
+    color: white; /* Text color in headers */
+    font-weight: bold; /* Bold text in headers */
+    /* Removed border from th as it's already handled by the thead tr */
+}
+
+/* Hover effect on table rows */
+tbody tr:hover {
+    background-color: #f9f9f9; /* Light gray background when hovering over rows */
+} 

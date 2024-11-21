@@ -11,7 +11,14 @@ if (isset($_POST["submit"])) {
     $passwordRepeat = $_POST["confirm_password"];
 
     // Instantiate
+    include "../dbh.classes.php";
     include "../classes/signup.classes.php";
     include "../classes/signup_contr.class.php";
     $signup = new SignupContr($Name, $email, $Sr_code, $Mobilenum, $password, $passwordRepeat);
+
+    //Run error handles
+    $signup->signupStudent();
+
+    //Go back to front page
+    header("location: ../usersignup.html?error=none");
 }

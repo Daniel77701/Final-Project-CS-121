@@ -1,0 +1,223 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
+}
+
+#header {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: white;
+    color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem;
+    margin-right: 8px;
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Only apply background color on hover */
+#sidebar .nav-link:hover {
+    background-color: #d1182d; /* Red background on hover */
+    color: white;
+}
+
+/* Apply background color and white text to "Scholars" */
+#sidebar .nav-link.active {
+    background-color: #d1182d; /* Red background */
+    color: white; /* White font */
+    text-decoration: none; /* Remove underline */
+}
+
+#main-content {
+    background-color: #d9dfdb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Scholarship Section */
+.scholarship-section {
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+/* Title Box Styles */
+.title-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 110%; /* Ensure title box is full width */
+    max-width: 1200px; /* Optional max-width for a more contained box */
+    margin: 30px auto 20px auto; /* Adjust margin-top to create more space */
+    margin-left: 2%; /* Shift the table box a little to the right */
+}
+
+.title-box h2 {
+    color: #333;
+    font-size: 2.5rem;
+    padding-bottom: 15px;
+    margin: 0;
+}
+
+.title-box hr {
+    border: none;
+    border-top: 2px solid #8C1D1A;
+    margin-top: 15px;
+}
+
+/* Table Box Styles */
+.table-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 110%; /* Ensure title box is full width */
+    max-width: 1200px;
+    margin: 0 auto 20px auto; /* Center title box and add bottom margin */
+    margin-left: 2%; /* Shift the table box a little to the right */
+}
+
+/* Scholarship Table */
+.scholarship-table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders collapse into one */
+    margin: 0; /* Removed margin to ensure table is flush with container */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 15px 20px; /* Adjusted padding for better spacing */
+    text-align: center;
+}
+
+thead tr {
+    border: 2px solid #333; /* Dark border for table header */
+}
+
+/* Table Header Styling */
+th {
+    background-color: darkred !important; /* Mark background color as important */
+    color: white;
+    font-weight: bold;
+    font-size: 1rem; /* Adjusted font size */
+}
+
+
+tbody tr:hover {
+    background-color: #f9f9f9; /* Highlight rows on hover */
+}
+
+td button {
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+
+td button:hover {
+    opacity: 0.8;
+}
+
+/* Container Styles */
+.container {
+    padding: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+hr {
+    margin: 10px 0;
+}
+
+.print {
+    background-color: #c8102e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 5px; /* Added 'px' for rounded corners */
+    margin-left: 2%; /* Adjusts the print button to the left by 2% */
+}
+
+/* Table General Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: lightslategray;
+}
+
+/* Button Styling */
+button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5;
+}
+
+.view {
+    background-color: green;
+    color: white;
+}
+
+.change {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Footer */
+.footer {
+    margin-top: 20px;
+}  

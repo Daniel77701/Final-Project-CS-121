@@ -61,81 +61,109 @@
                     </li>
                 </ul>
             </nav>
-
-<!-- Main Content -->
-<main class="col-md-9 col-lg-10 ml-sm-auto px-md-4" id="main-content">
-    <div class="dashboard-section">
-        <h1 class="mb-4">Dashboard </h1>
-        <hr>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>0 Approved Scholarship Request</h5>
-                        <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#approvedScholarshipModal">View Details</a>
+            <main class="col-md-9 col-lg-10 ml-sm-auto px-md-4" id="main-content">
+                <div class="dashboard-section">
+                    <h1 class="mb-4">Dashboard</h1>
+                    <hr>
+                    <div class="row">
+                        <!-- Upper row -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>0 Approved Scholarship Request</h5>
+                                    <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#approvedScholarshipModal">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>1 Total Scheme</h5>
+                                    <a href="user_schema.html" class="btn btn-link custom-link">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Lower row -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>0 Announcement</h5>
+                                    <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#announcementModal">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>FAQ's</h5>
+                                    <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#faqsModal">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Modals -->
+            <div class="modal fade" id="approvedScholarshipModal" tabindex="-1" role="dialog" aria-labelledby="approvedScholarshipModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="approvedScholarshipModalLabel">Approved Scholarship Requests</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>No approved scholarship requests at this time.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>1 Total Scheme</h5>
-                        <a href="user_schema.html" class="btn btn-link custom-link">View Details</a>
+            
+            <div class="modal fade" id="announcementModal" tabindex="-1" role="dialog" aria-labelledby="announcementModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="announcementModalLabel">Announcements</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>No announcements at this time.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>0 Announcement</h5>
-                        <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#announcementModal">View Details</a>
+            
+            <div class="modal fade" id="faqsModal" tabindex="-1" role="dialog" aria-labelledby="faqsModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="faqsModalLabel">FAQ's</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>No FAQs available at this time.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</main>
-
-<!-- Modals -->
-<div class="modal fade" id="approvedScholarshipModal" tabindex="-1" role="dialog" aria-labelledby="approvedScholarshipModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approvedScholarshipModalLabel">Approved Scholarship Requests</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>No approved scholarship requests at this time.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="announcementModal" tabindex="-1" role="dialog" aria-labelledby="announcementModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="announcementModalLabel">Announcements</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>No announcements at this time.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-        </div>
-    </div>
+            
 
     <!-- Sidebar Toggle Button for smaller screens -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">

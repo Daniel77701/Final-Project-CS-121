@@ -1,3 +1,33 @@
+<?php
+    require_once "FAQ.php";
+    $faq = new FAQ();
+    $faqs = $faq->getFAQs(); // Fetch FAQs
+
+    // Handle delete action
+    if (isset($_GET['delete'])) {
+        $id = $_GET['delete'];
+        $faq->deleteFAQ($id);
+        header("Location: FAQ'S.php"); 
+        exit();
+    }
+
+    // Handle edit action 
+    if (isset($_GET['edit'])) {
+        $id = $_GET['edit'];
+        // Fetch the FAQ to edit
+        $faqItem = $faq->getFAQById($id);
+    }
+
+    // Handle adding FAQ via form submission
+    if (isset($_POST['add'])) {
+        $question = $_POST['question'];
+        $answer = $_POST['answer'];
+        $faq->addFAQ($question, $answer);
+        header("Location: FAQ'S.php"); 
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +87,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="FAQ'S.html">
+                        <a class="nav-link active" href="FAQ'S.php">
                             <img src="icons_admin/exam_management.png" alt="FAQ'S Icon" width="20">
                             FAQ'S
                         </a>
@@ -104,63 +134,66 @@
             <!-- Main Content (Right Column) -->
             <div class="col-md-9 col-lg-10 main-content">
                 <div class="title-box">
-                    <h1>Scholarship FAQ's <a href="settings.html">
-                        <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
-                    </a> </h1>
+                    <h1>Scholarship FAQ's</h1>
                     <hr>
                     <div class="add-question-container">
-                        <button class="add-question btn btn-primary">Add Question</button>
+                        <button class="add-question btn btn-primary" data-toggle="modal" data-target="#addFAQModal">Add Question</button>
                     </div>
                 </div>
 
                 <!-- FAQ Section -->
                 <div class="faq-title-box">
-                    <div class="accordion-container">
-                        <!-- Accordion Item 1 -->
-                        <button class="accordion btn btn-light text-left">1. How do I apply for a scholarship at Batangas State University?</button>
-                        <div class="panel">
-                            <p>You can apply for a scholarship through the "Scholarship Application Tracker" by visiting our website. The application process is done entirely online, where you can submit your application, track its progress, and check scholarship eligibility.</p>
-                        </div>
-
-                        <!-- Accordion Item 2 -->
-                        <button class="accordion btn btn-light text-left">2. Do I need to maintain a certain GPA to keep my scholarship?</button>
-                        <div class="panel">
-                            <p>Yes, most scholarships at Batangas State University require students to maintain a specific GPA to retain their scholarship for the following semesters.</p>
-                        </div>
-
-                        <!-- Accordion Item 3 -->
-                        <button class="accordion btn btn-light text-left">3. Can incoming freshmen apply for scholarships?</button>
-                        <div class="panel">
-                            <p>Yes, incoming freshmen can apply for scholarships, especially those for first-year students. Make sure to check the available scholarships for new students.</p>
-                        </div>
-
-                        <!-- Accordion Item 4 -->
-                        <button class="accordion btn btn-light text-left">4. Do I need to be an honor student to apply for a scholarship?</button>
-                        <div class="panel">
-                            <p>Not all scholarships require honor status. Some are based on financial need or other criteria. It depends on the specific scholarship.</p>
-                        </div>
-
-                        <!-- Accordion Item 5 -->
-                        <button class="accordion btn btn-light text-left">5. Who can apply for scholarships at Batangas State University?</button>
-                        <div class="panel">
-                            <p>All enrolled students at Batangas State University who meet the eligibility requirements can apply for scholarships.</p>
-                        </div>
+                    <div class="accordion-container"> 
+                        <!-- Loop through FAQs and display them -->
+                        <?php foreach ($faqs as $faqItem): ?>
+                            <button class="accordion btn btn-light text-left"><?php echo $faqItem['question']; ?></button>
+                            <div class="panel">
+                                <p><?php echo $faqItem['answer']; ?></p>
+                                <a href="FAQ'S.php?edit=<?php echo $faqItem['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="FAQ'S.php?delete=<?php echo $faqItem['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div> <!-- End Main Content -->
         </div> <!-- End Row -->
     </div> <!-- End Main Container -->
- <!-- Sidebar Toggle Button for smaller screens -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-    <!-- Bootstrap and jQuery Scripts -->
+    <!-- Add FAQ Modal -->
+    <div class="modal fade" id="addFAQModal" tabindex="-1" role="dialog" aria-labelledby="addFAQModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFAQModalLabel">Add New FAQ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="question">Question</label>
+                            <input type="text" class="form-control" id="question" name="question" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="answer">Answer</label>
+                            <textarea class="form-control" id="answer" name="answer" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="add" class="btn btn-primary">Save FAQ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-
 
     <!-- Accordion Functionality Script -->
     <script>

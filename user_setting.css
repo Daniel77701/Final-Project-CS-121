@@ -1,0 +1,394 @@
+/* General Styles */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
+}
+
+#header {
+    background-color: #d1182d !important;
+    color: white;
+    padding: 8px 20px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: white !important;   
+     color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem;
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Only apply background color on hover */
+#sidebar .nav-link:hover {
+    background-color: #d1182d; /* Red background on hover */
+    color: white;
+}
+
+/* Remove the red background from the active state */
+#sidebar .nav-link.active {
+    background-color: #d1182d; /* No background for active state */
+    color: white; /* Optional: change text color when active */
+}
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification {
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: white;
+    color: #dc2626;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.container {
+    display: flex;
+    min-height: calc(100vh - 80px);
+}
+
+.sidebar {
+    width: 250px;
+    background: white;
+    padding: 1rem;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar-item {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-item.active {
+    background-color: #dc2626;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+.content-card {
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 20px; /* Add this line to move the content card lower */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.table-container {
+    overflow-x: auto;
+    padding: 1rem;
+}
+
+table {
+    width: 120%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+    background-color: #8C1D1A;
+    color: white;
+    font-weight: 600;
+}
+
+.view-details-btn {
+    background-color: #8b5cf6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 0.1rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    max-height: 80vh; /* Set a max height */
+    overflow-y: auto;
+}
+
+.modal-body {
+    max-height: 60vh; /* Set a height for the body */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-top: 0.1rem; /* Add some space above */
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.close-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.print-btn {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #f3f4f6;
+}
+
+.student-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: block;
+}
+
+.scholarship-type {
+    color: #dc2626;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar-item span {
+        display: none;
+    }
+
+    .user-section span {
+        display: none;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 2rem;
+    }
+}
+.hr {
+    border-color: #8C1D1A !important;
+    border-width: 2px !important;
+}
+.btn-close {
+    background-color: #ef4444;
+    color: white;
+}
+.btn-submit {
+    background-color: #4caf50;
+    color: white;
+}
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 90%; /* Width of the modal */
+    max-width: 500px; /* Max width */
+    max-height: 80vh; /* Set max height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for better visibility */
+}
+.apply-button {
+    background-color: darkorchid; /* Green background */
+    color: white; /* White text */
+    padding: 0.5rem 1.5rem; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 0.375rem; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s; /* Smooth background color transition */
+    display: inline-block; /* Inline block for proper spacing */
+    text-align: center; /* Center text */
+}
+
+.apply-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+.settings-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.settings-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--text);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn {
+    background: #666;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .user-section {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .settings-card {
+        margin: 1rem;
+    }
+}

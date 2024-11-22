@@ -1,276 +1,152 @@
+98% of storage used … If you run out, you can't create, edit and upload files. Get 100 GB of storage for ₱89.00 ₱22.25/month for 2 months.
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon">
     <title>Scholarship Tracker System</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #e8f0eb;
-        }
-
-        .header {
-            background-color: #dc2626;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-        }
-
-        .system-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .notification {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .notification-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: white;
-            color: #dc2626;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.8rem;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .profile-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .sidebar {
-            background-color: white;
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            top: 72px;
-            padding: 1rem;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            color: #4b5563;
-            text-decoration: none;
-        }
-
-        .nav-item:hover {
-            background-color: #f3f4f6;
-        }
-
-        .nav-item.active {
-            background-color: #dc2626;
-            color: white;
-            border-radius: 4px;
-        }
-
-        .main-content {
-            margin-left: 250px;
-            margin-top: 72px;
-            padding: 2rem;
-        }
-
-        .dashboard-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #1f2937;
-        }
-
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background-color: #dc2626;
-            color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-number {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .view-details {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .view-details:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .cards-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="user_css/user_dashboard.css">
 </head>
 <body>
-    <header class="header">
-        <div class="logo-section">
-            <button class="menu-toggle">☰</button>
-            <img src="/placeholder.svg" alt="Logo" class="logo">
-            <span class="system-title">Scholarship Tracker System</span>
+    <!-- Header Section -->
+    <header id="header" class="d-flex justify-content-between align-items-center p-3 bg-light">
+        <div class="logo d-flex align-items-center">
+            <img src="icons_user/logo.png" alt="Logo" width="40">
+            <span class="ml-2">Scholarship Tracker System</span>
         </div>
-        <div class="user-section">
-            <div class="notification">
-                <span>🔔</span>
-                <span class="notification-count">2</span>
-            </div>
-            <div class="user-profile">
-                <img src="/placeholder.svg" alt="Profile" class="profile-image">
-                <span>Welcome John Doe</span>
-                <span>▼</span>
-            </div>
+        <div class="welcome d-flex align-items-center">
+            <i class="fas fa-bell"></i> 
+            <span class="badge badge-light ml-2">3</span>
+            <span class="ml-4">Joan Briones</span>
+            <img src="icons_user/Formal Pic.jpeg" alt="Profile Picture" class="rounded-circle ml-2" width="40" height="40">
         </div>
     </header>
 
-    <nav class="sidebar">
-        <a href="#" class="nav-item active">
-            <span>📊</span>
-            Dash Board
-        </a>
-        <a href="#" class="nav-item">
-            <span>📄</span>
-            View Schema
-        </a>
-        <a href="#" class="nav-item">
-            <span>📝</span>
-            Application History
-        </a>
-        <a href="#" class="nav-item">
-            <span>👤</span>
-            Profile
-        </a>
-        <a href="#" class="nav-item">
-            <span>⚙️</span>
-            Settings
-        </a>
-        <a href="#" class="nav-item">
-            <span>🚪</span>
-            Logout
-        </a>
-    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="user_dashboard.html">
+                            <img src="icons_user/dashboard.png" alt="Dashboard Icon"> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user_schema.html">
+                            <img src="icons_user/view schema.png" alt="View Schema Icon"> View Schema
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user_application-history.html">
+                            <img src="icons_user/application history.png" alt="Application History Icon"> Application History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user_profile.html">
+                            <img src="icons_user/profile.png" alt="Profile Icon"> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user_settings.html">
+                            <img src="icons_user/setting.png" alt="Setting Icon"> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user_logout.html">
+                            <img src="icons_user/logout.png" alt="Logout Icon"> Logout
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
-    <main class="main-content">
-        <h1 class="dashboard-title">Dash Board</h1>
-        <div class="cards-container">
-            <div class="card">
-                <div class="card-number">0</div>
-                <div class="card-title">Approved Scholarship Request</div>
-                <button class="view-details">View Details</button>
+<!-- Main Content -->
+<main class="col-md-9 col-lg-10 ml-sm-auto px-md-4" id="main-content">
+    <div class="dashboard-section">
+        <h1 class="mb-4">Dashboard </h1>
+        <hr>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>0 Approved Scholarship Request</h5>
+                        <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#approvedScholarshipModal">View Details</a>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <div class="card-number">5</div>
-                <div class="card-title">Total Scheme</div>
-                <button class="view-details">View Details</button>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>1 Total Scheme</h5>
+                        <a href="user_schema.html" class="btn btn-link custom-link">View Details</a>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <div class="card-number">0</div>
-                <div class="card-title">Announcement</div>
-                <button class="view-details">View Details</button>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>0 Announcement</h5>
+                        <a href="#" class="btn btn-link custom-link" data-toggle="modal" data-target="#announcementModal">View Details</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <script>
-        // Mobile menu toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
+<!-- Modals -->
+<div class="modal fade" id="approvedScholarshipModal" tabindex="-1" role="dialog" aria-labelledby="approvedScholarshipModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approvedScholarshipModalLabel">Approved Scholarship Requests</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>No approved scholarship requests at this time.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    </script>
+<div class="modal fade" id="announcementModal" tabindex="-1" role="dialog" aria-labelledby="announcementModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="announcementModalLabel">Announcements</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>No announcements at this time.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <!-- Sidebar Toggle Button for smaller screens -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Bootstrap and jQuery Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </body>
 </html>

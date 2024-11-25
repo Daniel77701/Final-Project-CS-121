@@ -106,4 +106,10 @@ if (isset($_POST['update'])) {
 // Get all FAQs
 $faqs = $faq->getFAQs();
 
+// Check if there's an edit request
+if (isset($_GET['edit'])) {
+    $id = $_GET['edit'];
+    $faqItem = $faq->getFAQById($id); // Get the FAQ to be edited
+}
+
 ?>

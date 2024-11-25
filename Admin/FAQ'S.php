@@ -1,31 +1,41 @@
 <?php
-    require_once "FAQ.php";
-    $faq = new FAQ();
-    $faqs = $faq->getFAQs(); // Fetch FAQs
+require_once "FAQ.php";
+$faq = new FAQ();
+$faqs = $faq->getFAQs(); // Fetch FAQs
 
-    // Handle delete action
-    if (isset($_GET['delete'])) {
-        $id = $_GET['delete'];
-        $faq->deleteFAQ($id);
-        header("Location: FAQ'S.php"); 
-        exit();
-    }
+// Handle delete action
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $faq->deleteFAQ($id);
+    header("Location: FAQ'S.php"); 
+    exit();
+}
 
-    // Handle edit action 
-    if (isset($_GET['edit'])) {
-        $id = $_GET['edit'];
-        // Fetch the FAQ to edit
-        $faqItem = $faq->getFAQById($id);
-    }
+// Handle edit action
+if (isset($_GET['edit'])) {
+    $id = $_GET['edit'];
+    // Fetch the FAQ to edit
+    $faqItem = $faq->getFAQById($id);
+}
 
-    // Handle adding FAQ via form submission
-    if (isset($_POST['add'])) {
-        $question = $_POST['question'];
-        $answer = $_POST['answer'];
-        $faq->addFAQ($question, $answer);
-        header("Location: FAQ'S.php"); 
-        exit();
-    }
+// Handle adding FAQ via form submission
+if (isset($_POST['add'])) {
+    $question = $_POST['question'];
+    $answer = $_POST['answer'];
+    $faq->addFAQ($question, $answer);
+    header("Location: FAQ'S.php"); 
+    exit();
+}
+
+// Handle updating FAQ
+if (isset($_POST['update'])) {
+    $id = $_POST['id'];
+    $question = $_POST['question'];
+    $answer = $_POST['answer'];
+    $faq->updateFAQ($id, $question, $answer);
+    header("Location: FAQ'S.php"); 
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +65,6 @@
         </div>
     </header>
     
-
     <!-- Main Container to hold sidebar and main content -->
     <div class="container-fluid">
         <div class="row">
@@ -149,7 +158,7 @@
                             <button class="accordion btn btn-light text-left"><?php echo $faqItem['question']; ?></button>
                             <div class="panel">
                                 <p><?php echo $faqItem['answer']; ?></p>
-                                <a href="FAQ'S.php?edit=<?php echo $faqItem['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="FAQ'S.php?edit=<?php echo $faqItem['id']; ?>" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editFAQModal">Edit</a>
                                 <a href="FAQ'S.php?delete=<?php echo $faqItem['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                             </div>
                         <?php endforeach; ?>
@@ -188,6 +197,39 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit FAQ Modal -->
+    <?php if (isset($faqItem)): ?>
+        <div class="modal fade" id="editFAQModal" tabindex="-1" role="dialog" aria-labelledby="editFAQModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editFAQModalLabel">Edit FAQ</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST">
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="<?php echo $faqItem['id']; ?>">
+                            <div class="form-group">
+                                <label for="question">Question</label>
+                                <input type="text" class="form-control" id="question" name="question" value="<?php echo $faqItem['question']; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="answer">Answer</label>
+                                <textarea class="form-control" id="answer" name="answer" required><?php echo $faqItem['answer']; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" name="update" class="btn btn-primary">Update FAQ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <!-- Include Bootstrap and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

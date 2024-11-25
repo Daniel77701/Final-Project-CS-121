@@ -1,4 +1,3 @@
-/* General Styles */
 body {
     font-family: 'Times New Roman', Times, serif;
     background-color: whitesmoke;
@@ -29,15 +28,13 @@ body {
     font-weight: bold;
 }
 
-/* Sidebar */
 #sidebar {
     background-color: white;
     color: black;
     height: 100vh;
     padding-top: 20px;
     font-size: 0.85rem;
-    margin-right: 8px; /* Added margin to the right to separate from the main content */
-    /* Optional: you can also add padding-right if you want space inside the sidebar */
+    margin-right: 8px;
 }
 
 #sidebar .nav-link {
@@ -53,17 +50,15 @@ body {
     margin-right: 10px;
 }
 
-/* Only apply background color on hover */
 #sidebar .nav-link:hover {
-    background-color: #d1182d; /* Red background on hover */
+    background-color: #d1182d;
     color: white;
 }
 
-/* Apply background color and white text to "Scholars" */
 #sidebar .nav-link.active {
-    background-color: #d1182d; /* Red background */
-    color: white; /* White font */
-    text-decoration: none; /* Remove underline */
+    background-color: #d1182d;
+    color: white;
+    text-decoration: none;
 }
 
 #main-content {
@@ -73,7 +68,6 @@ body {
     margin-top: 25px;
 }
 
-/* Scholarship Section */
 .scholarship-section {
     padding: 20px;
     border-radius: 8px;
@@ -84,9 +78,9 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 150%; /* Ensure title box is full width */
-    max-width: 1200px; /* Optional max-width for a more contained box */
-    margin: 8px auto 20px auto; /* Adjust margin-top to create more space */
+    width: 150%;
+    max-width: 1200px;
+    margin: 8px auto 20px auto;
 }
 .title-box h2 {
     color: #333;
@@ -102,12 +96,11 @@ body {
     padding: 0;
 }
 
-/* Center the button inside its container using flexbox */
 .button-container {
     display: flex;
-    justify-content: center;  /* Horizontally center the button */
-    align-items: center;      /* Vertically center (optional) */
-    height: 100px;             /* Height of the container for vertical centering */
+    justify-content: center;
+    align-items: center;
+    height: 100px;
 }
 
 .add-featured {
@@ -125,8 +118,6 @@ body {
     background-color: blue;
 }
 
-
-/* Table Box Styles */
 .table-box {
     background-color: white;
     padding: 35px;
@@ -139,36 +130,31 @@ body {
     margin-right: auto;
 }
 
-/* Table Styles */
 .table-box table {
-    width: 100%; /* Ensures table takes up full container width */
-    border-collapse: collapse; /* Ensures table borders collapse together */
+    width: 100%;
+    border-collapse: collapse;
     font-size: 0.95rem;
     margin: 0 auto;
 }
 
-/* Table Header */
 .table-box th {
     background-color: darkred;
     color: white;
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    border: 1px solid whitesmoke; /* Adds a gray border to table headers */
+    border: 1px solid whitesmoke;
 }
 
-/* Table Data */
 .table-box td {
     padding: 12px;
-    border: 1px solid lightgrey; /* Adds a gray border to table data cells */
+    border: 1px solid lightgrey;
 }
 
-/* Table Rows */
 .table-box tr {
-    border: 1px solid  #ddd !important; /* Adds a gray border to the entire row */
+    border: 1px solid  #ddd !important;
 }
 
-/* Action Buttons */
 td button {
     padding: 6px 12px;
     border-radius: 1px;
@@ -201,9 +187,30 @@ td button.close-renewal {
     background-color: #9e9e9e;
     color: white;
 }
-/* Footer */
+
 .footer {
     margin-top: 20px;
     font-size: 0.9rem;
     color: #333;
-} 
+}
+
+#success-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: none;
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    display: none;
+}

@@ -23,8 +23,16 @@ CREATE TABLE IF NOT EXISTS `students` (
     password VARCHAR(255) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS featured_scholars (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    subject VARCHAR(255) NOT NULL,
+    course VARCHAR(255) NOT NULL,
+    year_graduated YEAR NOT NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 -- Table for Applications
--- Table for Applications (Already Correct)
 CREATE TABLE IF NOT EXISTS `applications` (
     application_id INT AUTO_INCREMENT PRIMARY KEY,
     scholarship_id INT,

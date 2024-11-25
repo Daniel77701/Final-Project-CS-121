@@ -6,7 +6,7 @@ class Dbh {
     private $pwd = "";
     private $dbName = "db_scholarshiptracker";
 
-    protected function connect() {
+    public function connect() {
         try {
             $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->dbName;
             $pdo = new PDO($dsn, $this->user, $this->pwd);

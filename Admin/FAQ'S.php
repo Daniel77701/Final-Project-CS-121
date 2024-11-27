@@ -1,5 +1,5 @@
 <?php
-require_once "FAQ.php";
+require_once "FAQ'S_handler.php";
 $faq = new FAQ();
 $faqs = $faq->getFAQs(); // Fetch FAQs
 

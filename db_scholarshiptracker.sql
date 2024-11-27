@@ -32,6 +32,12 @@ CREATE TABLE IF NOT EXISTS featured_scholars (
     status VARCHAR(50) NOT NULL
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS faqs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question VARCHAR(255) NOT NULL,
+    answer VARCHAR(255) NOT NULL,
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 -- Table for Applications
 CREATE TABLE IF NOT EXISTS `applications` (
     application_id INT AUTO_INCREMENT PRIMARY KEY,

@@ -1,4 +1,3 @@
-/* General Styles */
 body {
     font-family: 'Times New Roman', Times, serif;
     background-color: whitesmoke;
@@ -29,13 +28,15 @@ body {
     font-weight: bold;
 }
 
-/* Sidebar */
 #sidebar {
-    background-color: white !important;   
-     color: black;
+    background-color: white !important;
+    color: black;
     height: 100vh;
     padding-top: 20px;
     font-size: 0.85rem;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
 }
 
 #sidebar .nav-link {
@@ -51,31 +52,35 @@ body {
     margin-right: 10px;
 }
 
-/* Only apply background color on hover */
 #sidebar .nav-link:hover {
-    background-color: #d1182d; /* Red background on hover */
+    background-color: #d1182d;
     color: white;
 }
 
-/* Remove the red background from the active state */
 #sidebar .nav-link.active {
-    background-color: #d1182d; /* No background for active state */
-    color: white; /* Optional: change text color when active */
+    background-color: #d1182d;
+    color: white;
 }
 
-/* Main Content */
 .main-content {
-    margin-left: 250px; /* Create space to the right of the fixed sidebar */
+    margin-left: 250px;
     padding: 20px;
-    width: calc(100% - 250px); /* Fill the remaining width of the page */
+    width: calc(100% - 250px);
     background-color: #d9dfdb;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin-top: 60px;
 }
 
-/* Scholarship Section */
 .scholarship-section {
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .title-box {
@@ -117,16 +122,22 @@ body {
 .table-box {
     background-color: white;
     padding: 35px;
-    border-radius: 2px;
+    border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 25px;
     overflow-x: auto;
+    width: 100%;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .table-box table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
+    background-color: white;
+    border-radius: 8px;
 }
 
 .table-box th {
@@ -142,17 +153,15 @@ body {
     border: 1px solid lightgrey;
 }
 
-/* General styles for buttons inside table cells */
 td button {
     padding: 8px 16px;
     border-radius: 1px;
     border: none;
     cursor: pointer;
-    font-size: 0.7rem; /* Slightly increased font size for better readability */
+    font-size: 0.7rem;
     margin-right: 5px;
 }
 
-/* Edit button style */
 td button:first-child {
     background-color: #4CAF50;
     color: white;
@@ -170,7 +179,7 @@ td button:nth-child(2) {
 td button:nth-child(2):hover {
     background-color: blue;
 }
-/* Set Deadline button style */
+
 td button:nth-child(3) {
     background-color: #ff9800;
     color: white;
@@ -180,7 +189,6 @@ td button:nth-child(3):hover {
     background-color: blue;
 }
 
-/* Close Renewal button style */
 td button.close-renewal {
     background-color: #9e9e9e;
     color: white;
@@ -188,4 +196,88 @@ td button.close-renewal {
 
 td button.close-renewal:hover {
     background-color: blue;
+}
+
+.modal-dialog {
+    max-width: 500px;
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.modal-header {
+    background-color: #d1182d;
+    color: white;
+}
+
+.modal-header .close {
+    color: white;
+}
+
+.modal-footer {
+    text-align: center;
+}
+
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.btn {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #d1182d;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #a50e1e;
+}
+
+.btn-secondary {
+    background-color: #f8f9fa;
+    color: black;
+}
+
+.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+.container-fluid {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.table-responsive {
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+thead th {
+    text-align: left;
+    padding: 10px;
+}
+
+tbody td {
+    padding: 10px;
 }

@@ -3,13 +3,13 @@ CREATE DATABASE IF NOT EXISTS db_scholarshiptracker CHARACTER SET utf8mb4 COLLAT
 USE db_scholarshiptracker;
 
 -- Table for Scholarships
-CREATE TABLE IF NOT EXISTS `scholarships` (
+CREATE TABLE IF NOT EXISTS scholarships (
     scholarship_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
-    deadline DATE,
-    requirements TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    description TEXT NOT NULL,
+    requirements TEXT NOT NULL,
+    deadline DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 

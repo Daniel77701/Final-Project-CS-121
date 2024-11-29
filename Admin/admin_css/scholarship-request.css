@@ -221,3 +221,28 @@ button {
 .footer {
     margin-top: 20px;
 }  
+
+/* Ensure the modal takes up full height and centers on screen */
+.modal {
+    display: block;
+    padding-left: 0 !important;
+}
+
+.modal-dialog {
+    max-width: 800px; /* You can adjust this width as needed */
+    margin: auto;
+}
+
+.modal-content {
+    overflow: hidden;
+}
+
+/* Custom styles for the modal */
+.modal.fade .modal-dialog {
+    transform: translate(0, 50%);
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: translate(0, 0);
+}

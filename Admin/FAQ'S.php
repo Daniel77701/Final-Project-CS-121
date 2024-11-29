@@ -84,7 +84,7 @@ if (isset($_POST['update'])) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="scholarship.html">
+                        <a class="nav-link" href="scholarship.php">
                             <img src="icons_admin/scholarship.png" alt="Scholarship Icon" width="20">
                             Scholarship
                         </a>
@@ -126,7 +126,7 @@ if (isset($_POST['update'])) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="useraccount.html">
+                        <a class="nav-link" href="useraccount.php">
                             <img src="icons_admin/useraccount.png" alt="User Account Icon" width="20">
                             User Account
                         </a>

@@ -38,6 +38,24 @@ CREATE TABLE IF NOT EXISTS faqs (
     answer VARCHAR(255) NOT NULL,
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE TABLE announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    subject VARCHAR(255) NOT NULL,
+    announcement TEXT NOT NULL,
+    date_posted DATETIME NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS scholarship_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    scholarship VARCHAR(100) NOT NULL,
+    student_no VARCHAR(20) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    course VARCHAR(100) NOT NULL,
+    year_level VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Table for Applications
 CREATE TABLE IF NOT EXISTS `applications` (
     application_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -106,7 +124,6 @@ INSERT INTO scholarships (name, description, deadline, requirements) VALUES
 ('CHED CoScho Scholarship', 'Co-sponsored scholarship under CHED for deserving students.', '2025-03-10', 'GPA above 3.2, Sponsorship agreement');
 
 -- Insert Data into Students Table
--- Insert Data into Students Table with Unique SR Codes (Including 23-XXXX for 6 students)
 INSERT INTO students (name, email, sr_code, mobile_number, password) VALUES
 ('Jose Cruz', 'jose.cruz@gmail.com', '21-20930', '09123456789', 'password123'),
 ('Maria Santos', 'maria.santos@gmail.com', '21-89012', '09123456780', 'password123'),

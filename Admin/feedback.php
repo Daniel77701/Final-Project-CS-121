@@ -7,11 +7,10 @@
     <title>Scholarship Tracker System</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="admin_css/setting.css"> 
-
+    <link rel="stylesheet" href="admin_css/feedback.css">
 </head>
 <body>
-         <!-- Header Section -->
+    <!-- Header Section -->
     <header id="header">
         <div class="logo">
             <img src="icons_admin/logo.png" alt="Logo" width="40">
@@ -38,54 +37,62 @@
                     <li class="nav-item"><a class="nav-link" href="scholarship-request.html"><img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon"> Scholarship Request</a></li>
                     <li class="nav-item"><a class="nav-link" href="FAQ'S.php"><img src="icons_admin/exam_management.png" alt="FAQ'S Icon"> FAQ'S</a></li>
                     <li class="nav-item"><a class="nav-link" href="announcement.html"><img src="icons_admin/announcement.png" alt="Announcement Icon"> Announcement</a></li>
-                    <li class="nav-item"><a class="nav-link" href="feedback.php"><img src="icons_admin/feedback.png" alt="Feedback Icon"> Feedback</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="feedback.php"><img src="icons_admin/feedback.png" alt="Feedback Icon"> Feedback</a></li>
                     <li class="nav-item"><a class="nav-link" href="featured-scholars.html"><img src="icons_admin/featured_scholars.png" alt="Featured Scholars Icon"> Featured Scholars</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="settings.html"><img src="icons_admin/setting.png" alt="Settings Icon"> Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="settings.html"><img src="icons_admin/setting.png" alt="Settings Icon"> Settings</a></li>
                     <li class="nav-item"><a class="nav-link" href="useraccount.php"><img src="icons_admin/useraccount.png" alt="User Account Icon"> User Account</a></li>
                     <li class="nav-item"><a class="nav-link" href="userlogs.html"><img src="icons_admin/userlogs.png" alt="User Logs Icon"> User Logs</a></li>
                 </ul>
             </nav>
-                    <div class="scholarship-section">
-                        <div class="title-box">
-                        <h2>Settings <a href="settings.html">
-                            <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
-                        </a> </h2> 
-                        <hr> 
-                        <div class="button-container">
-                            <button class="add-featured">Set School Year</button> 
-                            <button class="add-featured">Assess Scholars </button>
 
-                        </div>
-                          </div>
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 px-md-4" id="main-content">
+                <div class="dashboard-section">
+                    <h1 class="mt-4">Feedback <a href="settings.html">
+                        <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
+                    </a> </h1>
+                    <hr>
+                </div>
 
-                        <div class="table-box">
-                        <table>
-                            <thead>
+                <!-- Feedback Table -->
+                <div class="table-box">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Scholarship</th>
+                                <th>Message</th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            include("feedback_handler.php");
+                            foreach ($feedbacks as $feedback):
+                            ?>
                                 <tr>
-                                    <th>School Year</th>
-                                    <th>Semester</th>
+                                    <td><?= htmlspecialchars($feedback['scholarship']); ?></td>
+                                    <td><?= htmlspecialchars($feedback['message']); ?></td>
+                                    <td><?= htmlspecialchars($feedback['name']); ?></td>
+                                    <td><?= htmlspecialchars($feedback['course']); ?></td>
+                                    <td><?= htmlspecialchars($feedback['created_at']); ?></td>
+                                    <td><?= htmlspecialchars($feedback['email']); ?></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>      </td>
-                                    <td>      </td>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <p>Showing <?= count($feedbacks); ?> feedback entries</p>
+                </div>
+            </main>
+        </div>
+    </div>
 
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="footer">Showing 1 to 1 of 1 entries</div>
-                    </div>
-                    
-   <!-- Sidebar Toggle Button for smaller screens -->
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
-    <span class="navbar-toggler-icon"></span>
-</button>
     <!-- Bootstrap and jQuery Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-
 </body>
 </html>

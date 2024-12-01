@@ -1,0 +1,550 @@
+<!DOCTYPE html> <html lang="en">
+     <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon"> 
+        <title>Scholarship Tracker System</title> 
+        <!-- Bootstrap CSS --> 
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+         <link rel="stylesheet" href="/user_css/user_profile.css">
+        </head>
+         <body>  
+    <!-- Header Section -->
+    <header id="header" class="d-flex justify-content-between align-items-center p-3 bg-light">
+        <div class="logo d-flex align-items-center">
+            <img src="/icons/logo.png" alt="Logo" width="40">
+            <span class="ml-2">Scholarship Tracker System</span>
+        </div>
+        <div class="welcome d-flex align-items-center">
+            <div class="notification-bell">
+                <i class="fas fa-bell" id="notificationBell"></i>
+                <span class="notification-count" id="notificationCount">0</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-list" id="notificationList">
+                        <!-- Notifications will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            <span class="ml-4" id="userName"></span>
+            <i class="fas fa-user-circle" style="font-size: 40px; margin-left: 10px;"></i>
+        </div>
+    </header>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../html/user_dashboard.html">
+                                    <img src="../icons_user/dashboard.png" alt="Dashboard Icon"> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../php/user_schema.php">
+                                    <img src="../icons_user/view schema.png" alt="View Schema Icon"> View Schema
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../php/user_application-history.php">
+                                    <img src="../icons_user/application history.png" alt="Application History Icon"> Application History
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="../html/user_profile.html">
+                                    <img src="../icons_user/profile.png" alt="Profile Icon"> Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../html/user_settings.html">
+                                    <img src="../icons_user/setting.png" alt="Setting Icon"> Settings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../html/user_logout.html">
+                                    <img src="../icons_user/logout.png" alt="Logout Icon"> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+            <main class="main-content">
+                <div class="card">
+                    <h2 style="font-size: 36px;"> Profile </h2>
+                    <hr class="hr">                      
+                    <div class="profile-content">
+                        <div class="profile-image-container">
+                            <img src="" alt="Profile" class="profile-image-large" id="profilePreview">
+                        </div>
+                        <div class="profile-details">
+                            <div class="grid grid-cols-2">
+                                <div class="form-group">
+                                    <label for="fullName">Applicant Name:</label>
+                                    <input type="text" id="fullName" class="form-control" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mobileNumber">Mobile Number:</label>
+                                    <input type="tel" id="mobileNumber" class="form-control" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="srcode">SR-Code:</label>
+                                    <input type="text" id="srcode" class="form-control" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="yearLevel">Year Level:</label>
+                                    <input type="text" id="yearLevel" class="form-control" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" class="form-control" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="registrationDate">Registration Date:</label>
+                                    <input type="date" id="registrationDate" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="grid grid-cols-2">
+                    <div class="card">
+                        <h2 class="card-title">Exam Result</h2>
+                        <p>Congratulations, you passed the exam!</p>
+                    </div>
+                    <div class="card">
+                        <h2 class="card-title">Feedback</h2>
+                        <div class="form-group">
+                            <label for="message">Message:</label>
+                            <textarea id="message" rows="4" placeholder="Type your feedback here..."></textarea>
+                            <button class="btn">Submit</button>
+    
+                        </div>
+                    </div>
+                </div>
+            </main>
+    <!-- Sidebar Toggle Button for smaller screens -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Bootstrap and jQuery Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.querySelector('.card .btn').addEventListener('click', function() {
+            const feedbackMessage = document.getElementById('message').value;
+            
+            if (!feedbackMessage.trim()) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please enter your feedback message!'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Submit Feedback?',
+                text: 'Are you sure you want to submit this feedback?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Submitted!',
+                        'Your feedback has been submitted successfully.',
+                        'success'
+                    ).then(() => {
+                        document.getElementById('message').value = '';
+                    });
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            function initializeForm() {
+                const applications = JSON.parse(localStorage.getItem('applications')) || [];
+                const latestApplication = applications[applications.length - 1];
+
+                if (latestApplication) {
+                    if (latestApplication.photo) {
+                        document.getElementById('profilePreview').src = latestApplication.photo;
+                        const headerProfilePic = document.querySelector('.header-profile-pic');
+                        if (headerProfilePic) {
+                            headerProfilePic.src = latestApplication.photo;
+                        }
+                    } else {
+                        document.getElementById('profilePreview').src = 'icons_user/Formal Pic.jpeg';
+                    }
+
+                    document.getElementById('fullName').value = latestApplication.name || '';
+                    document.getElementById('mobileNumber').value = latestApplication.mobile || '';
+                    document.getElementById('srcode').value = latestApplication.srcode || '';
+                    document.getElementById('yearLevel').value = latestApplication.year || '';
+                    document.getElementById('email').value = latestApplication.email || '';
+                    document.getElementById('registrationDate').value = latestApplication.apply_date || '';
+                } else {
+                    document.getElementById('profilePreview').src = 'icons_user/Formal Pic.jpeg';
+
+                    document.getElementById('fullName').value = '';
+                    document.getElementById('mobileNumber').value = '';
+                    document.getElementById('srcode').value = '';
+                    document.getElementById('yearLevel').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('registrationDate').value = '';
+                }
+            }
+        
+            initializeForm();
+        });
+
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+        document.getElementById('userName').textContent = userData.name;
+    } else {
+        window.location.href = 'user_login.html';
+    }
+    </script>
+
+    <style>
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .notification-bell i {
+            font-size: 20px;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .notification-bell:hover i {
+            color: #e6e6e6;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid #fff;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: -10px;
+            width: 380px;
+            background-color: white;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            display: none;
+            z-index: 1000;
+            margin-top: 15px;
+            border: 1px solid #eef0f2;
+        }
+
+        .notification-dropdown:before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 25px;
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            transform: rotate(45deg);
+            border-left: 1px solid #eef0f2;
+            border-top: 1px solid #eef0f2;
+        }
+
+        .notification-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eef0f2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .notification-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .notification-list {
+            max-height: 460px;
+            overflow-y: auto;
+            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+
+        .notification-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .notification-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .notification-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .notification-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eef0f2;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .notification-content {
+            margin-bottom: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .notification-item.unread {
+            background-color: #f0f7ff;
+        }
+
+        .notification-item.unread .notification-content {
+            font-weight: 500;
+        }
+
+        .notification-item.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .notification-item.warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .notification-item.important {
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification-item.info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        .no-notifications {
+            padding: 30px 20px;
+            text-align: center;
+            color: #666;
+        }
+
+        .no-notifications i {
+            font-size: 24px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .no-notifications p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .notification-action-btn {
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .notification-action-btn:hover {
+            background-color: #e9ecef;
+            color: #0056b3;
+        }
+
+        .unread-indicator {
+            background-color: #e7f3ff;
+            color: #0056b3;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bell = document.getElementById('notificationBell');
+            const dropdown = document.getElementById('notificationDropdown');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationList = document.getElementById('notificationList');
+
+            if (!localStorage.getItem('notifications')) {
+                fetch('get_notifications.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        localStorage.setItem('notifications', JSON.stringify(data.notifications));
+                        updateNotifications();
+                    });
+            }
+
+            bell.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                if (dropdown.style.display === 'block') {
+                    updateNotifications();
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!bell.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            function updateNotifications() {
+                const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+                const unreadCount = notifications.filter(n => !n.is_read).length;
+                
+                updateNotificationCount(unreadCount);
+                displayNotifications(notifications);
+            }
+
+            function updateNotificationCount(count) {
+                notificationCount.style.display = count > 0 ? 'block' : 'none';
+                notificationCount.textContent = count;
+            }
+
+            function displayNotifications(notifications) {
+                notificationList.innerHTML = `
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <span class="notification-count-header">${notifications.filter(n => !n.is_read).length} new</span>
+                    </div>
+                `;
+                
+                if (!notifications || notifications.length === 0) {
+                    notificationList.innerHTML += `
+                        <div class="no-notifications">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No notifications yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                notifications.forEach(notification => {
+                    const timeAgo = new Date(notification.created_at).toLocaleString();
+                    const div = document.createElement('div');
+                    div.className = `notification-item ${notification.is_read ? '' : 'unread'} ${notification.type}`;
+                    div.innerHTML = `
+                        <div class="notification-content">
+                            ${notification.message}
+                        </div>
+                        <div class="notification-meta">
+                            <div class="timestamp">
+                                <i class="far fa-clock"></i> ${timeAgo}
+                            </div>
+                            <div class="notification-actions">
+                                ${notification.is_read ? 
+                                    `<span class="notification-action-btn mark-unread" data-id="${notification.id}">
+                                        <i class="far fa-envelope"></i> Mark as unread
+                                    </span>` : 
+                                    `<span class="unread-indicator">New</span>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add click handlers
+                    div.querySelector('.notification-content').onclick = function() {
+                        if (!notification.is_read) {
+                            markAsRead(notification.id, div);
+                        }
+                    };
+
+                    // Add mark as unread handler if notification is read
+                    const markUnreadBtn = div.querySelector('.mark-unread');
+                    if (markUnreadBtn) {
+                        markUnreadBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            markAsUnread(notification.id, div);
+                        };
+                    }
+
+                    notificationList.appendChild(div);
+                });
+            }
+
+            function markAsRead(notificationId, element) {
+                const notifications = JSON.parse(localStorage.getItem('notifications'));
+                const notification = notifications.find(n => n.id === notificationId);
+                if (notification) {
+                    notification.is_read = true;
+                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                    updateNotifications();
+                }
+            }
+
+            function markAsUnread(notificationId, element) {
+                const notifications = JSON.parse(localStorage.getItem('notifications'));
+                const notification = notifications.find(n => n.id === notificationId);
+                if (notification) {
+                    notification.is_read = false;
+                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                    updateNotifications();
+                }
+            }
+
+            updateNotifications();
+            
+            setInterval(updateNotifications, 30000);
+        });
+    </script>
+    </body> </html>

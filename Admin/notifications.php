@@ -1,7 +1,7 @@
 <?php
 require_once "../dbh.classes.php";
 
-class NotificationManager {
+class Notifications {
     private $conn;
 
     // Constructor accepts a PDO connection
@@ -19,9 +19,17 @@ class NotificationManager {
 
     // Mark a notification as read
     public function markAsRead($id) {
-        $query = "UPDATE notifications SET is_read = 1 WHERE id = :id";
+        $query = "UPDATE notifications SET status = 'read' WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    // Add a new notification
+    public function addNotification($message) {
+        $query = "INSERT INTO notifications (message, status) VALUES (:message, 'unread')";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':message', $message, PDO::PARAM_STR);
         return $stmt->execute();
     }
 
@@ -31,6 +39,7 @@ class NotificationManager {
 
         switch ($action) {
             case 'fetch':
+                // Fetch notifications
                 $notifications = $this->getNotifications();
                 header('Content-Type: application/json');
                 echo json_encode($notifications);
@@ -39,6 +48,7 @@ class NotificationManager {
             case 'mark':
                 $id = $_POST['id'] ?? null;
                 if ($id) {
+                    // Mark the notification as read
                     $success = $this->markAsRead($id);
                     header('Content-Type: application/json');
                     echo json_encode(['success' => $success]);
@@ -52,37 +62,11 @@ class NotificationManager {
     }
 }
 
-$action = $_GET['action'] ?? '';
-
-if ($action === 'fetch') {
-    // Fetch all notifications from the database
-    $query = "SELECT * FROM notifications ORDER BY created_at DESC";
-    $result = $db->query($query);
-    $notifications = [];
-    
-    while ($row = $result->fetch_assoc()) {
-        $notifications[] = $row;
-    }
-
-    echo json_encode($notifications);
-}
-
-if ($action === 'mark') {
-    // Mark notification as read
-    $data = json_decode(file_get_contents('php://input'), true);
-    $id = $data['id'] ?? 0;
-
-    if ($id) {
-        $query = "UPDATE notifications SET status = 'read' WHERE id = $id";
-        $db->query($query);
-    }
-}
-
-// Initialize Database Connection and Notification Manager
+// Initialize Database Connection and Notifications Manager
 $dbh = new Dbh();
 $conn = $dbh->connect();
-$notificationManager = new NotificationManager($conn);
+$notifications = new Notifications($conn);
 
 // Handle Request
-$notificationManager->handleRequest();
+$notifications->handleRequest();
 ?>

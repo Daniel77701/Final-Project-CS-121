@@ -83,7 +83,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 130%; /* Ensure title box is full width */
+    width: 200%; /* Ensure title box is full width */
     max-width: 1200px; /* Optional max-width for a more contained box */
     margin: 30px auto 20px auto; /* Adjust margin-top to create more space */
     margin-left: 20px;
@@ -126,7 +126,7 @@ body {
     border-radius: 2px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 25px;
-    width: 130%;
+    width: 200%;
     overflow-x: auto;
     margin-left: 20px;
     margin-right: auto;
@@ -235,30 +235,35 @@ td button.close-renewal {
 /* Action Container: Wrapping both print and search elements */
 .action-container {
     display: flex;
-    justify-content: space-between; /* Pushes elements to opposite ends */
-    align-items: center; /* Vertically aligns items */
-    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    width: 200%; /* Match the width of your table-box */
+    max-width: 1200px;
+    margin-left: 20px;
 }
 
 /* Search Container: Moves search bar to the right */
 .search-container {
     display: flex;
     align-items: center;
-    margin-left: 20px; /* Pushes search bar to the far right */
-    gap: 10px; /* Space between label and input */
+    margin-left: auto; /* Push to the right */
+    margin-right: 20px;
 }
 
 /* Label for Search */
 .search-container label {
     font-size: 1rem;
     color: #333;
+    margin-right: 10px;
+    white-space: nowrap;
 }
 
 /* Search Input Styling */
 .search-container input {
-    padding: 8px;
+    padding: 8px 12px;
     font-size: 1rem;
-    border-radius: 5px;
+    border-radius: 4px;
     border: 1px solid #ddd;
     width: 250px; /* Width of the search input */
     outline: none;
@@ -280,9 +285,31 @@ td button.close-renewal {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-right: 10px; /* Optional spacing from the left */
+    margin-right: auto; /* Keep print button to the left */
 }
 
 .print:hover {
     background-color: blue;
+}
+
+/* Search functionality styles */
+#no-results-message td {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    background-color: #f9f9f9;
+}
+
+/* Highlight matching text */
+.highlight {
+    background-color: yellow;
+    padding: 2px;
+}
+
+/* Search input focus state */
+.search-container input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
 }

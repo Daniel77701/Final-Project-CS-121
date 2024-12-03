@@ -3,13 +3,17 @@ require_once "FAQ'S_handler.php";
 $faq = new FAQ();
 $faqs = $faq->getFAQs(); // Fetch FAQs
 
+// Fetch the number of unread notifications
+$unreadNotificationsCount = $faq->getUnreadNotificationsCount();
+
 // Handle delete action
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $faq->deleteFAQ($id);
-    header("Location: FAQ'S.php"); 
+    $faq->addNotification("FAQ #$id deleted.");
+    header("Location: FAQ'S.php");
     exit();
-}
+}   
 
 // Handle edit action
 if (isset($_GET['edit'])) {
@@ -23,7 +27,8 @@ if (isset($_POST['add'])) {
     $question = $_POST['question'];
     $answer = $_POST['answer'];
     $faq->addFAQ($question, $answer);
-    header("Location: FAQ'S.php"); 
+    $faq->addNotification("New FAQ added.");
+    header("Location: FAQ'S.php");
     exit();
 }
 
@@ -33,7 +38,8 @@ if (isset($_POST['update'])) {
     $question = $_POST['question'];
     $answer = $_POST['answer'];
     $faq->updateFAQ($id, $question, $answer);
-    header("Location: FAQ'S.php"); 
+    $faq->addNotification("FAQ #$id updated.");
+    header("Location: FAQ'S.php");
     exit();
 }
 ?>
@@ -47,6 +53,7 @@ if (isset($_POST['update'])) {
     <title>Scholarship Tracker System</title> 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include your external CSS file -->
     <link rel="stylesheet" href="admin_css/FAQ'S.css">
 </head>
 <body>
@@ -56,7 +63,26 @@ if (isset($_POST['update'])) {
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
+            <!-- Notification Dropdown -->
+            <div class="notification">
+                <a href="#" id="notificationDropdown" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell" style="font-size: 24px;"></i> 
+                    <span class="badge badge-light ml-2" style="font-size: 14px; position: relative; top: -10px;">
+                        <?php echo $unreadNotificationsCount; ?>
+                    </span>
+                </a>
+            </div>
+            <div>
+                <div class="dropdown-menu" aria-labelledby="notificationDropdown" style="max-height: 300px; overflow-y: auto;">
+                <!-- Loop through notifications here -->
+                    <?php foreach ($faqs as $faqItem): ?>
+                        <a class="dropdown-item" href="#" data-id="<?php echo $faqItem['id']; ?>">
+                            <i class="fas fa-info-circle"></i> <?php echo $faqItem['question']; ?> - <?php echo $faqItem['answer']; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.html">
@@ -109,9 +135,9 @@ if (isset($_POST['update'])) {
                         <?php endforeach; ?>
                     </div>
                 </div>
-            </div> <!-- End Main Content -->
-        </div> <!-- End Row -->
-    </div> <!-- End Main Container -->
+            </div> 
+        </div>
+    </div> 
 
     <!-- Add FAQ Modal -->
     <div class="modal fade" id="addFAQModal" tabindex="-1" role="dialog" aria-labelledby="addFAQModalLabel" aria-hidden="true">
@@ -136,7 +162,7 @@ if (isset($_POST['update'])) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" name="add" class="btn btn-primary">Save FAQ</button>
+                        <button type="submit" name="add" class="btn btn-primary">Add FAQ</button>
                     </div>
                 </form>
             </div>
@@ -144,45 +170,42 @@ if (isset($_POST['update'])) {
     </div>
 
     <!-- Edit FAQ Modal -->
-    <?php if (isset($faqItem)): ?>
-        <div class="modal fade" id="editFAQModal" tabindex="-1" role="dialog" aria-labelledby="editFAQModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editFAQModalLabel">Edit FAQ</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST">
-                        <div class="modal-body">
-                            <input type="hidden" name="id" value="<?php echo $faqItem['id']; ?>">
-                            <div class="form-group">
-                                <label for="question">Question</label>
-                                <input type="text" class="form-control" id="question" name="question" value="<?php echo $faqItem['question']; ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="answer">Answer</label>
-                                <textarea class="form-control" id="answer" name="answer" required><?php echo $faqItem['answer']; ?></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" name="update" class="btn btn-primary">Update FAQ</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="editFAQModal" tabindex="-1" role="dialog" aria-labelledby="editFAQModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFAQModalLabel">Edit FAQ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="<?php echo $faqItem['id']; ?>">
+                        <div class="form-group">
+                            <label for="question">Question</label>
+                            <input type="text" class="form-control" id="question" name="question" value="<?php echo $faqItem['question']; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="answer">Answer</label>
+                            <textarea class="form-control" id="answer" name="answer" required><?php echo $faqItem['answer']; ?></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="update" class="btn btn-primary">Update FAQ</button>
+                    </div>
+                </form>
             </div>
         </div>
-    <?php endif; ?>
+    </div>
 
-    <!-- Include Bootstrap and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS, jQuery, and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-    <!-- Accordion Functionality Script -->
+    <!-- Accordion Script -->
     <script>
         var acc = document.getElementsByClassName("accordion");
         for (var i = 0; i < acc.length; i++) {
@@ -196,6 +219,25 @@ if (isset($_POST['update'])) {
                 }
             });
         }
+    </script>
+    <script>
+     $(document).ready(function () {
+        $('#notificationDropdown').dropdown();
+        
+        // AJAX to mark notifications as read
+        $(document).on('click', '.dropdown-item', function() {
+            var notificationId = $(this).data('id');
+            
+            $.ajax({
+                url: 'notifications.php?action=mark',
+                method: 'POST',
+                data: { id: notificationId },
+                success: function(response) {
+                    $('#notificationDropdown .badge').text('0'); 
+                }
+            });
+        });
+    });
     </script>
 </body>
 </html>

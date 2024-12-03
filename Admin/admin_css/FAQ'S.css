@@ -236,3 +236,35 @@ body {
 .accordion.active::after {
     content: "\2212"; /* Unicode for the minus symbol */
 }
+
+.notification i {
+    font-size: 24px;
+    color: #fff;
+}
+
+.notification .badge {
+    font-size: 14px;
+    background-color: red;
+    position: relative;
+    top: -10px;
+    left: 10px;
+}
+
+.notification .dropdown-menu {
+    width: 300px;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    z-index: 9999;
+}
+
+.notification .dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.notification .dropdown-item:hover {
+    background-color: #f1f1f1;
+}

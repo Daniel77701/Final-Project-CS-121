@@ -1,7 +1,7 @@
 <?php
-require_once '../classes/dbh.classes.php';
+require_once '../connection/dbh.classes.php';
 
-class scholars_handler extends Dbh {
+class ScholarsHandler extends Dbh {
     public function getScholars() {
         try {
             $stmt = $this->connect()->prepare("SELECT * FROM scholars ORDER BY sr_code");

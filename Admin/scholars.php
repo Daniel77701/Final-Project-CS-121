@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once '../includes/scholars_handler.php';
-$scholars = new scholars_handler();
+require_once '../classes/scholars_handler.php';
+$scholars = new ScholarsHandler();
 
 // Debug POST data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

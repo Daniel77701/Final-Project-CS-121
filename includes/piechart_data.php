@@ -1,5 +1,5 @@
 <?php
-require_once '../classes/dbh.classes.php';
+require_once '../connection/dbh.classes.php';
 
 try {
     $sql = "SELECT year_level, COUNT(*) AS count FROM scholars GROUP BY year_level";

@@ -1,4 +1,5 @@
 <?php
+require_once '../connection/dbh.classes.php';
 
 class ScholarshipRequest extends Dbh {
     

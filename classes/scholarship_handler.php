@@ -1,7 +1,7 @@
 <?php
-require_once "../classes/dbh.classes.php";
+require_once "../connection/dbh.classes.php";
 
-class scholarship_handler extends Dbh {
+class ScholarshipHandler extends Dbh {
     public function getScholarships() {
         try {
             $stmt = $this->connect()->prepare("SELECT * FROM scholarships ORDER BY scholarship_id ASC");
@@ -60,7 +60,7 @@ class scholarship_handler extends Dbh {
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $scholarship = new scholarship_handler();
+    $scholarship = new ScholarshipHandler();
     
     if (isset($_POST['add_scholarship'])) {
         $scholarship->create(
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Handle delete requests
 if (isset($_GET['delete_scholarship_id'])) {
-    $scholarship = new scholarship_handler();
+    $scholarship = new ScholarshipHandler();
     $scholarship->delete($_GET['delete_scholarship_id']);
     header("Location: ../scholarship.php?status=deleted");
     exit();

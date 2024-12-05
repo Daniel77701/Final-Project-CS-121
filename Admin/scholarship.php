@@ -1,6 +1,6 @@
 <?php
-    require_once '../includes/scholarship_handler.php';
-    $scholarships = new scholarship_handler();
+    require_once '../classes/scholarship_handler.php';
+    $scholarships = new ScholarshipHandler();
     $scholarshipList = $scholarships->getScholarships();
 ?>
 
@@ -52,7 +52,7 @@
                     <li class="nav-item"><a class="nav-link" href="settings.php"><img src="icons_admin/setting.png" alt="Settings Icon"> Settings</a></li>
                     <li class="nav-item"><a class="nav-link" href="useraccount.php"><img src="icons_admin/useraccount.png" alt="User Account Icon"> User Account</a></li>
                     <li class="nav-item"><a class="nav-link" href="userlogs.php"><img src="icons_admin/userlogs.png" alt="User Logs Icon"> User Logs</a></li>
-                </ul> 
+                </ul>
             </nav>
     
             <!-- Main Content -->

@@ -1,6 +1,6 @@
 <?php
+require_once '../classes/announcement_handler.php';
 session_start();
-require_once '../includes/announcement_handler.php';
 // Add any authentication checks here if needed
 ?>
 <!DOCTYPE html>
@@ -8,7 +8,7 @@ require_once '../includes/announcement_handler.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="icons_admin/logo.png" type="image/x-icon">
     <title>Scholarship Tracker System</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -19,7 +19,7 @@ require_once '../includes/announcement_handler.php';
     <!-- Header Section -->
     <header id="header">
         <div class="logo">
-            <img src="icons/logo.png" alt="Logo" width="40">
+            <img src="icons_admin/logo.png" alt="Logo" width="40">
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
@@ -38,16 +38,16 @@ require_once '../includes/announcement_handler.php';
             <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3 collapse d-md-block">
                 <ul class="nav flex-column">
                     <li class="nav-item"><a class="nav-link" href="admin-dashboard.php"><img src="icons_admin/dashboard.png" alt="Dashboard Icon"> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="/icons_admin/scholars.png..png" alt="Scholars Icon"> Scholars</a></li>
-                    <li class="nav-item"><a class="nav-link" href="scholarship.php"><img src="/icons_admin/scholarships.png" alt="Scholarship Icon"> Scholarship</a></li>
+                    <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
+                    <li class="nav-item"><a class="nav-link" href="scholarship.php"><img src="icons_admin/scholarships.png" alt="Scholarship Icon"> Scholarship</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholarship-request.php"><img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon"> Scholarship Request</a></li>
-                    <li class="nav-item"><a class="nav-link" href="schema.php"><img src="/icons_user/view schema.png" alt="Schema Icon"> Schema</a></li>
+                    <li class="nav-item"><a class="nav-link" href="schema.php"><img src="icons_admin/view schema.png" alt="Schema Icon"> Schema</a></li>
                     <li class="nav-item"><a class="nav-link" href="FAQ'S.php"><img src="icons_admin/exam_management.png" alt="FAQ'S Icon"> FAQ'S</a></li>
                     <li class="nav-item"><a class="nav-link active" href="announcement.php"><img src="icons_admin/announcement.png" alt="Announcement Icon"> Announcement</a></li>
                     <li class="nav-item"><a class="nav-link" href="feedback.php"><img src="icons_admin/feedback.png" alt="Feedback Icon"> Feedback</a></li>
                     <li class="nav-item"><a class="nav-link" href="featured-scholars.html"><img src="icons_admin/featured_scholars.png" alt="Featured Scholars Icon"> Featured Scholars</a></li>
                     <li class="nav-item"><a class="nav-link" href="settings.php"><img src="icons_admin/setting.png" alt="Settings Icon"> Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="useraccount.php"><img src="/icons_admin/user_account.png" alt="User Account Icon"> User Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="useraccount.php"><img src="icons_admin/useraccount.png" alt="User Account Icon"> User Account</a></li>
                     <li class="nav-item"><a class="nav-link" href="userlogs.php"><img src="icons_admin/userlogs.png" alt="User Logs Icon"> User Logs</a></li>
                 </ul>
             </nav>

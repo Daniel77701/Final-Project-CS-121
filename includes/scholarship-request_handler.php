@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once '../classes/dbh.classes.php';
+require_once '../connection/dbh.classes.php';
 require_once '../classes/scholarship-request.classes.php';
 
 $scholarshipRequest = new ScholarshipRequest();

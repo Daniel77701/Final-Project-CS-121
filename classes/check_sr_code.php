@@ -1,5 +1,5 @@
 <?php
-require_once 'classes/dbh.classes.php';
+require_once '../connection/dbh.classes.php';
 
 class SRCodeChecker extends Dbh {
     public function checkSRCode($code) {

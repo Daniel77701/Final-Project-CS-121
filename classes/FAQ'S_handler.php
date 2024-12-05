@@ -4,7 +4,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once '../classes/dbh.classes.php';
+require_once '../connection/dbh.classes.php';
 
 class FAQ extends Dbh {
 

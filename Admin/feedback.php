@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/feedback_handler.php';
+require_once '../classes/feedback_handler.php';
 
 $feedbackHandler = new FeedbackHandler();
 $feedbacks = $feedbackHandler->getAllFeedbacks();
@@ -54,13 +54,13 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
                     <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholarship.php"><img src="icons_admin/scholarships.png" alt="Scholarship Icon"> Scholarship</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholarship-request.php"><img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon"> Scholarship Request</a></li>
-                    <li class="nav-item"><a class="nav-link" href="schema.php"><img src="icons_user/view schema.png" alt="Schema Icon"> Schema</a></li>
+                    <li class="nav-item"><a class="nav-link" href="schema.php"><img src="icons_admin/view schema.png" alt="Schema Icon"> Schema</a></li>
                     <li class="nav-item"><a class="nav-link" href="FAQ'S.php"><img src="icons_admin/exam_management.png" alt="FAQ'S Icon"> FAQ'S</a></li>
                     <li class="nav-item"><a class="nav-link" href="announcement.php"><img src="icons_admin/announcement.png" alt="Announcement Icon"> Announcement</a></li>
                     <li class="nav-item"><a class="nav-link active" href="feedback.php"><img src="icons_admin/feedback.png" alt="Feedback Icon"> Feedback</a></li>
                     <li class="nav-item"><a class="nav-link" href="featured-scholars.html"><img src="icons_admin/featured_scholars.png" alt="Featured Scholars Icon"> Featured Scholars</a></li>
                     <li class="nav-item"><a class="nav-link" href="settings.php"><img src="icons_admin/setting.png" alt="Settings Icon"> Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="useraccount.php"><img src="/icons_admin/user_account.png" alt="User Account Icon"> User Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="useraccount.php"><img src="icons_admin/useraccount.png" alt="User Account Icon"> User Account</a></li>
                     <li class="nav-item"><a class="nav-link" href="userlogs.php"><img src="icons_admin/userlogs.png" alt="User Logs Icon"> User Logs</a></li>
                 </ul>
             </nav>

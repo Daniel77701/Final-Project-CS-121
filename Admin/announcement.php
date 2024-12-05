@@ -109,7 +109,7 @@ session_start();
 
         // Fetch announcements
         function fetchAnnouncements() {
-            $.post('announcement_handler.php', { action: 'get_announcements' }, function(response) {
+            $.post('../classes/announcement_handler.php', { action: 'get_announcements' }, function(response) {
                 if (response.error) {
                     alert(response.error);
                     return;
@@ -148,24 +148,17 @@ session_start();
 
         // Add announcement
         function showAddAnnouncementForm() {
-            // Get today's date in YYYY-MM-DD format
-            const today = new Date().toISOString().split('T')[0];
-            
             Swal.fire({
                 title: 'Add New Announcement',
                 html: `
                     <form id="addAnnouncementForm">
                         <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
+                            <label for="subject">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
                         </div>
                         <div class="form-group">
-                            <label for="content">Content</label>
-                            <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Date</label>
-                            <input type="date" class="form-control" id="date" name="date" value="${today}" required>
+                            <label for="announcement">Announcement</label>
+                            <textarea class="form-control" id="announcement" name="announcement" rows="4" required></textarea>
                         </div>
                     </form>
                 `,
@@ -175,32 +168,32 @@ session_start();
                 preConfirm: () => {
                     const form = document.getElementById('addAnnouncementForm');
                     const formData = new FormData(form);
-                    return Object.fromEntries(formData);
+                    return {
+                        subject: formData.get('subject'),
+                        announcement: formData.get('announcement')
+                    };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'announcement_handler.php',
+                        url: '../classes/announcement_handler.php',
                         type: 'POST',
                         data: {
-                            action: 'add',
-                            ...result.value
+                            action: 'add_announcement',
+                            subject: result.value.subject,
+                            announcement: result.value.announcement
                         },
                         success: function(response) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Announcement added successfully',
-                                icon: 'success'
-                            }).then(() => {
-                                location.reload();
-                            });
+                            if (response.success) {
+                                Swal.fire('Success!', response.message, 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Error!', response.error, 'error');
+                            }
                         },
-                        error: function() {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Failed to add announcement',
-                                icon: 'error'
-                            });
+                        error: function(xhr) {
+                            const response = xhr.responseJSON || {};
+                            Swal.fire('Error!', response.error || 'Failed to add announcement', 'error');
                         }
                     });
                 }
@@ -238,10 +231,10 @@ session_start();
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'announcement_handler.php',
+                        url: '../classes/announcement_handler.php',
                         type: 'POST',
                         data: {
-                            action: 'edit',
+                            action: 'edit_announcement',
                             id: id,
                             ...result.value
                         },
@@ -279,10 +272,10 @@ session_start();
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'announcement_handler.php',
+                        url: '../classes/announcement_handler.php',
                         type: 'POST',
                         data: {
-                            action: 'delete',
+                            action: 'delete_announcement',
                             id: id
                         },
                         success: function(response) {

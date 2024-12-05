@@ -107,27 +107,29 @@ try {
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10">
-                <div class="scholarship-section">
-                    <div class="title-box">
+                <div id="main-content">
+                    <div class="dashboard-section">
                         <h2>Settings</h2>
                         <hr>
                         
                         <?php if(isset($_SESSION['error'])): ?>
                             <div class="alert alert-danger"><?php echo $_SESSION['error']; ?></div>
-                            <?php unset($_SESSION['error']); // Clear the error message ?>
+                            <?php unset($_SESSION['error']); ?>
                         <?php endif; ?>
                         
                         <?php if(isset($_SESSION['success'])): ?>
                             <div class="alert alert-success"><?php echo $_SESSION['success']; ?></div>
-                            <?php unset($_SESSION['success']); // Clear the success message ?>
+                            <?php unset($_SESSION['success']); ?>
                         <?php endif; ?>
 
                         <div class="button-container">
-                            <button class="add-featured" data-toggle="modal" data-target="#setSchoolYearModal">Set School Year</button>
+                            <button class="add-featured" data-toggle="modal" data-target="#setSchoolYearModal">
+                                Set School Year
+                            </button>
                         </div>
 
                         <div class="table-box">
-                            <table class="table table-bordered">
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>School Year</th>

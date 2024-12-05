@@ -1,12 +1,11 @@
 /* General Styles */
 body {
     font-family: 'Times New Roman', Times, serif;
-    background-color: whitesmoke;
+    background-color: #F7F8FA;
     font-size: 0.95rem;
     overflow-x: hidden;
 }
 
-/* Header Styles */
 #header {
     background-color: #d1182d;
     color: white;
@@ -16,8 +15,9 @@ body {
     justify-content: space-between;
     font-size: 1.4rem;
     position: fixed;
-    width: 100%;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1030;
 }
 
@@ -35,19 +35,18 @@ body {
     font-weight: bold;
 }
 
-/* Sidebar Styles */
+/* Sidebar */
 #sidebar {
     background-color: white !important;   
     color: black;
-    position: fixed;
-    top: 60px; /* Height of header */
-    left: 0;
-    height: calc(100vh - 60px);
-    overflow-y: auto;
-    width: 250px;
+    height: 100vh;
     padding-top: 20px;
     font-size: 0.85rem;
-    z-index: 1020;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 220px;
+    overflow-y: auto;
 }
 
 #sidebar .nav-link {
@@ -64,22 +63,23 @@ body {
 }
 
 #sidebar .nav-link:hover {
-    background-color: #d1182d;
+    background-color: #d1182d; 
     color: white;
 }
 
 #sidebar .nav-link.active {
-    background-color: #d1182d;
-    color: white;
+    background-color: #d1182d; 
+    color: white; 
+    text-decoration: none; 
 }
 
 /* Main Content Styles */
 #main-content {
     margin-left: 220px;
-    margin-top: 60px;
     padding: 20px;
     background-color: #f8f9fa;
     min-height: calc(100vh - 60px);
+    width: calc(100% - 220px);
 }
 
 .dashboard-section {
@@ -178,23 +178,6 @@ body {
     }
 }
 
-/* Custom Scrollbar for Sidebar */
-#sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-#sidebar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-#sidebar::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
-}
-
-#sidebar::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
 .status-select {
     width: auto;
     min-width: 140px;
@@ -334,4 +317,11 @@ hr {
     background-color: #8B0000 !important;
     border: none;
     margin: 15px 0;
+}
+
+/* Update container-fluid to prevent horizontal scroll */
+.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+    margin-top: 60px;
 }

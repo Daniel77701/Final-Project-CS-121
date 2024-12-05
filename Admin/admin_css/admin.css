@@ -108,16 +108,14 @@ body {
     margin-right: 10px;
 }
 
-/* Only apply background color on hover */
 #sidebar .nav-link:hover {
-    background-color: #d1182d; /* Red background on hover */
+    background-color: #d1182d; 
     color: white;
 }
 
-/* Remove the red background from the active state */
 #sidebar .nav-link.active {
-    background-color: #d1182d; /* No background for active state */
-    color: white; /* Optional: change text color when active */
+    background-color: #d1182d; 
+    color: white; 
 }
 
 /* Main Content */

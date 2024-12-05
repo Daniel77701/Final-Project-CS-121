@@ -51,17 +51,15 @@ body {
     margin-right: 10px;
 }
 
-/* Only apply background color on hover */
 #sidebar .nav-link:hover {
-    background-color: #d1182d; /* Red background on hover */
+    background-color: #d1182d; 
     color: white;
 }
 
-/* Apply background color and white text to "Scholars" */
 #sidebar .nav-link.active {
-    background-color: #d1182d; /* Red background */
-    color: white; /* White font */
-    text-decoration: none; /* Remove underline */
+    background-color: #d1182d; 
+    color: white; 
+    text-decoration: none; 
 }
 
 /* Main Content */

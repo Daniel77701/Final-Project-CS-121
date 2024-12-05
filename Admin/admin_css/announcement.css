@@ -29,15 +29,12 @@ body {
     font-weight: bold;
 }
 
-/* Sidebar */
 #sidebar {
-    background-color: white;
+    background-color: white !important;
     color: black;
     height: 100vh;
     padding-top: 20px;
     font-size: 0.85rem;
-    margin-right: 8px; /* Added margin to the right to separate from the main content */
-    /* Optional: you can also add padding-right if you want space inside the sidebar */
 }
 
 #sidebar .nav-link {
@@ -53,18 +50,11 @@ body {
     margin-right: 10px;
 }
 
-/* Only apply background color on hover */
 #sidebar .nav-link:hover {
-    background-color: #d1182d; /* Red background on hover */
+    background-color: #d1182d; 
     color: white;
 }
 
-/* Apply background color and white text to "Scholars" */
-#sidebar .nav-link.active {
-    background-color: #d1182d; /* Red background */
-    color: white; /* White font */
-    text-decoration: none; /* Remove underline */
-}
 #main-content {
     background-color: #d9dfdb;
     padding: 15px;

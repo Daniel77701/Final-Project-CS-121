@@ -89,32 +89,39 @@
 
     <script>
         $(document).ready(function() {
+            // Load scholars list when page loads
+            loadScholarsList();
+            fetchScholars();
+
             // Update the add scholar button click handler
             $('#add-scholar-btn').click(function() {
+                // First load scholars if not loaded
+                if (!window.scholarsList) {
+                    loadScholarsList();
+                }
+
+                let scholarOptions = window.scholarsList.map(scholar => 
+                    `<option value="${scholar.sr_code}">${scholar.name} - ${scholar.course} (${scholar.scholarship})</option>`
+                ).join('');
+
                 Swal.fire({
                     title: 'Add Featured Scholar',
                     html: `
                         <form id="addScholarForm" class="text-left">
                             <div class="form-group">
-                                <label for="subject">Name:</label>
-                                <input type="text" class="form-control" name="subject" required>
+                                <label for="sr_code">Select Scholar:</label>
+                                <select class="form-control" name="sr_code" required>
+                                    <option value="">Select a Scholar</option>
+                                    ${scholarOptions}
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label for="course">Course:</label>
-                                <input type="text" class="form-control" name="course" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="year_graduated">Scholarship Name:</label>
-                                <input type="text" class="form-control" name="year_graduated" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message:</label>
-                                <textarea class="form-control" name="message" required></textarea>
+                                <label for="message">Testimonial Message:</label>
+                                <textarea class="form-control" name="message" rows="4" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="status">Status:</label>
                                 <select class="form-control" name="status" required>
-                                    <option value="">Select Status</option>
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
                                 </select>
@@ -122,9 +129,8 @@
                         </form>
                     `,
                     showCancelButton: true,
-                    confirmButtonText: 'Add Scholar',
+                    confirmButtonText: 'Add Featured Scholar',
                     cancelButtonText: 'Cancel',
-                    width: '500px',
                     preConfirm: () => {
                         const form = document.getElementById('addScholarForm');
                         if (!form.checkValidity()) {
@@ -133,58 +139,158 @@
                         }
                         return {
                             action: 'add_scholar',
-                            subject: form.querySelector('[name="subject"]').value,
-                            course: form.querySelector('[name="course"]').value,
-                            year_graduated: form.querySelector('[name="year_graduated"]').value,
+                            sr_code: form.querySelector('[name="sr_code"]').value,
                             message: form.querySelector('[name="message"]').value,
                             status: form.querySelector('[name="status"]').value
                         };
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        console.log('Sending data:', result.value); // Debug log
                         $.ajax({
-                            url: 'featured-scholars_handler.php',
+                            url: '../classes/featured-scholars_handler.php',
                             type: 'POST',
                             data: result.value,
-                            dataType: 'json',
                             success: function(response) {
-                                console.log('Response:', response); // Debug log
-                                let result = typeof response === 'string' ? JSON.parse(response) : response;
-                                if (result.status === 'success') {
-                                    Swal.fire({
-                                        title: 'Success!',
-                                        text: 'Scholar added successfully',
-                                        icon: 'success',
-                                        timer: 1500
-                                    });
+                                if (response.status === 'success') {
+                                    Swal.fire('Success!', response.message, 'success');
                                     fetchScholars();
                                 } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: result.message || 'Failed to add scholar',
-                                        icon: 'error'
-                                    });
+                                    Swal.fire('Error!', response.message, 'error');
                                 }
                             },
-                            error: function(xhr, status, error) {
-                                console.error('Ajax error:', error); // Debug log
-                                console.error('Response:', xhr.responseText); // Debug log
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'An error occurred while adding the scholar: ' + error,
-                                    icon: 'error'
-                                });
+                            error: function(xhr) {
+                                console.error('Error:', xhr.responseText);
+                                Swal.fire('Error!', 'Failed to add featured scholar', 'error');
                             }
                         });
                     }
                 });
             });
-    
-            // Delete scholar
+
+            // Update the table display function
+            function fetchScholars() {
+                $.ajax({
+                    url: '../classes/featured-scholars_handler.php',
+                    type: 'GET',
+                    success: function(response) {
+                        let scholars = response.scholar_data || [];
+                        let tableRows = '';
+                        
+                        if (scholars.length === 0) {
+                            tableRows = '<tr><td colspan="6" class="text-center">No featured scholars found</td></tr>';
+                        } else {
+                            scholars.forEach(function(scholar) {
+                                tableRows += `
+                                    <tr>
+                                        <td>${scholar.name}</td>
+                                        <td>${scholar.course}</td>
+                                        <td>${scholar.scholarship}</td>
+                                        <td>${scholar.message}</td>
+                                        <td>${scholar.status}</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm edit-btn" data-id="${scholar.id}" 
+                                                    data-message="${scholar.message}" data-status="${scholar.status}">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button class="btn btn-danger btn-sm delete-btn" data-id="${scholar.id}">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                        }
+                        
+                        $('#scholar-table').html(tableRows);
+                        $('.footer').text(`Showing ${scholars.length} of ${scholars.length} entries`);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        $('#scholar-table').html('<tr><td colspan="6" class="text-center text-danger">Error loading scholars</td></tr>');
+                    }
+                });
+            }
+
+            // Helper function to load scholars list
+            function loadScholarsList() {
+                $.ajax({
+                    url: '../classes/featured-scholars_handler.php',
+                    type: 'GET',
+                    data: { action: 'get_scholars_list' },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            window.scholarsList = response.scholars;
+                        }
+                    }
+                });
+            }
+
+            // Add this event handler in your document.ready function
+            $(document).on('click', '.edit-btn', function() {
+                const id = $(this).data('id');
+                const message = $(this).data('message');
+                const status = $(this).data('status');
+
+                Swal.fire({
+                    title: 'Edit Featured Scholar',
+                    html: `
+                        <form id="editScholarForm" class="text-left">
+                            <div class="form-group">
+                                <label for="message">Testimonial Message:</label>
+                                <textarea class="form-control" name="message" rows="4" required>${message}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                <select class="form-control" name="status" required>
+                                    <option value="Active" ${status === 'Active' ? 'selected' : ''}>Active</option>
+                                    <option value="Inactive" ${status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                                </select>
+                            </div>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Update Scholar',
+                    cancelButtonText: 'Cancel',
+                    preConfirm: () => {
+                        const form = document.getElementById('editScholarForm');
+                        if (!form.checkValidity()) {
+                            Swal.showValidationMessage('Please fill in all required fields');
+                            return false;
+                        }
+                        return {
+                            action: 'update_scholar',
+                            id: id,
+                            message: form.querySelector('[name="message"]').value,
+                            status: form.querySelector('[name="status"]').value
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '../classes/featured-scholars_handler.php',
+                            type: 'POST',
+                            data: result.value,
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    Swal.fire('Success!', response.message, 'success');
+                                    fetchScholars();
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
+                            },
+                            error: function(xhr) {
+                                console.error('Error:', xhr.responseText);
+                                Swal.fire('Error!', 'Failed to update featured scholar', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Update the delete button handler
             $(document).on('click', '.delete-btn', function() {
-                let scholarId = $(this).data('id');
-    
+                const id = $(this).data('id');
+                
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -196,85 +302,28 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'featured-scholars_handler.php',
+                            url: '../classes/featured-scholars_handler.php',
                             type: 'POST',
-                            dataType: 'json',
-                            data: { action: 'delete_scholar', scholar_id: scholarId },
+                            data: {
+                                action: 'delete_scholar',
+                                id: id  // Changed from scholar_id to id to match the handler
+                            },
                             success: function(response) {
-                                let result = typeof response === 'string' ? JSON.parse(response) : response;
-                                if (result.status === 'success') {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: result.message,
-                                        icon: 'success',
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
+                                if (response.status === 'success') {
+                                    Swal.fire('Deleted!', response.message, 'success');
                                     fetchScholars();
                                 } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: result.message,
-                                        icon: 'error'
-                                    });
+                                    Swal.fire('Error!', response.message || 'Failed to delete scholar', 'error');
                                 }
                             },
-                            error: function(xhr, status, error) {
-                                console.error('Delete error:', error);
-                                console.error('Response:', xhr.responseText);
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Failed to delete scholar: ' + error,
-                                    icon: 'error'
-                                });
+                            error: function(xhr) {
+                                console.error('Error:', xhr.responseText);
+                                Swal.fire('Error!', 'Failed to delete scholar', 'error');
                             }
                         });
                     }
                 });
             });
-    
-            // Fetch scholars function
-            function fetchScholars() {
-                $.ajax({
-                    url: 'featured-scholars_handler.php',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log('Fetched data:', response); // Debug log
-                        let scholars = response.scholar_data || [];
-                        let tableRows = '';
-                        if (scholars.length === 0) {
-                            tableRows = '<tr><td colspan="6" class="text-center">No scholars found</td></tr>';
-                        } else {
-                        scholars.forEach(function(scholar) {
-                            tableRows += `
-                                <tr>
-                                    <td>${scholar.subject}</td>
-                                    <td>${scholar.course}</td>
-                                    <td>${scholar.year_graduated}</td>
-                                    <td>${scholar.message}</td>
-                                    <td>${scholar.status}</td>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${scholar.id}">Delete</button>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-                        }
-                        $('#scholar-table').html(tableRows);
-                        // Update the entries count
-                        $('.footer').text(`Showing ${scholars.length} of ${scholars.length} entries`);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching scholars:', error);
-                        console.error('Response:', xhr.responseText);
-                        $('#scholar-table').html('<tr><td colspan="6" class="text-center text-danger">Error loading scholars</td></tr>');
-                    }
-                });
-            }
-    
-            // Call fetchScholars when page loads
-            fetchScholars();
         });
     </script>
 </body>

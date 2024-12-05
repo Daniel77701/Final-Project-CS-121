@@ -6,106 +6,110 @@ class AnnouncementHandler extends Dbh {
     // Fetch all announcements
     public function getAnnouncements() {
         try {
-            $sql = "SELECT id, subject, announcement, date_posted FROM announcements ORDER BY date_posted DESC";
+            $sql = "SELECT * FROM announcements ORDER BY date_posted DESC";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute();
-            $result = $stmt->fetchAll();
-            return $result;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
+            error_log("Error in getAnnouncements: " . $e->getMessage());
+            throw new Exception("Database error occurred");
         }
     }
 
     // Add a new announcement
     public function addAnnouncement($subject, $announcement) {
         try {
-            $sql = "INSERT INTO announcements (subject, announcement, date_posted) VALUES (:subject, :announcement, NOW())";
+            $sql = "INSERT INTO announcements (subject, announcement) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':subject', $subject);
-            $stmt->bindParam(':announcement', $announcement);
-            $stmt->execute();
-            return "Announcement added successfully!";
+            if (!$stmt->execute([$subject, $announcement])) {
+                throw new Exception("Failed to add announcement");
+            }
+            return true;
         } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
+            error_log("Error in addAnnouncement: " . $e->getMessage());
+            throw new Exception("Database error occurred");
         }
     }
 
-    // Edit an existing announcement
+    // Edit an announcement
     public function editAnnouncement($id, $subject, $announcement) {
         try {
-            $sql = "UPDATE announcements SET subject = :subject, announcement = :announcement WHERE id = :id";
+            $sql = "UPDATE announcements SET subject = ?, announcement = ? WHERE id = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':subject', $subject);
-            $stmt->bindParam(':announcement', $announcement);
-            $stmt->execute();
-            return "Announcement updated successfully!";
+            if (!$stmt->execute([$subject, $announcement, $id])) {
+                throw new Exception("Failed to update announcement");
+            }
+            return true;
         } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
+            error_log("Error in editAnnouncement: " . $e->getMessage());
+            throw new Exception("Database error occurred");
         }
     }
 
     // Delete an announcement
     public function deleteAnnouncement($id) {
         try {
-            $sql = "DELETE FROM announcements WHERE id = :id";
+            $sql = "DELETE FROM announcements WHERE id = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-            return "Announcement deleted successfully!";
+            if (!$stmt->execute([$id])) {
+                throw new Exception("Failed to delete announcement");
+            }
+            return true;
         } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
+            error_log("Error in deleteAnnouncement: " . $e->getMessage());
+            throw new Exception("Database error occurred");
         }
     }
 }
 
 // Handle AJAX requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $handler = new AnnouncementHandler();
+    header('Content-Type: application/json');
+    try {
+        $handler = new AnnouncementHandler();
+        $action = $_POST['action'] ?? '';
 
-    // Check for the action parameter
-    $action = $_POST['action'] ?? '';
+        switch ($action) {
+            case 'get_announcements':
+                echo json_encode($handler->getAnnouncements());
+                break;
 
-    if ($action === 'get_announcements') {
-        // Fetch and return all announcements
-        $announcements = $handler->getAnnouncements();
-        echo json_encode($announcements);
+            case 'add_announcement':
+                $subject = $_POST['subject'] ?? '';
+                $announcement = $_POST['announcement'] ?? '';
+                if (empty($subject) || empty($announcement)) {
+                    throw new Exception("All fields are required");
+                }
+                $handler->addAnnouncement($subject, $announcement);
+                echo json_encode(['success' => true, 'message' => 'Announcement added successfully']);
+                break;
 
-    } elseif ($action === 'add_announcement') {
-        // Add a new announcement
-        $subject = $_POST['subject'] ?? '';
-        $announcement = $_POST['announcement'] ?? '';
-        if (!empty($subject) && !empty($announcement)) {
-            $message = $handler->addAnnouncement($subject, $announcement);
-            echo json_encode(['message' => $message]);
-        } else {
-            echo json_encode(['message' => 'All fields are required!']);
+            case 'edit_announcement':
+                $id = $_POST['id'] ?? '';
+                $subject = $_POST['subject'] ?? '';
+                $announcement = $_POST['announcement'] ?? '';
+                if (empty($id) || empty($subject) || empty($announcement)) {
+                    throw new Exception("All fields are required");
+                }
+                $handler->editAnnouncement($id, $subject, $announcement);
+                echo json_encode(['success' => true, 'message' => 'Announcement updated successfully']);
+                break;
+
+            case 'delete_announcement':
+                $id = $_POST['id'] ?? '';
+                if (empty($id)) {
+                    throw new Exception("ID is required");
+                }
+                $handler->deleteAnnouncement($id);
+                echo json_encode(['success' => true, 'message' => 'Announcement deleted successfully']);
+                break;
+
+            default:
+                throw new Exception("Invalid action");
         }
-
-    } elseif ($action === 'edit_announcement') {
-        // Edit an existing announcement
-        $id = $_POST['id'] ?? '';
-        $subject = $_POST['subject'] ?? '';
-        $announcement = $_POST['announcement'] ?? '';
-        if (!empty($id) && !empty($subject) && !empty($announcement)) {
-            $message = $handler->editAnnouncement($id, $subject, $announcement);
-            echo json_encode(['message' => $message]);
-        } else {
-            echo json_encode(['message' => 'All fields are required!']);
-        }
-
-    } elseif ($action === 'delete_announcement') {
-        // Delete an announcement
-        $id = $_POST['id'] ?? '';
-        if (!empty($id)) {
-            $message = $handler->deleteAnnouncement($id);
-            echo json_encode(['message' => $message]);
-        } else {
-            echo json_encode(['message' => 'ID is required for deletion!']);
-        }
-
-    } else {
-        echo json_encode(['message' => 'Invalid action.']);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['error' => $e->getMessage()]);
     }
 }
 ?>

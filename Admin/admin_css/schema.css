@@ -1,11 +1,10 @@
 /* General Styles */
 body {
     font-family: 'Times New Roman', Times, serif;
-    background-color: whitesmoke;
+    background-color: #F7F8FA;
     font-size: 0.95rem;
 }
 
-/* Header Styles */
 #header {
     background-color: #d1182d;
     color: white;
@@ -14,10 +13,6 @@ body {
     align-items: center;
     justify-content: space-between;
     font-size: 1.4rem;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1030;
 }
 
 #header .logo {
@@ -34,7 +29,7 @@ body {
     font-weight: bold;
 }
 
-/* Sidebar Styles */
+/* Sidebar */
 #sidebar {
     background-color: white !important;   
     color: black;
@@ -57,13 +52,14 @@ body {
 }
 
 #sidebar .nav-link:hover {
-    background-color: #d1182d;
+    background-color: #d1182d; 
     color: white;
 }
 
 #sidebar .nav-link.active {
-    background-color: #d1182d;
-    color: white;
+    background-color: #d1182d; 
+    color: white; 
+    text-decoration: none; 
 }
 
 /* Main Content Area */
@@ -79,14 +75,16 @@ body {
     background-color: #f8f9fa;
 }
 
-/* Section Header */
+/* Section Header - Further adjusted spacing and color */
 .section-header {
     margin-bottom: 15px;
+    margin-top: 5px; /* Further reduced */
 }
 
 .section-header h2 {
-    color: #333;
+    color: black; /* Changed to black */
     margin-bottom: 10px;
+    margin-top: 10px; /* Further reduced */
     font-weight: 500;
     font-size: 2.3rem;
     letter-spacing: 0.5px;
@@ -107,8 +105,8 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 10px 0;
-    margin-left: 10px;
+    margin-top: 10px; /* Further reduced */
+    margin-bottom: 20px;
     padding: 20px;
 }
 

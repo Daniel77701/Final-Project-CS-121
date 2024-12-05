@@ -81,6 +81,7 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
                             <tr>
                                 <th>Message</th>
                                 <th>Email</th>
+                                <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -90,6 +91,7 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
                                     <tr>
                                         <td><?= htmlspecialchars($feedback['message']); ?></td>
                                         <td><?= htmlspecialchars($feedback['email']); ?></td>
+                                        <td><?= date('M d, Y', strtotime($feedback['created_at'])); ?></td>
                                         <td>
                                             <form method="POST" action="includes/delete_feedback.php" style="display: inline;">
                                                 <input type="hidden" name="id" value="<?= $feedback['id']; ?>">
@@ -103,7 +105,7 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="3" class="text-center">No feedback entries found</td>
+                                    <td colspan="4" class="text-center">No feedback entries found</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>

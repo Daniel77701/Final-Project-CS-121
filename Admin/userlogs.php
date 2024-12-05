@@ -2,11 +2,17 @@
 
 session_start();
 require_once '../connection/dbh.classes.php';
+require_once '../classes/LoginTracker.php';
 
+$loginTracker = new LoginTracker();
 $db = new Dbh();
 $conn = $db->connect();
 
-$query = "SELECT * FROM user_logs ORDER BY timestamp DESC";
+// Modified query to join with students table to get more information
+$query = "SELECT ul.*, s.name, s.sr_code 
+          FROM user_logs ul
+          JOIN students s ON s.id = ul.student_id
+          ORDER BY ul.login_time DESC";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -83,18 +89,24 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="selectAll"></th>
-                        <th>Timestamp</th>
-                        <th>Description</th>
-                        <th>Author</th>
+                        <th>SR Code</th>
+                        <th>Name</th>
+                        <th>Login Time</th>
+                        <th>Logout Time</th>
+                        <th>Duration</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($logs as $log): ?>
+                    <?php foreach ($logs as $log): 
+                        $duration = $loginTracker->formatDuration($log['duration'] ?? 0);
+                    ?>
                     <tr>
                         <td><input type="checkbox" class="log-checkbox" value="<?php echo $log['id']; ?>"></td>
-                        <td><?php echo htmlspecialchars($log['timestamp']); ?></td>
-                        <td><?php echo htmlspecialchars($log['description']); ?></td>
-                        <td><?php echo htmlspecialchars($log['author']); ?></td>
+                        <td><?php echo htmlspecialchars($log['sr_code']); ?></td>
+                        <td><?php echo htmlspecialchars($log['name']); ?></td>
+                        <td><?php echo date('M d, Y h:i A', strtotime($log['login_time'])); ?></td>
+                        <td><?php echo $log['logout_time'] ? date('M d, Y h:i A', strtotime($log['logout_time'])) : 'Active'; ?></td>
+                        <td><?php echo $duration; ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -117,13 +129,17 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 var noResults = true;
                 
                 $("#logsTable tbody tr").each(function() {
-                    var timestamp = $(this).find("td:eq(1)").text().toLowerCase();
-                    var description = $(this).find("td:eq(2)").text().toLowerCase();
-                    var author = $(this).find("td:eq(3)").text().toLowerCase();
+                    var srCode = $(this).find("td:eq(1)").text().toLowerCase();
+                    var name = $(this).find("td:eq(2)").text().toLowerCase();
+                    var loginTime = $(this).find("td:eq(3)").text().toLowerCase();
+                    var logoutTime = $(this).find("td:eq(4)").text().toLowerCase();
+                    var duration = $(this).find("td:eq(5)").text().toLowerCase();
                     
-                    if (timestamp.includes(searchText) || 
-                        description.includes(searchText) || 
-                        author.includes(searchText)) {
+                    if (srCode.includes(searchText) || 
+                        name.includes(searchText) || 
+                        loginTime.includes(searchText) ||
+                        logoutTime.includes(searchText) ||
+                        duration.includes(searchText)) {
                         $(this).show();
                         noResults = false;
                     } else {
@@ -136,7 +152,7 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     if ($("#no-results-message").length === 0) {
                         $("#logsTable tbody").append(
                             '<tr id="no-results-message">' +
-                            '<td colspan="4" class="text-center">' +
+                            '<td colspan="6" class="text-center">' +
                             'No matching records found' +
                             '</td></tr>'
                         );

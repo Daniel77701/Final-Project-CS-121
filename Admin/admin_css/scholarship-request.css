@@ -42,33 +42,31 @@
 /* Header Styles */
 #header {
     background-color: #d1182d;
+    color: white;
     padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 1.4rem;
     position: fixed;
-    width: 100%;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1030;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
 }
 
 #header .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
 #header .logo img {
-    width: 60px;
-    height: 60px;
+    margin-right: 8px;
 }
 
 #header .logo span {
-    font-size: 30px;
+    font-size: 1.5em;
     font-weight: bold;
-    color: white;
 }
 
 /* Welcome section in header */
@@ -174,18 +172,18 @@
     padding: 0.375rem 0.75rem;
 }
 
-/* Sidebar Styles */
+/* Sidebar */
 #sidebar {
     background-color: white !important;   
     color: black;
+    height: calc(100vh - 60px);
+    padding-top: 20px;
+    font-size: 0.85rem;
     position: fixed;
     top: 60px;
     left: 0;
-    height: calc(100vh - 60px);
+    width: 220px;
     overflow-y: auto;
-    width: 250px;
-    padding-top: 20px;
-    font-size: 0.85rem;
     z-index: 1020;
 }
 
@@ -195,24 +193,22 @@
     padding: 10px 15px;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-#sidebar .nav-link:hover {
-    background-color: #d1182d;
-    color: white;
-}
-
-#sidebar .nav-link.active {
-    background-color: #d1182d;
-    color: white;
 }
 
 #sidebar .nav-link img {
     width: 20px;
-    height: 20px;
+    margin-right: 10px;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #d1182d; 
+    color: white;
+}
+
+#sidebar .nav-link.active {
+    background-color: #d1182d; 
+    color: white; 
+    text-decoration: none; 
 }
 
 /* Responsive Styles */
@@ -292,9 +288,11 @@
 /* General Styles */
 body {
     font-family: 'Times New Roman', Times, serif;
-    background-color: whitesmoke;
+    background-color: #F7F8FA;
     font-size: 0.95rem;
     overflow-x: hidden;
+    height: 100vh;
+    margin: 0;
 }
 
 /* Custom Header Styles */
@@ -339,24 +337,6 @@ body {
 #sidebar .nav-link.active {
     background-color: #d1182d;
     color: white;
-}
-
-/* Custom Scrollbar for Sidebar */
-#sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-#sidebar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-#sidebar::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
-}
-
-#sidebar::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }
 
 /* Main Content Styles */

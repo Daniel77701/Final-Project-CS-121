@@ -1,5 +1,56 @@
 <?php
  include '../classes/useraccount_handler.php'; 
+
+// Initialize UserAccountHandler
+$userHandler = new UserAccountHandler();
+
+// Get current page and search parameters
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Get students with pagination
+$result = $userHandler->getStudents($search, $page);
+$users = $result['users'];
+$total_records = $result['total_records'];
+$total_pages = $result['total_pages'];
+
+ // Handle POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+    if (isset($_POST['action'])) {
+            if ($_POST['action'] === 'delete' && isset($_POST['id'])) {
+                $userHandler->deleteStudent($_POST['id']);
+                $_SESSION['message'] = "Student deleted successfully";
+                $_SESSION['message_type'] = "success";
+            } elseif ($_POST['action'] === 'edit' && isset($_POST['id'])) {
+                $userHandler->updateStudent(
+                    $_POST['id'],
+                    $_POST['name'],
+                    $_POST['email'],
+                    $_POST['sr_code']
+                );
+                $_SESSION['message'] = "Student updated successfully";
+                $_SESSION['message_type'] = "success";
+            } elseif ($_POST['action'] === 'add') {
+                $userHandler->addStudent(
+                    $_POST['name'],
+                    $_POST['email'],
+                    $_POST['sr_code'],
+                    $_POST['password']
+                );
+                $_SESSION['message'] = "Student added successfully";
+                $_SESSION['message_type'] = "success";
+            }
+            }
+        } catch (Exception $e) {
+            $_SESSION['message'] = $e->getMessage();
+            $_SESSION['message_type'] = "error";
+        }
+        
+        header('Location: useraccount.php');
+        exit();
+}
+
  ?>
 
 <!DOCTYPE html>
@@ -36,7 +87,7 @@
             <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3 collapse d-md-block">
                 <ul class="nav flex-column">
                     <li class="nav-item"><a class="nav-link" href="admin-dashboard.php"><img src="icons_admin/dashboard.png" alt="Dashboard Icon"> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
+                    <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholarship.php"><img src="icons_admin/scholarships.png" alt="Scholarship Icon"> Scholarship</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholarship-request.php"><img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon"> Scholarship Request</a></li>
                     <li class="nav-item"><a class="nav-link" href="schema.php"><img src="icons_admin/view schema.png" alt="Schema Icon"> Schema</a></li>
@@ -61,7 +112,6 @@
                     </div>
                 </div>
 
-                <!-- Search bar moved outside -->
                 <div class="search-box">
                     <div class="search-container">
                         <form class="form-inline">
@@ -86,7 +136,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Username</th>
+                                <th>Email</th>
                                 <th>Sr-Code</th>
                                 <th>Name</th>
                                 <th>Actions</th>
@@ -102,11 +152,11 @@
                                     <tr>
                                         <td><?= htmlspecialchars($user['email']); ?></td>
                                         <td><?= htmlspecialchars($user['sr_code']); ?></td>
-                                        <td><?= htmlspecialchars($user['full_name']); ?></td>
+                                        <td><?= htmlspecialchars($user['name']); ?></td>
                                         <td class="button-cell">
                                             <button class="edit-btn" data-toggle="modal" data-target="#editUserModal" 
                                                 data-id="<?= $user['id']; ?>" 
-                                                data-name="<?= htmlspecialchars($user['full_name']); ?>" 
+                                                data-name="<?= htmlspecialchars($user['name']); ?>" 
                                                 data-email="<?= htmlspecialchars($user['email']); ?>" 
                                                 data-sr_code="<?= htmlspecialchars($user['sr_code']); ?>">
                                                 Edit
@@ -114,9 +164,7 @@
                                             <form method="post" style="display: inline-block;">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="<?= $user['id']; ?>">
-                                                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this user?');">
-                                                    Delete
-                                                </button>
+                                                <button type="submit" class="delete-btn">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -129,7 +177,11 @@
                 <!-- Pagination -->
                 <div class="pagination-container">
                     <div class="pagination-info">
-                        Showing <?= count($student) ?> of <?= $total_records ?> entries
+                        <?php 
+                        // Change $student to $users since that's the variable we're using
+                        $showing = is_array($users) ? count($users) : 0;
+                        ?>
+                        Showing <?= $showing ?> of <?= $total_records ?> entries
                     </div>
                     <?php if ($total_pages > 1): ?>
                         <ul class="pagination">
@@ -178,7 +230,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="action" value="add">
-                        <input type="text" name="full_name" placeholder="Full Name" required>
+                        <input type="text" name="name" placeholder="Name" required>
                         <input type="email" name="email" placeholder="Email" required>
                         <input type="text" name="sr_code" placeholder="Sr-Code" required>
                         <input type="password" name="password" placeholder="Password" required>
@@ -198,15 +250,24 @@
             <div class="modal-content">
                 <form method="post">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit User</h4>
+                        <h4 class="modal-title">Edit Student</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="action" value="edit">
                         <input type="hidden" name="id">
-                        <input type="text" name="full_name" placeholder="Full Name" required>
-                        <input type="email" name="email" placeholder="Email" required>
-                        <input type="text" name="sr_code" placeholder="Sr-Code" required>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sr_code">SR Code</label>
+                            <input type="text" class="form-control" name="sr_code" required>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -366,5 +427,37 @@
             this.submit();
         });
     </script>
+
+    <!-- Handle POST requests -->
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userHandler = new UserAccountHandler();
+        
+        if (isset($_POST['action'])) {
+            try {
+                if ($_POST['action'] === 'delete' && isset($_POST['id'])) {
+                    $userHandler->deleteStudent($_POST['id']);
+                    $_SESSION['message'] = "Student deleted successfully";
+                    $_SESSION['message_type'] = "success";
+                } elseif ($_POST['action'] === 'edit' && isset($_POST['id'])) {
+                    $userHandler->updateStudent(
+                        $_POST['id'],
+                        $_POST['name'],
+                        $_POST['email'],
+                        $_POST['sr_code']
+                    );
+                    $_SESSION['message'] = "Student updated successfully";
+                    $_SESSION['message_type'] = "success";
+                }
+            } catch (Exception $e) {
+                $_SESSION['message'] = $e->getMessage();
+                $_SESSION['message_type'] = "error";
+            }
+            
+            header('Location: useraccount.php');
+            exit();
+        }
+    }
+    ?>
 </body>
 </html>

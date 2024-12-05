@@ -1,5 +1,5 @@
 <?php
-require_once "../dbh.classes.php";
+require_once "../classes/dbh.classes.php";
 
 try {
     // Get scholars count

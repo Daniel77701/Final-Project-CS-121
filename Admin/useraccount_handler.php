@@ -3,7 +3,7 @@ require_once "../dbh.classes.php";
 
 class UserAccountHandler extends Dbh {
     public function fetchAllUsers() {
-        $sql = "SELECT id, full_name, email, sr_code, mobile_number FROM students ORDER BY created_at DESC";
+        $sql = "SELECT id, name, email, sr_code, mobile_number FROM students ORDER BY id DESC";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

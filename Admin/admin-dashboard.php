@@ -1,5 +1,5 @@
 <?php
-require_once 'getCount.php';
+require_once '../includes/getCount.php';
 ?>
 
 <!DOCTYPE html>
@@ -47,9 +47,10 @@ require_once 'getCount.php';
                     <li class="nav-item"><a class="nav-link active" href="admin-dashboard.php"><img src="icons_admin/dashboard.png" alt="Dashboard Icon"> Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholarship.php"><img src="icons_admin/scholarship.png" alt="Scholarship Icon"> Scholarship</a></li>
-                    <li class="nav-item"><a class="nav-link" href="scholarship-request.html"><img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon"> Scholarship Request</a></li>
+                    <li class="nav-item"><a class="nav-link" href="scholarship-request.php"><img src="icons_admin/scholarship_request.png" alt="Scholarship Request Icon"> Scholarship Request</a></li>
+                    <li class="nav-item"><a class="nav-link" href="schema.php"><img src="icons_admin/view schema.png" alt="Schema Icon"> Schema</a></li>
                     <li class="nav-item"><a class="nav-link" href="FAQ'S.php"><img src="icons_admin/exam_management.png" alt="FAQ'S Icon"> FAQ'S</a></li>
-                    <li class="nav-item"><a class="nav-link" href="announcement.html"><img src="icons_admin/announcement.png" alt="Announcement Icon"> Announcement</a></li>
+                    <li class="nav-item"><a class="nav-link" href="announcement.php"><img src="icons_admin/announcement.png" alt="Announcement Icon"> Announcement</a></li>
                     <li class="nav-item"><a class="nav-link" href="feedback.php"><img src="icons_admin/feedback.png" alt="Feedback Icon"> Feedback</a></li>
                     <li class="nav-item"><a class="nav-link" href="featured-scholars.html"><img src="icons_admin/featured_scholars.png" alt="Featured Scholars Icon"> Featured Scholars</a></li>
                     <li class="nav-item"><a class="nav-link" href="settings.html"><img src="icons_admin/setting.png" alt="Settings Icon"> Settings</a></li>
@@ -72,7 +73,7 @@ require_once 'getCount.php';
                             <div class="card">
                                 <div class="card-body">
                                     <h5><?php echo $scholarsCount; ?> Scholars</h5>
-                                    <a href="scholars.html" class="btn btn-link custom-link">View Details</a>
+                                    <a href="scholars.php" class="btn btn-link custom-link">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +172,7 @@ require_once 'getCount.php';
     <script>
         $(document).ready(function() {
             $.ajax({
-                url: 'piechart_data.php',
+                url: '../includes/piechart_data.php',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {

@@ -5,23 +5,42 @@ class FeaturedScholarsHandler extends Dbh {
     // Get list of all scholars for dropdown
     public function getScholarsList() {
         try {
-            $sql = "SELECT sr_code, name, course, scholarship 
-                   FROM scholars 
-                   ORDER BY name ASC";
+            error_log("=== Debug getScholarsList ===");
+            
+            // Get all scholars that aren't featured yet
+            $sql = "SELECT DISTINCT s.sr_code, s.name, s.course, sch.name as scholarship 
+                   FROM scholars s
+                   LEFT JOIN scholarships sch ON s.scholarship_id = sch.scholarship_id 
+                   WHERE s.sr_code NOT IN (
+                       SELECT sr_code FROM featured_scholars
+                   )
+                   AND s.name IS NOT NULL 
+                   AND s.course IS NOT NULL
+                   ORDER BY s.name ASC";
+            
+            error_log("SQL Query: " . $sql);
+            
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            error_log("Number of scholars found: " . count($results));
+            error_log("Scholar data: " . print_r($results, true));
+            
+            return $results;
         } catch (PDOException $e) {
-            error_log("Error fetching scholars list: " . $e->getMessage());
+            error_log("Error in getScholarsList: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             return [];
         }
     }
 
     public function getAllFeaturedScholars() {
         try {
-            $sql = "SELECT fs.*, s.name, s.course, s.scholarship 
+            $sql = "SELECT fs.*, s.name, s.course, sch.name as scholarship 
                     FROM featured_scholars fs
                     JOIN scholars s ON fs.sr_code = s.sr_code
+                    LEFT JOIN scholarships sch ON s.scholarship_id = sch.scholarship_id
                     ORDER BY fs.id DESC";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute();
@@ -75,12 +94,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET
         
         if ($action === 'get_scholars_list') {
             $scholars = $handler->getScholarsList();
-            echo json_encode(['status' => 'success', 'scholars' => $scholars]);
+            echo json_encode([
+                'status' => 'success',
+                'scholars' => $scholars,
+                'debug_count' => count($scholars) // Debug info
+            ]);
+            exit();
         } else {
             $featuredScholars = $handler->getAllFeaturedScholars();
-            echo json_encode(['status' => 'success', 'scholar_data' => $featuredScholars]);
+            echo json_encode([
+                'status' => 'success',
+                'scholar_data' => $featuredScholars
+            ]);
+            exit();
         }
-        exit();
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

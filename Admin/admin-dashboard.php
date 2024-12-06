@@ -33,7 +33,7 @@ require_once '../includes/getCount.php';
             </div>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
-            <a href="settings.html">
+            <a href="settings.php">
                 <img src="icons_admin/white_settings.png" alt="Settings Icon" style="width: 30px; height: 30px; margin-left: 10px;">
             </a>
         </div>
@@ -63,7 +63,7 @@ require_once '../includes/getCount.php';
             <main class="col-md-9 col-lg-10 px-md-4" id="main-content">
                 <div class="dashboard-section">
                     <h1 class="mt-4">Dashboard
-                        <a href="settings.html">
+                        <a href="settings.php">
                             <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
                         </a>
                     </h1>

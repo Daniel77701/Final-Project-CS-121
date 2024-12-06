@@ -1,11 +1,4 @@
-/* General Styles */
-body {
-    font-family: 'Times New Roman', Times, serif;
-    background-color: #F7F8FA;
-    font-size: 0.95rem;
-}
-
-/* Header Styles */
+/* Fixed Header */
 #header {
     background-color: #d1182d;
     color: white;
@@ -18,8 +11,81 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1030;
-    height: 70px;
+    height: 60px;
+    z-index: 1000;
+}
+
+/* Body padding to account for fixed header */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
+    padding-top: 80px;
+}
+
+/* Sidebar with scrolling */
+#sidebar {
+    background-color: white !important;
+    position: fixed;
+    top: 60px; /* Height of header */
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 60px); /* Viewport height minus header height */
+    overflow-y: auto;
+    padding-top: 20px;
+    z-index: 999;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* Main content area */
+.col-md-9.col-lg-10 {
+    margin-left: 220px;
+    padding: 20px 30px;
+    width: calc(100% - 250px);
+}
+
+/* Remove responsive styles for header and sidebar */
+@media (max-width: 768px) {
+    #header {
+        position: fixed;
+        width: 100%;
+    }
+
+    #sidebar {
+        position: fixed;
+        width: 250px;
+        left: 0;
+    }
+
+    .col-md-9.col-lg-10 {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+    }
+}
+
+/* Scrollbar styling for sidebar */
+#sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* General Styles */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
 }
 
 #header .logo {
@@ -37,20 +103,6 @@ body {
 }
 
 /* Sidebar */
-#sidebar {
-    background-color: white !important;   
-    color: black;
-    height: calc(100vh - 70px);
-    padding-top: 20px;
-    font-size: 0.85rem;
-    position: fixed;
-    top: 70px;
-    left: 0;
-    width: 220px;
-    overflow-y: auto;
-    z-index: 1020;
-}
-
 #sidebar .nav-link {
     color: black;
     font-size: 1.22rem;
@@ -64,122 +116,193 @@ body {
     margin-right: 10px;
 }
 
+/* Only apply background color on hover */
 #sidebar .nav-link:hover {
-    background-color: #d1182d;
+    background-color: #d1182d; /* Red background on hover */
     color: white;
 }
 
+/* Remove the red background from the active state */
 #sidebar .nav-link.active {
-    background-color: #d1182d;
-    color: white;
-    text-decoration: none;
+    background-color: #d1182d; /* No background for active state */
+    color: white; /* Optional: change text color when active */
 }
 
-/* Main Content */
+
 #main-content {
-    margin-left: 220px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    min-height: calc(100vh - 70px);
-    width: calc(100% - 220px);
-    margin-top: 70px;
-}
-
-/* Dashboard Section */
-.dashboard-section {
-    background-color: white;
-    padding: 20px 30px;
+    background-color: #d9dfdb;
+    padding: 15px;
     border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Scholarship Section */
+.scholarship-section {
+    padding: 0;
+    width: 100%;
+}
+.title-box {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.dashboard-section h2 {
+.title-box h2 {
     color: #333;
-    font-size: 2rem;
-    margin-bottom: 5px;
+    font-size: 2.5rem;
+    padding-bottom: 15px;
+    margin-bottom: 0;
 }
 
-.dashboard-section hr {
+.title-box hr {
     border: none;
-    height: 2px;
-    background-color: #8B0000;
-    margin: 10px 0 20px 0;
+    border-top: 2px solid #8C1D1A;
+    margin-top: 0;
+    padding: 0;
 }
-
-/* Table Box */
-.table-box {
-    margin-top: 30px;
-    width: 100%;
-}
-
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    background-color: #8B0000;
-    color: white;
-    padding: 12px;
-    text-align: center;
-    font-weight: normal;
-}
-
-td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-/* Column widths */
-th:nth-child(1), td:nth-child(1) { width: 25%; }
-th:nth-child(2), td:nth-child(2) { width: 25%; }
-th:nth-child(3), td:nth-child(3) { width: 25%; }
-th:nth-child(4), td:nth-child(4) { width: 25%; }
-
-/* Button Container */
+/* Center the button container and add space between buttons */
 .button-container {
-    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+    justify-content: flex-start;
 }
 
 .add-featured {
     background-color: #d1182d;
     color: white;
-    padding: 8px 20px;
     border: none;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-featured:hover {
+    background-color: #b01425;
+}
+/* Table Box Styles */
+.table-box {
+    background-color: white;
+    padding: 20px 25px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Table Styles */
+.table-box table {
+    width: 100%; /* Ensures table takes up full container width */
+    border-collapse: collapse; /* Ensures table borders collapse together */
     font-size: 0.95rem;
+    margin: 0 auto;
 }
 
-/* Badge Styling */
-.badge {
-    padding: 5px 15px;
-    border-radius: 3px;
-    font-weight: normal;
+/* Table Header */
+.table-box th {
+    background-color: darkred;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid whitesmoke; /* Adds a gray border to table headers */
 }
 
-.badge-success {
-    background-color: #28a745;
+/* Table Data */
+.table-box td {
+    padding: 12px;
+    border: 1px solid lightgrey; /* Adds a gray border to table data cells */
+}
+
+/* Table Rows */
+.table-box tr {
+    border: 1px solid  #ddd !important; /* Adds a gray border to the entire row */
 }
 
 /* Action Buttons */
-.btn-danger.btn-sm {
-    background-color: #d1182d;
-    color: white;
-    padding: 5px 15px;
+td button {
+    padding: 6px 12px;
+    border-radius: 1px;
     border: none;
-    border-radius: 3px;
+    cursor: pointer;
     font-size: 0.9rem;
-    text-decoration: none;
+    margin-right: 5px;
 }
 
+td button:hover {
+    opacity: 0.8;
+}
+
+td button:first-child {
+    background-color: #4CAF50;
+    color: white;
+}
+
+td button:nth-child(2) {
+    background-color: #f44336;
+    color: white;
+}
+
+td button:nth-child(3) {
+    background-color: #ff9800;
+    color: white;
+}
+
+td button.close-renewal {
+    background-color: #9e9e9e;
+    color: white;
+}
 /* Footer */
 .footer {
     margin-top: 15px;
-    padding: 10px;
+    text-align: left;
     color: #666;
-    font-size: 0.9rem;
+} 
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 8px;
+}
+
+.modal-header {
+    background-color: #d1182d;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header .close {
+    color: white;
+}
+
+.btn-danger {
+    background-color: #d1182d;
+    border-color: #d1182d;
+}
+
+.btn-danger:hover {
+    background-color: #b01425;
+    border-color: #b01425;
+}
+
+/* Logout button styles */
+.logout-btn {
+    color: white;
+    text-decoration: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+}
+
+.logout-btn i {
+    font-size: 1.1rem;
 }

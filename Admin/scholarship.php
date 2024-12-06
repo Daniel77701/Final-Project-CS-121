@@ -1,7 +1,61 @@
 <?php
-    require_once '../classes/scholarship_handler.php';
+require_once '../classes/scholarship_handler.php';
+
+try {
     $scholarships = new ScholarshipHandler();
     $scholarshipList = $scholarships->getScholarships();
+} catch (Exception $e) {
+    error_log("Scholarship page error: " . $e->getMessage());
+    die("Unable to connect to the database. Please try again later or contact support.");
+}
+
+// Handle Add Scholarship
+if (isset($_POST['add_scholarship'])) {
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $deadline = $_POST['deadline'];
+    $requirements = $_POST['requirements'];
+    $status = $_POST['status'];
+
+    if ($scholarships->createScholarship($name, $description, $deadline, $requirements, $status)) {
+        header("Location: scholarship.php?success=created");
+        exit();
+    } else {
+        header("Location: scholarship.php?error=create_failed");
+        exit();
+    }
+}
+
+// Handle Update Scholarship
+if (isset($_POST['update_scholarship'])) {
+    $id = $_POST['scholarship_id'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $deadline = $_POST['deadline'];
+    $requirements = $_POST['requirements'];
+    $status = $_POST['status'];
+
+    if ($scholarships->updateScholarship($id, $name, $description, $deadline, $requirements, $status)) {
+        header("Location: scholarship.php?success=updated");
+        exit();
+    } else {
+        header("Location: scholarship.php?error=update_failed");
+        exit();
+    }
+}
+
+// Handle Delete Scholarship
+if (isset($_GET['delete_scholarship_id'])) {
+    $id = $_GET['delete_scholarship_id'];
+    
+    if ($scholarships->deleteScholarship($id)) {
+        header("Location: scholarship.php?success=deleted");
+        exit();
+    } else {
+        header("Location: scholarship.php?error=delete_failed");
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -97,6 +151,7 @@
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Requirements</th>
+                                <th>Deadline</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -108,6 +163,7 @@
                                 <td><?php echo $scholarship['name']; ?></td>
                                 <td><?php echo $scholarship['description']; ?></td>
                                 <td><?php echo $scholarship['requirements']; ?></td>
+                                <td><?php echo $scholarship['deadline']; ?></td>
                                 <td><?php echo $scholarship['status']; ?></td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" onclick="editScholarship(this)"
@@ -115,6 +171,7 @@
                                     data-name="<?php echo $scholarship['name']; ?>"
                                     data-description="<?php echo $scholarship['description']; ?>"
                                     data-requirements="<?php echo $scholarship['requirements']; ?>"
+                                    data-deadline="<?php echo $scholarship['deadline']; ?>"
                                     data-status="<?php echo $scholarship['status']; ?>">Edit</button>
                                     <button class="btn btn-danger btn-sm" 
                                             onclick="confirmScholarshipDelete('<?php echo $scholarship['scholarship_id']; ?>')">Delete</button>
@@ -165,6 +222,10 @@
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline">Deadline</label>
+                            <input type="date" class="form-control" name="deadline" required>
                         </div>
                         <button type="submit" class="btn btn-primary" name="add_scholarship">Add Scholarship</button>
                     </form>
@@ -361,27 +422,28 @@
                 html: `
                     <form id="addScholarshipForm">
                         <div class="form-group">
-                            <label for="scholarship_id">Scholarship ID</label>
-                            <input type="text" class="form-control" name="scholarship_id" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Name</label>
+                            <label for="name">Name *</label>
                             <input type="text" class="form-control" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">Description *</label>
                             <textarea class="form-control" name="description" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="requirements">Requirements</label>
+                            <label for="requirements">Requirements *</label>
                             <textarea class="form-control" name="requirements" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="status">Status</label>
+                            <label for="status">Status *</label>
                             <select class="form-control" name="status" required>
+                                <option value="">Select status</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline">Deadline *</label>
+                            <input type="date" class="form-control" name="deadline" required>
                         </div>
                     </form>
                 `,
@@ -390,24 +452,55 @@
                 cancelButtonText: 'Cancel',
                 preConfirm: () => {
                     const form = document.getElementById('addScholarshipForm');
-                    const formData = new FormData(form);
-                    return Object.fromEntries(formData);
+                    const name = form.querySelector('[name="name"]').value.trim();
+                    const description = form.querySelector('[name="description"]').value.trim();
+                    const requirements = form.querySelector('[name="requirements"]').value.trim();
+                    const status = form.querySelector('[name="status"]').value.trim();
+                    const deadline = form.querySelector('[name="deadline"]').value.trim();
+
+                    // Check for empty fields
+                    if (!name) {
+                        Swal.showValidationMessage('Scholarship name is required');
+                        return false;
+                    }
+                    if (!description) {
+                        Swal.showValidationMessage('Description is required');
+                        return false;
+                    }
+                    if (!requirements) {
+                        Swal.showValidationMessage('Requirements are required');
+                        return false;
+                    }
+                    if (!status) {
+                        Swal.showValidationMessage('Please select a status');
+                        return false;
+                    }
+                    if (!deadline) {
+                        Swal.showValidationMessage('Deadline is required');
+                        return false;
+                    }
+
+                    // Validate deadline is not in the past
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const selectedDate = new Date(deadline);
+                    if (selectedDate < today) {
+                        Swal.showValidationMessage('Deadline cannot be in the past');
+                        return false;
+                    }
+
+                    // If all validations pass, return the data
+                    return {
+                        add_scholarship: true,
+                        name: name,
+                        description: description,
+                        requirements: requirements,
+                        status: status,
+                        deadline: deadline
+                    };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const scholarship_id = result.value.scholarship_id;
-                    
-                    fetch(`check_scholarship_id.php?id=${scholarship_id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.exists) {
-                            Swal.fire({
-                                title: 'Warning!',
-                                text: 'This Scholarship ID already exists. Please use a different ID.',
-                                icon: 'warning',
-                                confirmButtonText: 'Ok'
-                            });
-                        } else {
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = 'scholarship.php';
@@ -420,15 +513,20 @@
                         form.appendChild(input);
                     }
 
-                    const addButton = document.createElement('input');
-                    addButton.type = 'hidden';
-                    addButton.name = 'add_scholarship';
-                    addButton.value = '1';
-                    form.appendChild(addButton);
-
                     document.body.appendChild(form);
                     form.submit();
-                        }
+
+                    // Show success message
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Scholarship added successfully'
                     });
                 }
             });
@@ -440,6 +538,7 @@
                 name: button.dataset.name,
                 description: button.dataset.description,
                 requirements: button.dataset.requirements,
+                deadline: button.dataset.deadline,
                 status: button.dataset.status
             };
 
@@ -466,6 +565,10 @@
                                 <option value="Active" ${scholarshipData.status === 'Active' ? 'selected' : ''}>Active</option>
                                 <option value="Inactive" ${scholarshipData.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline">Deadline</label>
+                            <input type="date" class="form-control" name="deadline" value="${scholarshipData.deadline}" required>
                         </div>
                     </form>
                 `,

@@ -73,7 +73,7 @@
                             </tr>
                         </thead>
                         <tbody id="scholar-table">
-                            <!-- Scholars will be loaded here dynamically via AJAX -->
+                            <!-- Scholars will be loaded here dynamically -->
                         </tbody>
                     </table>
                     <div class="footer">Showing 0 to 0 of 0 entries</div>
@@ -95,74 +95,121 @@
 
             // Update the add scholar button click handler
             $('#add-scholar-btn').click(function() {
-                // First load scholars if not loaded
-                if (!window.scholarsList) {
-                    loadScholarsList();
-                }
-
-                let scholarOptions = window.scholarsList.map(scholar => 
-                    `<option value="${scholar.sr_code}">${scholar.name} - ${scholar.course} (${scholar.scholarship})</option>`
-                ).join('');
-
-                Swal.fire({
-                    title: 'Add Featured Scholar',
-                    html: `
-                        <form id="addScholarForm" class="text-left">
-                            <div class="form-group">
-                                <label for="sr_code">Select Scholar:</label>
-                                <select class="form-control" name="sr_code" required>
-                                    <option value="">Select a Scholar</option>
-                                    ${scholarOptions}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Testimonial Message:</label>
-                                <textarea class="form-control" name="message" rows="4" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status:</label>
-                                <select class="form-control" name="status" required>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </form>
-                    `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Add Featured Scholar',
-                    cancelButtonText: 'Cancel',
-                    preConfirm: () => {
-                        const form = document.getElementById('addScholarForm');
-                        if (!form.checkValidity()) {
-                            Swal.showValidationMessage('Please fill in all required fields');
-                            return false;
-                        }
-                        return {
-                            action: 'add_scholar',
-                            sr_code: form.querySelector('[name="sr_code"]').value,
-                            message: form.querySelector('[name="message"]').value,
-                            status: form.querySelector('[name="status"]').value
-                        };
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '../classes/featured-scholars_handler.php',
-                            type: 'POST',
-                            data: result.value,
-                            success: function(response) {
-                                if (response.status === 'success') {
-                                    Swal.fire('Success!', response.message, 'success');
-                                    fetchScholars();
-                                } else {
-                                    Swal.fire('Error!', response.message, 'error');
-                                }
-                            },
-                            error: function(xhr) {
-                                console.error('Error:', xhr.responseText);
-                                Swal.fire('Error!', 'Failed to add featured scholar', 'error');
+                $.ajax({
+                    url: '../classes/featured-scholars_handler.php',
+                    type: 'GET',
+                    data: { action: 'get_scholars_list' },
+                    success: function(response) {
+                        console.log('Raw response:', response);
+                        
+                        if (typeof response === 'string') {
+                            try {
+                                response = JSON.parse(response);
+                            } catch (e) {
+                                console.error('Failed to parse response:', e);
+                                Swal.fire('Error', 'Invalid server response', 'error');
+                                return;
                             }
-                        });
+                        }
+                        
+                        console.log('Parsed response:', response);
+                        
+                        if (response.status === 'success') {
+                            if (!Array.isArray(response.scholars)) {
+                                console.error('Scholars is not an array:', response.scholars);
+                                Swal.fire('Error', 'Invalid scholars data format', 'error');
+                                return;
+                            }
+                            
+                            if (response.scholars.length === 0) {
+                                console.log('No scholars found in response');
+                                Swal.fire({
+                                    title: 'No Scholars Available',
+                                    text: 'There are no scholars available to feature at this time.',
+                                    icon: 'info',
+                                    footer: 'Debug info: ' + response.debug_count + ' scholars found'
+                                });
+                                return;
+                            }
+
+                            let scholarOptions = response.scholars.map(scholar => {
+                                console.log('Processing scholar:', scholar);
+                                return `<option value="${scholar.sr_code}">${scholar.name} - ${scholar.course} (${scholar.scholarship || 'No Scholarship'})</option>`;
+                            }).join('');
+
+                            console.log('Generated options:', scholarOptions);
+
+                            Swal.fire({
+                                title: 'Add Featured Scholar',
+                                html: `
+                                    <form id="addScholarForm" class="text-left">
+                                        <div class="form-group">
+                                            <label for="sr_code">Select Scholar:</label>
+                                            <select class="form-control" name="sr_code" required>
+                                                <option value="">Select a Scholar</option>
+                                                ${scholarOptions}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message">Testimonial Message:</label>
+                                            <textarea class="form-control" name="message" rows="4" required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="status">Status:</label>
+                                            <select class="form-control" name="status" required>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                `,
+                                showCancelButton: true,
+                                confirmButtonText: 'Add Featured Scholar',
+                                cancelButtonText: 'Cancel',
+                                preConfirm: () => {
+                                    const form = document.getElementById('addScholarForm');
+                                    if (!form.checkValidity()) {
+                                        Swal.showValidationMessage('Please fill in all required fields');
+                                        return false;
+                                    }
+                                    return {
+                                        action: 'add_scholar',
+                                        sr_code: form.querySelector('[name="sr_code"]').value,
+                                        message: form.querySelector('[name="message"]').value,
+                                        status: form.querySelector('[name="status"]').value
+                                    };
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        url: '../classes/featured-scholars_handler.php',
+                                        type: 'POST',
+                                        data: result.value,
+                                        success: function(response) {
+                                            if (response.status === 'success') {
+                                                Swal.fire('Success!', response.message, 'success');
+                                                fetchScholars();
+                                            } else {
+                                                Swal.fire('Error!', response.message, 'error');
+                                            }
+                                        },
+                                        error: function(xhr) {
+                                            console.error('Error:', xhr.responseText);
+                                            Swal.fire('Error!', 'Failed to add featured scholar', 'error');
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            console.error('Response status is not success:', response);
+                            Swal.fire('Error', 'Failed to load scholars list', 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Ajax error:', error);
+                        console.error('Status:', status);
+                        console.error('Response:', xhr.responseText);
+                        Swal.fire('Error', `Failed to load scholars list: ${error}`, 'error');
                     }
                 });
             });
@@ -188,8 +235,11 @@
                                         <td>${scholar.message}</td>
                                         <td>${scholar.status}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm edit-btn" data-id="${scholar.id}" 
-                                                    data-message="${scholar.message}" data-status="${scholar.status}">
+                                            <button class="btn btn-warning btn-sm edit-btn" 
+                                                    data-id="${scholar.id}"
+                                                    data-sr_code="${scholar.sr_code}"
+                                                    data-message="${scholar.message}" 
+                                                    data-status="${scholar.status}">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
                                             <button class="btn btn-danger btn-sm delete-btn" data-id="${scholar.id}">
@@ -218,16 +268,24 @@
                     type: 'GET',
                     data: { action: 'get_scholars_list' },
                     success: function(response) {
+                        console.log('Response from server:', response); // Debug log
                         if (response.status === 'success') {
                             window.scholarsList = response.scholars;
+                            console.log('Scholars list:', window.scholarsList); // Debug log
+                        } else {
+                            console.error('Failed to load scholars:', response);
                         }
+                    },
+                    error: function(xhr, error) {
+                        console.error('Ajax error:', error);
                     }
                 });
             }
 
-            // Add this event handler in your document.ready function
+            // Update the edit button handler
             $(document).on('click', '.edit-btn', function() {
                 const id = $(this).data('id');
+                const sr_code = $(this).data('sr_code');
                 const message = $(this).data('message');
                 const status = $(this).data('status');
 
@@ -235,6 +293,10 @@
                     title: 'Edit Featured Scholar',
                     html: `
                         <form id="editScholarForm" class="text-left">
+                            <div class="form-group">
+                                <label for="sr_code">SR Code:</label>
+                                <input type="text" class="form-control" value="${sr_code}" disabled>
+                            </div>
                             <div class="form-group">
                                 <label for="message">Testimonial Message:</label>
                                 <textarea class="form-control" name="message" rows="4" required>${message}</textarea>

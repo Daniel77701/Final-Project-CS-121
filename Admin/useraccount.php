@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
-            <a href="settings.html">
+            <a href="settings.php">
                 <img src="icons_admin/white_settings.png" alt="Settings Icon" style="width: 30px; height: 30px; margin-left: 10px;">
             </a> 
         </div>
@@ -112,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
+                <!-- Search bar moved outside -->
                 <div class="search-box">
                     <div class="search-container">
                         <form class="form-inline">
@@ -136,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <table>
                         <thead>
                             <tr>
-                                <th>Email</th>
+                                <th>Username</th>
                                 <th>Sr-Code</th>
                                 <th>Name</th>
                                 <th>Actions</th>
@@ -288,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var modal = $(this);
 
             modal.find('input[name="id"]').val(button.data('id'));
-            modal.find('input[name="full_name"]').val(button.data('name'));
+            modal.find('input[name="name"]').val(button.data('name'));
             modal.find('input[name="email"]').val(button.data('email'));
             modal.find('input[name="sr_code"]').val(button.data('sr_code'));
         });

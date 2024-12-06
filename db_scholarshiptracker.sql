@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2024 at 11:09 AM
+-- Generation Time: Dec 06, 2024 at 07:28 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_scholarshiptracker`
 --
+
 -- --------------------------------------------------------
 
 --
@@ -30,15 +31,16 @@ CREATE TABLE `announcements` (
   `id` int(11) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `announcement` text NOT NULL,
-  `date_posted` date DEFAULT curdate()
+  `date_posted` datetime NOT NULL DEFAULT current_timestamp(),
+  `status` enum('Active','Inactive') DEFAULT 'Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `announcements`
 --
 
-INSERT INTO `announcements` (`id`, `subject`, `announcement`, `date_posted`) VALUES
-(4, 'Scholarship Merit Award', 'You are qualified to this scholarships', '2024-12-02');
+INSERT INTO `announcements` (`id`, `subject`, `announcement`, `date_posted`, `status`) VALUES
+(12, 'OWWA Scholarship', 'Give the deadlines today. Give all the needed documents', '2024-12-06 14:19:13', 'Active');
 
 -- --------------------------------------------------------
 
@@ -96,24 +98,13 @@ INSERT INTO `applications` (`application_id`, `scholarship_id`, `student_id`, `s
 (5, 5, 5, 'Awarded', '2024-09-30', '2024-11-22 04:57:05'),
 (7, 7, 7, 'In Progress', '2024-11-10', '2024-11-22 04:57:05'),
 (8, 8, 8, 'Not Started', '2024-11-01', '2024-11-22 04:57:05'),
-(9, 9, 9, 'Submitted', '2024-10-15', '2024-11-22 04:57:05'),
 (10, 10, 10, 'Not Started', '2024-10-12', '2024-11-22 04:57:05'),
 (12, 2, 12, 'In Progress', '2024-11-05', '2024-11-22 04:57:05'),
-(13, 3, 13, 'Not Started', '2024-10-12', '2024-11-22 04:57:05'),
-(14, 4, 14, 'Submitted', '2024-10-20', '2024-11-22 04:57:05'),
 (15, 5, 15, 'Awarded', '2024-09-25', '2024-11-22 04:57:05'),
-(17, 7, 17, 'In Progress', '2024-11-15', '2024-11-22 04:57:05'),
-(18, 8, 18, 'Not Started', '2024-11-03', '2024-11-22 04:57:05'),
-(19, 9, 19, 'Submitted', '2024-10-18', '2024-11-22 04:57:05'),
 (20, 10, 20, 'Not Started', '2024-10-13', '2024-11-22 04:57:05'),
 (22, 2, 22, 'In Progress', '2024-11-02', '2024-11-22 04:57:05'),
-(23, 3, 23, 'Not Started', '2024-10-07', '2024-11-22 04:57:05'),
 (24, 4, 24, 'Submitted', '2024-10-08', '2024-11-22 04:57:05'),
-(25, 5, 25, 'Awarded', '2024-09-29', '2024-11-22 04:57:05'),
-(27, 7, 27, 'In Progress', '2024-11-08', '2024-11-22 04:57:05'),
-(28, 8, 28, 'Not Started', '2024-11-06', '2024-11-22 04:57:05'),
-(29, 9, 29, 'Submitted', '2024-10-17', '2024-11-22 04:57:05'),
-(30, 10, 30, 'Not Started', '2024-10-09', '2024-11-22 04:57:05');
+(29, 9, 29, 'Submitted', '2024-10-17', '2024-11-22 04:57:05');
 
 -- --------------------------------------------------------
 
@@ -179,7 +170,6 @@ INSERT INTO `application_reviews` (`review_id`, `application_id`, `reviewer_id`,
 (5, 5, 5, 90, 'Well-rounded application.', '2024-11-22 04:57:05'),
 (7, 7, 2, 75, 'Decent application, but GPA is borderline.', '2024-11-22 04:57:05'),
 (8, 8, 3, 80, 'Shows potential but lacks extracurriculars.', '2024-11-22 04:57:05'),
-(9, 9, 4, 95, 'Outstanding candidate.', '2024-11-22 04:57:05'),
 (10, 10, 5, 82, 'Good academic standing.', '2024-11-22 04:57:05');
 
 -- --------------------------------------------------------
@@ -206,7 +196,6 @@ INSERT INTO `application_status_history` (`history_id`, `application_id`, `statu
 (6, 5, 'Awarded', '2024-11-22 04:57:05'),
 (8, 7, 'In Progress', '2024-11-22 04:57:05'),
 (9, 8, 'Not Started', '2024-11-22 04:57:05'),
-(10, 9, 'Submitted', '2024-11-22 04:57:05'),
 (11, 10, 'Not Started', '2024-11-22 04:57:05');
 
 -- --------------------------------------------------------
@@ -217,40 +206,11 @@ INSERT INTO `application_status_history` (`history_id`, `application_id`, `statu
 
 CREATE TABLE `faqs` (
   `id` int(11) NOT NULL,
-  `question` varchar(255) NOT NULL,
-  `answer` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `faqs`
---
-
-INSERT INTO `faqs` (`id`, `question`, `answer`) VALUES
-(24, 'Cute ba me?', 'yes na yes naman'),
-(27, 'matangkad ba me?', 'yes');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `featured_scholar`
---
-
-CREATE TABLE `featured_scholar` (
-  `id` int(11) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `course` varchar(255) NOT NULL,
-  `year_graduated` varchar(50) NOT NULL,
-  `message` text NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
+  `status` enum('Active','Inactive') DEFAULT 'Active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `featured_scholar`
---
-
-INSERT INTO `featured_scholar` (`id`, `subject`, `course`, `year_graduated`, `message`, `status`, `created_at`) VALUES
-(1, 'Scholarship', 'BSIT', '2024-2025', 'mmmmm', 'Approved', '2024-12-02 03:39:42');
 
 -- --------------------------------------------------------
 
@@ -260,24 +220,11 @@ INSERT INTO `featured_scholar` (`id`, `subject`, `course`, `year_graduated`, `me
 
 CREATE TABLE `featured_scholars` (
   `id` int(11) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `course` varchar(255) NOT NULL,
-  `year_graduated` year(4) NOT NULL,
+  `sr_code` varchar(20) NOT NULL,
   `message` text NOT NULL,
-  `status` varchar(50) NOT NULL
+  `status` enum('Active','Inactive') DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `featured_scholars`
---
-
-INSERT INTO `featured_scholars` (`id`, `subject`, `course`, `year_graduated`, `message`, `status`) VALUES
-(10, 'Scholarship', 'BSIT', '2024', 'n', 'Approved'),
-(11, 'Scholarship', 'BSIT', '2024', 'n', 'Approved'),
-(12, 'Scholarship', 'BSIT', '2024', 'm', 'Approved'),
-(13, 'Scholarship', 'BSIT', '2024', 'm', 'Approved'),
-(14, 'Scholarship', 'BSIT', '2024', ',,', 'Approved'),
-(15, 'Scholarship', 'BSIT', '2024', 'hi', 'Approved');
 
 -- --------------------------------------------------------
 
@@ -294,6 +241,65 @@ CREATE TABLE `feedbacks` (
   `email` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('unread','read') DEFAULT 'unread',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `message`, `status`, `created_at`) VALUES
+(1, 'New FAQ added: ggg', 'unread', '2024-12-02 13:41:41'),
+(2, 'FAQ updated: ggg', 'unread', '2024-12-02 13:51:00'),
+(3, 'FAQ updated: sasasasas', 'unread', '2024-12-02 13:51:04'),
+(4, 'FAQ deleted: sasasasas', 'unread', '2024-12-02 13:51:06'),
+(5, 'New FAQ added: yess gumana na din AGHAHAHAH', 'unread', '2024-12-02 13:51:13'),
+(6, 'FAQ updated: yess gumana na din AGHAHAHAH', 'unread', '2024-12-02 13:51:50'),
+(7, 'FAQ deleted: yess gumana na din AGHAHAHAH', 'unread', '2024-12-02 13:53:07'),
+(8, 'New FAQ added: azsasas', 'unread', '2024-12-02 14:02:21'),
+(9, 'New FAQ added: aaaaaaaaaaaaa', 'unread', '2024-12-02 14:02:25'),
+(10, 'New FAQ added: ssssssssssssssssssssssss', 'unread', '2024-12-02 14:02:31'),
+(11, 'FAQ updated: sasasas', 'unread', '2024-12-02 14:02:35'),
+(12, 'New FAQ added: sasas', 'unread', '2024-12-02 14:02:51'),
+(13, 'FAQ deleted: azsasas', 'unread', '2024-12-02 14:02:56'),
+(14, 'FAQ deleted: aaaaaaaaaaaaa', 'unread', '2024-12-02 14:02:58'),
+(15, 'FAQ deleted: sasasas', 'unread', '2024-12-02 14:03:00'),
+(16, 'FAQ deleted: sasas', 'unread', '2024-12-02 14:03:01'),
+(17, 'New FAQ added: aaaaaaaaaaaaa', 'unread', '2024-12-02 14:10:44'),
+(18, 'New FAQ added: aaaaaa', 'unread', '2024-12-02 14:11:08'),
+(19, 'FAQ deleted: aaaaaaaaaaaaa', 'unread', '2024-12-02 14:16:21'),
+(20, 'FAQ deleted: aaaaaa', 'unread', '2024-12-02 14:16:24'),
+(21, 'New FAQ added: assssa', 'unread', '2024-12-02 14:16:45'),
+(22, 'New FAQ added: aaaaaaaaaaa', 'unread', '2024-12-02 14:21:15'),
+(23, 'FAQ deleted: assssa', 'unread', '2024-12-02 14:21:33'),
+(24, 'FAQ deleted: aaaaaaaaaaa', 'unread', '2024-12-02 14:21:35'),
+(25, 'New FAQ added: ggg', 'unread', '2024-12-02 14:37:37'),
+(26, 'FAQ deleted: ggg', 'unread', '2024-12-02 14:37:50'),
+(27, 'New FAQ added: aaaaaaa', 'unread', '2024-12-02 14:38:19'),
+(28, 'FAQ deleted: aaaaaaa', 'unread', '2024-12-02 14:38:33'),
+(29, 'New FAQ added: aaaaaaaaaaaaaa', 'unread', '2024-12-02 14:52:10'),
+(30, 'New FAQ added: sasa', 'unread', '2024-12-02 14:52:14'),
+(31, 'FAQ deleted: aaaaaaaaaaaaaa', 'unread', '2024-12-02 14:52:16'),
+(32, 'FAQ deleted: sasa', 'unread', '2024-12-02 14:52:18'),
+(33, 'New FAQ added: aaaaaaaaaaaaaa', 'unread', '2024-12-03 12:58:43'),
+(34, 'FAQ deleted: aaaaaaaaaaaaaa', 'unread', '2024-12-03 12:58:50'),
+(35, 'New FAQ added: assssa', 'unread', '2024-12-03 13:03:16'),
+(36, 'FAQ updated: assssasasasas', 'unread', '2024-12-03 13:03:22'),
+(37, 'FAQ deleted: assssasasasas', 'unread', '2024-12-03 13:03:25'),
+(38, 'New FAQ added: ggg', 'unread', '2024-12-05 03:42:50'),
+(39, 'FAQ updated: ggg', 'unread', '2024-12-05 03:42:54'),
+(40, 'FAQ deleted: ggg', 'unread', '2024-12-05 03:42:55');
 
 -- --------------------------------------------------------
 
@@ -329,15 +335,20 @@ CREATE TABLE `scholars` (
   `name` varchar(255) DEFAULT NULL,
   `course` varchar(255) DEFAULT NULL,
   `year_level` varchar(255) DEFAULT NULL,
-  `scholarship` varchar(255) DEFAULT NULL
+  `scholarship_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `scholars`
 --
 
-INSERT INTO `scholars` (`sr_code`, `name`, `course`, `year_level`, `scholarship`) VALUES
-('23-36222', 'Jayden Briones', 'BSIT', '2nd Year', 'DOST');
+INSERT INTO `scholars` (`sr_code`, `name`, `course`, `year_level`, `scholarship_id`) VALUES
+('21-12345', 'Roselle Bautista', 'BSCS', '2nd Year', 13),
+('21-20930', 'Jose Cruz', 'BSCS', '3rd Year', 9),
+('22-90123', 'Karla Garcia', 'BSIT', '1st Year', 4),
+('23-09231', 'Sophia Cruz', 'BSCS', '3rd Year', 12),
+('23-09233', 'Oliver Reyes', 'BSCS', '3rd year', 8),
+('23-09236', 'Mia Lopez', 'Engineering', '4th Year', 18);
 
 -- --------------------------------------------------------
 
@@ -378,7 +389,45 @@ INSERT INTO `scholarships` (`scholarship_id`, `name`, `description`, `deadline`,
 (16, 'CHED CoScho Scholarship', 'Co-sponsored scholarship under CHED for deserving students.', '2025-03-10', 'GPA above 3.2, Sponsorship agreement', '2024-11-22 04:57:05', '2024-11-22 04:57:05', 'active'),
 (17, 'Merit Scholarship', 'For academically excellent students', '2024-12-31', 'GWA of 1.75 or higher', '2024-11-30 13:59:13', '2024-11-30 13:59:13', 'active'),
 (18, 'Athletic Scholarship', 'For student athletes', '2024-12-31', 'Member of varsity team', '2024-11-30 13:59:13', '2024-11-30 13:59:13', 'active'),
-(19, 'Financial Aid', 'For financially challenged students', '2024-12-31', 'Income certificate required', '2024-11-30 13:59:13', '2024-11-30 13:59:13', 'active');
+(19, 'Financial Aid', 'For financially challenged students', '2024-12-31', 'Income certificate requireds', '2024-11-30 13:59:13', '2024-12-06 05:09:55', 'Active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `scholarship_pie_chart`
+--
+
+CREATE TABLE `scholarship_pie_chart` (
+  `id` int(11) NOT NULL,
+  `scholarship_program` varchar(100) NOT NULL,
+  `scholar_count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `scholarship_pie_chart`
+--
+
+INSERT INTO `scholarship_pie_chart` (`id`, `scholarship_program`, `scholar_count`) VALUES
+(1, 'CHED', 10),
+(2, 'OWWA', 8),
+(3, 'DOST', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `scholarship_request`
+--
+
+CREATE TABLE `scholarship_request` (
+  `scholarship_id` int(11) NOT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `scholarship` varchar(255) DEFAULT NULL,
+  `student_no` varchar(50) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `course` varchar(255) DEFAULT NULL,
+  `year_level` varchar(50) DEFAULT NULL,
+  `status` enum('pending','approved','disapproved') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -471,7 +520,8 @@ CREATE TABLE `scholarship_schema` (
 --
 
 INSERT INTO `scholarship_schema` (`schema_id`, `scholarship_type`, `grade_campus`, `year_scholarship`, `category`, `criteria`, `submission_deadline`, `required_documents`, `description`, `amount_per_sem`, `status`, `published_date`) VALUES
-(1, 'Academic Excellence', '1st Year BSU-Lipa', '2024-2025', 'Merit-based', 'Applicants must have an overall average of 90% or above in their most recent academic year or term.', '2024-11-15', 'Birth Certificate, Report Card, Enrollment Form', 'Rewards outstanding students who consistently achieve high grades', 3000.00, 'Open', '2024-03-28');
+(1, 'Academic Excellence', '1st Year BSU-Lipa', '2024-2025', 'Merit-based', 'Applicants must have an overall average of 90% or above in their most recent academic year or term.', '2024-11-15', 'Birth Certificate, Report Card, Enrollment Form', 'Rewards outstanding students who consistently achieve high grades', 3000.00, 'Open', '2024-03-28'),
+(2, 'DOST', '2nd Year/ BSU-Lipa', '2024-2025', 'Need-based', 'Nothinga', '2024-12-25', 'Nothing', 'Nothing', 65000.00, 'Open', '2024-12-05');
 
 -- --------------------------------------------------------
 
@@ -506,8 +556,11 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `school_year`, `semester`, `status`, `created_at`) VALUES
-(4, '2024-2025', 'Summer', 'Active', '2024-12-01 15:46:51'),
-(8, '2023-2024', '2nd', 'Active', '2024-12-02 09:13:57');
+(8, '2023-2024', '2nd', 'Active', '2024-12-02 09:13:57'),
+(9, '2023-2024', '1st', 'Active', '2024-12-04 14:19:26'),
+(10, '2023-2024', 'Summer', 'Active', '2024-12-05 06:21:05'),
+(12, '2023-2025', 'Summer', 'Active', '2024-12-05 11:31:05'),
+(13, '2023-2025', '1st', 'Active', '2024-12-05 11:51:40');
 
 -- --------------------------------------------------------
 
@@ -517,9 +570,9 @@ INSERT INTO `settings` (`id`, `school_year`, `semester`, `status`, `created_at`)
 
 CREATE TABLE `students` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `sr_code` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `sr_code` varchar(20) NOT NULL,
   `mobile_number` varchar(15) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -529,37 +582,22 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `name`, `email`, `sr_code`, `mobile_number`, `password`) VALUES
-(1, 'Jose Cruz', 'jose.cruz@gmail.com', '21-20930', '09123456789', 'password123'),
-(2, 'Maria Santos', 'maria.santos@gmail.com', '21-89012', '09123456780', 'password123'),
-(3, 'Mark Bautista', 'mark.bautista@gmail.com', '21-23456', '09123456781', 'password123'),
+(1, 'Jose Cruz', 'jose.cruz@gmail.com', '21-20930', '09123456789', '$2y$10$NcO53WgdL9xMvK5tAytgBuTbzoXuX1WFi.oTzrPKVKU9yZZf8/KdK'),
+(2, 'Maria Santos', 'maria.santos@gmail.com', '21-89012', '09123456780', '$2y$10$S5.0SDQ75pzKgKRnxs/h..n4.sS1YnClsKb8GAyWubJGTeScr4LjG'),
+(3, 'Mark Bautista', 'mark.bautista@gmail.com', '21-23456', '09123456781', '$2y$10$HBSwTrPlVK/lm9AVvi9rcuZDWOBOIHE27lNTHfnYlFbMYlqESi2fG'),
 (4, 'Ana Dela Cruz', 'ana.delacruz@gmail.com', '21-34567', '09123456782', 'password123'),
 (5, 'Carla Ramirez', 'carla.ramirez@gmail.com', '22-45678', '09123456783', 'password123'),
 (6, 'Miguel Reyes', 'miguel.reyes@gmail.com', '21-56789', '09123456784', 'password123'),
 (7, 'Isabel Flores', 'isabel.flores@gmail.com', '21-67890', '09123456785', 'password123'),
 (8, 'Paolo Garcia', 'paolo.garcia@gmail.com', '21-78901', '09123456786', 'password123'),
-(9, 'Christine Lim', 'christine.lim@gmail.com', '21-89012', '09123456787', 'password123'),
 (10, 'Juan Dela Cruz', 'juan.delacruz@gmail.com', '21-90123', '09123456788', 'password123'),
-(11, 'Carlos Santos', 'carlos.santos@gmail.com', '21-01234', '09123456789', 'password123'),
-(12, 'Julia Roldan', 'julia.roldan@gmail.com', '22-12345', '09123456790', 'password123'),
-(13, 'Ramon Lopez', 'ramon.lopez@gmail.com', '21-23456', '09123456791', 'password123'),
-(14, 'Teresa Castillo', 'teresa.castillo@gmail.com', '21-34567', '09123456792', 'password123'),
+(11, 'Carlos Santos', 'carlos.santos@gmail.com', '21-01234', '09123456789', '$2y$10$LhPhdD6dJe2L6LxcfbxtjOC.ato9tAi30fym66GM5qb4DahvD/SzG'),
+(12, 'Julia Roldan', 'julia.roldan@gmail.com', '22-12345', '09123456790', '$2y$10$MFigUav1u5LWm.1igOkHbe0ovX0ikf7VRQZVtkR1ALw3qLrvEzaZa'),
 (15, 'Eric Mendoza', 'eric.mendoza@gmail.com', '21-45678', '09123456793', 'password123'),
-(16, 'Angelica Tan', 'angelica.tan@gmail.com', '21-56789', '09123456794', 'password123'),
-(17, 'Jerome Alcantara', 'jerome.alcantara@gmail.com', '21-67890', '09123456795', 'password123'),
-(18, 'Lyka Mendoza', 'lyka.mendoza@gmail.com', '21-78901', '09123456796', 'password123'),
-(19, 'Carlos Aquino', 'carlos.aquino@gmail.com', '21-89012', '09123456797', 'password123'),
 (20, 'Karla Garcia', 'karla.garcia@gmail.com', '22-90123', '09123456798', 'password123'),
-(21, 'Miguel Fernandez', 'miguel.fernandez@gmail.com', '21-01234', '09123456799', 'password123'),
 (22, 'Roselle Bautista', 'roselle.bautista@gmail.com', '21-12345', '09123456800', 'password123'),
-(23, 'Patrick Reyes', 'patrick.reyes@gmail.com', '21-23456', '09123456801', 'password123'),
 (24, 'Angela Marquez', 'angela.marquez@gmail.com', '22-34567', '09123456802', 'password123'),
-(25, 'Emilio Navarro', 'emilio.navarro@gmail.com', '21-45678', '09123456803', 'password123'),
-(26, 'Diana Santos', 'diana.santos@gmail.com', '21-56789', '09123456804', 'password123'),
-(27, 'Leah Cortez', 'leah.cortez@gmail.com', '21-67890', '09123456805', 'password123'),
-(28, 'Felix Cruz', 'felix.cruz@gmail.com', '21-78901', '09123456806', 'password123'),
 (29, 'Sandra Diaz', 'sandra.diaz@gmail.com', '22-89012', '09123456807', 'password123'),
-(30, 'Raymond Mercado', 'raymond.mercado@gmail.com', '21-90123', '09123456808', 'password123'),
-(31, 'Carmen Ortiz', 'carmen.ortiz@gmail.com', '21-01234', '09123456809', 'password123'),
 (32, 'Sophia Cruz', 'sophia.cruz@gmail.com', '23-09231', '09123456810', 'password123'),
 (33, 'Liam Garcia', 'liam.garcia@gmail.com', '23-09232', '09123456811', 'password123'),
 (34, 'Oliver Reyes', 'oliver.reyes@gmail.com', '23-09233', '09123456812', 'password123'),
@@ -591,7 +629,6 @@ INSERT INTO `students` (`id`, `name`, `email`, `sr_code`, `mobile_number`, `pass
 (60, 'Justin Kyle Katigbak', 'justin.kyle@gmail.com', '23-36278', '09223363611', 'joanqt'),
 (61, 'Johnver Briones', 'johnverbriones@gmail.com', '20-20222', '0977238546', 'panget'),
 (62, 'Sky Belle', 'skybelle@gmail.com', '21-21234', '09112232322', 'skybelle'),
-(63, 'Joana Marie', 'joana-b@099gmail.com', '12-22344', '09876545455', 'marie'),
 (64, 'Sarah Santos', 'sarahs@gmail.com', '22-89018', '09123486780', 'password123'),
 (65, 'Joan Katigbak', 'joankatigbak@gmail.com', '21-23232', '09787787811', 'justin'),
 (66, 'Joed Katigbak', 'joedkatigbak@gmail.com', '23-23232', '09887787811', 'oklang');
@@ -674,9 +711,10 @@ CREATE TABLE `user_application` (
 
 CREATE TABLE `user_logs` (
   `id` int(11) NOT NULL,
-  `timestamp` datetime DEFAULT current_timestamp(),
-  `description` text NOT NULL,
-  `author` varchar(255) NOT NULL
+  `student_id` int(11) NOT NULL,
+  `login_time` datetime NOT NULL,
+  `logout_time` datetime DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -777,21 +815,22 @@ ALTER TABLE `faqs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `featured_scholar`
---
-ALTER TABLE `featured_scholar`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `featured_scholars`
 --
 ALTER TABLE `featured_scholars`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sr_code` (`sr_code`);
 
 --
 -- Indexes for table `feedbacks`
 --
 ALTER TABLE `feedbacks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -805,12 +844,25 @@ ALTER TABLE `reviewers`
 -- Indexes for table `scholars`
 --
 ALTER TABLE `scholars`
-  ADD PRIMARY KEY (`sr_code`);
+  ADD PRIMARY KEY (`sr_code`),
+  ADD KEY `scholarship_id` (`scholarship_id`);
 
 --
 -- Indexes for table `scholarships`
 --
 ALTER TABLE `scholarships`
+  ADD PRIMARY KEY (`scholarship_id`);
+
+--
+-- Indexes for table `scholarship_pie_chart`
+--
+ALTER TABLE `scholarship_pie_chart`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `scholarship_request`
+--
+ALTER TABLE `scholarship_request`
   ADD PRIMARY KEY (`scholarship_id`);
 
 --
@@ -850,7 +902,8 @@ ALTER TABLE `settings`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `sr_code` (`sr_code`);
 
 --
 -- Indexes for table `student_assessment`
@@ -884,7 +937,8 @@ ALTER TABLE `user_application`
 -- Indexes for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`);
 
 --
 -- Indexes for table `user_settings`
@@ -909,7 +963,7 @@ ALTER TABLE `user_students`
 -- AUTO_INCREMENT for table `announcements`
 --
 ALTER TABLE `announcements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `application`
@@ -951,25 +1005,25 @@ ALTER TABLE `application_status_history`
 -- AUTO_INCREMENT for table `faqs`
 --
 ALTER TABLE `faqs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
-
---
--- AUTO_INCREMENT for table `featured_scholar`
---
-ALTER TABLE `featured_scholar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `featured_scholars`
 --
 ALTER TABLE `featured_scholars`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `feedbacks`
 --
 ALTER TABLE `feedbacks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `reviewers`
@@ -982,6 +1036,18 @@ ALTER TABLE `reviewers`
 --
 ALTER TABLE `scholarships`
   MODIFY `scholarship_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `scholarship_pie_chart`
+--
+ALTER TABLE `scholarship_pie_chart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `scholarship_request`
+--
+ALTER TABLE `scholarship_request`
+  MODIFY `scholarship_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `scholarship_requests`
@@ -999,7 +1065,7 @@ ALTER TABLE `scholarship_requirements`
 -- AUTO_INCREMENT for table `scholarship_schema`
 --
 ALTER TABLE `scholarship_schema`
-  MODIFY `schema_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `schema_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `setting`
@@ -1011,13 +1077,13 @@ ALTER TABLE `setting`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `student_assessment`
@@ -1035,7 +1101,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_account`
 --
 ALTER TABLE `users_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_application`
@@ -1098,6 +1164,18 @@ ALTER TABLE `application_status_history`
   ADD CONSTRAINT `application_status_history_ibfk_1` FOREIGN KEY (`application_id`) REFERENCES `applications` (`application_id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `featured_scholars`
+--
+ALTER TABLE `featured_scholars`
+  ADD CONSTRAINT `featured_scholars_ibfk_1` FOREIGN KEY (`sr_code`) REFERENCES `scholars` (`sr_code`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `scholars`
+--
+ALTER TABLE `scholars`
+  ADD CONSTRAINT `scholars_ibfk_1` FOREIGN KEY (`scholarship_id`) REFERENCES `scholarships` (`scholarship_id`);
+
+--
 -- Constraints for table `scholarship_requests`
 --
 ALTER TABLE `scholarship_requests`
@@ -1108,6 +1186,12 @@ ALTER TABLE `scholarship_requests`
 --
 ALTER TABLE `scholarship_requirements`
   ADD CONSTRAINT `scholarship_requirements_ibfk_1` FOREIGN KEY (`scholarship_id`) REFERENCES `scholarships` (`scholarship_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_logs`
+--
+ALTER TABLE `user_logs`
+  ADD CONSTRAINT `user_logs_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`);
 
 --
 -- Constraints for table `user_settings`

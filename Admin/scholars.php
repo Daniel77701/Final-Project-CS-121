@@ -5,29 +5,50 @@ ini_set('display_errors', 1);
 require_once '../classes/scholars_handler.php';
 $scholars = new ScholarsHandler();
 
+if (isset($_GET['check_sr_code'])) {
+    header('Content-Type: application/json');
+    try {
+    $exists = $scholars->checkSRCodeExists($_GET['check_sr_code']);
+    echo json_encode(['exists' => $exists]);
+    } catch (Exception $e) {
+        echo json_encode(['error' => $e->getMessage()]);
+    }
+    exit();
+}
+
 // Debug POST data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log('POST data received: ' . print_r($_POST, true));
     
     if (isset($_POST['add_scholar'])) {
-        $result = $scholars->addScholar(
-            $_POST['sr_code'],
-            $_POST['name'],
-            $_POST['course'],
-            $_POST['year_level'],
-            $_POST['scholarship']
-        );
-        if (!$result) {
-            error_log('Failed to add scholar');
+        try {
+            $result = $scholars->addScholar(
+                $_POST['sr_code'],
+                null,  // name will be fetched from students table
+                $_POST['course'],
+                $_POST['year_level'],
+                $_POST['scholarship_id']  // Changed from scholarship to scholarship_id
+            );
+            if (!$result) {
+                error_log('Failed to add scholar');
+            }
+        } catch (Exception $e) {
+            error_log('Error adding scholar: ' . $e->getMessage());
+            // You might want to handle this error in the UI
         }
     } elseif (isset($_POST['update_scholar'])) {
-        $scholars->updateScholar(
-            $_POST['sr_code'],
-            $_POST['name'],
-            $_POST['course'],
-            $_POST['year_level'],
-            $_POST['scholarship']
-        );
+        try {
+            $scholars->updateScholar(
+                $_POST['sr_code'],
+                $_POST['name'],
+                $_POST['course'],
+                $_POST['year_level'],
+                $_POST['scholarship_id']  // Changed from scholarship to scholarship_id
+            );
+        } catch (Exception $e) {
+            error_log('Error updating scholar: ' . $e->getMessage());
+            // You might want to handle this error in the UI
+        }
     }
     // Redirect to prevent form resubmission
     header('Location: ' . $_SERVER['PHP_SELF']);
@@ -69,7 +90,7 @@ $scholarList = $scholars->getScholars();
             <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
-            <a href="settings.html">
+            <a href="settings.php">
                 <img src="icons_admin/white_settings.png" alt="Settings Icon" style="width: 30px; height: 30px; margin-left: 10px;">
             </a> 
         </div>
@@ -111,7 +132,7 @@ $scholarList = $scholars->getScholars();
                                 </div>
                                 <div class="button-group">
                                     <button class="btn btn-primary">Import</button>
-                                    <button class="btn btn-secondary" data-toggle="modal" data-target="#addScholarModal">Add Scholar</button>
+                                    <button class="btn btn-secondary" onclick="showAddScholarForm()">Add Scholar</button>
                                 </div>
                             </div>
                         </div>
@@ -146,31 +167,38 @@ $scholarList = $scholars->getScholars();
                     <table class="table table-striped">
                         <thead class="table-dark">
                             <tr>
-                                <th>Student SR Code</th>
+                                <th>SR Code</th>
                                 <th>Name</th>
                                 <th>Course</th>
                                 <th>Year Level</th>
                                 <th>Scholarship</th>
+                                <th>Deadline</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($scholarList as $scholar): ?>
                             <tr>
-                                <td><?php echo $scholar['sr_code']; ?></td>
-                                <td><?php echo $scholar['name']; ?></td>
-                                <td><?php echo $scholar['course']; ?></td>
-                                <td><?php echo $scholar['year_level']; ?></td>
-                                <td><?php echo $scholar['scholarship']; ?></td>
+                                <td><?php echo htmlspecialchars($scholar['sr_code']); ?></td>
+                                <td><?php echo htmlspecialchars($scholar['name']); ?></td>
+                                <td><?php echo htmlspecialchars($scholar['course']); ?></td>
+                                <td><?php echo htmlspecialchars($scholar['year_level']); ?></td>
+                                <td>
+                                    <?php echo htmlspecialchars($scholar['scholarship_name']); ?>
+                                    <?php if (!empty($scholar['description'])): ?>
+                                        <i class="fas fa-info-circle" data-toggle="tooltip" title="<?php echo htmlspecialchars($scholar['description']); ?>"></i>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo $scholar['deadline'] ? date('M d, Y', strtotime($scholar['deadline'])) : 'No deadline'; ?></td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" onclick="editScholar(this)"
-                                    data-sr_code="<?php echo $scholar['sr_code']; ?>"
-                                    data-name="<?php echo $scholar['name']; ?>"
-                                    data-course="<?php echo $scholar['course']; ?>"
-                                    data-year_level="<?php echo $scholar['year_level']; ?>"
-                                    data-scholarship="<?php echo $scholar['scholarship']; ?>">Edit</button>
+                                        data-sr_code="<?php echo htmlspecialchars($scholar['sr_code']); ?>"
+                                        data-name="<?php echo htmlspecialchars($scholar['name']); ?>"
+                                        data-course="<?php echo htmlspecialchars($scholar['course']); ?>"
+                                        data-year_level="<?php echo htmlspecialchars($scholar['year_level']); ?>"
+                                        data-scholarship_id="<?php echo htmlspecialchars($scholar['scholarship_id']); ?>">Edit</button>
                                     <button class="btn btn-danger btn-sm" 
-                                            onclick="confirmScholarDelete('<?php echo $scholar['sr_code']; ?>')">Delete</button>
+                                        onclick="confirmScholarDelete('<?php echo htmlspecialchars($scholar['sr_code']); ?>')">Delete</button>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -337,7 +365,7 @@ $scholarList = $scholars->getScholars();
                 name: button.dataset.name,
                 course: button.dataset.course,
                 year_level: button.dataset.year_level,
-                scholarship: button.dataset.scholarship
+                scholarship_id: button.dataset.scholarship_id  // Changed from scholarship
             };
 
             Swal.fire({
@@ -346,40 +374,67 @@ $scholarList = $scholars->getScholars();
                     <form id="editScholarForm">
                         <input type="hidden" name="sr_code" value="${scholarData.sr_code}">
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" value="${scholarData.name}" required>
+                            <label for="edit_name">Name *</label>
+                            <input type="text" class="form-control" id="edit_name" name="name" value="${scholarData.name}" required>
                         </div>
                         <div class="form-group">
-                            <label for="course">Course</label>
-                            <input type="text" class="form-control" name="course" value="${scholarData.course}" required>
+                            <label for="edit_course">Course *</label>
+                            <input type="text" class="form-control" id="edit_course" name="course" value="${scholarData.course}" required>
                         </div>
                         <div class="form-group">
-                            <label for="year_level">Year Level</label>
-                            <input type="text" class="form-control" name="year_level" value="${scholarData.year_level}" required>
+                            <label for="edit_year_level">Year Level *</label>
+                            <input type="text" class="form-control" id="edit_year_level" name="year_level" value="${scholarData.year_level}" required>
                         </div>
                         <div class="form-group">
-                            <label for="scholarship">Scholarship</label>
-                            <input type="text" class="form-control" name="scholarship" value="${scholarData.scholarship}" required>
+                            <label for="edit_scholarship">Scholarship *</label>
+                            <select class="form-control" id="edit_scholarship" name="scholarship_id" required>
+                                <option value="">Select a scholarship</option>
+                                <!-- Will be populated dynamically -->
+                            </select>
                         </div>
+                        <small class="text-muted">* Required fields</small>
                     </form>
                 `,
                 showCancelButton: true,
                 confirmButtonText: 'Save Changes',
                 cancelButtonText: 'Cancel',
+                didOpen: async () => {
+                    // Load scholarships and populate the dropdown
+                    const scholarships = await loadScholarships();
+                    const select = document.getElementById('edit_scholarship');
+                    scholarships.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.id;
+                        option.text = s.name;
+                        if (s.id === scholarData.scholarship_id) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                },
                 preConfirm: () => {
                     const form = document.getElementById('editScholarForm');
-                    const formData = new FormData(form);
-                    return Object.fromEntries(formData);
+                    const name = form.querySelector('#edit_name').value.trim();
+                    const course = form.querySelector('#edit_course').value.trim();
+                    const year_level = form.querySelector('#edit_year_level').value.trim();
+                    const scholarship_id = form.querySelector('#edit_scholarship').value.trim();
+                    
+                    // Check for empty fields
+                    if (!name || !course || !year_level || !scholarship_id) {
+                        Swal.showValidationMessage('All fields are required');
+                        return false;
+                    }
+                    
+                    return new FormData(form);
                 }
             }).then((result) => {
-                if (result.isConfirmed) {
-                    // Create and submit form
+                if (result.isConfirmed && result.value) {
+                    const formData = result.value;
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = 'scholars.php';
 
-                    // Add hidden inputs for all fields
-                    for (const [key, value] of Object.entries(result.value)) {
+                    for (const [key, value] of formData.entries()) {
                         const input = document.createElement('input');
                         input.type = 'hidden';
                         input.name = key;
@@ -387,7 +442,6 @@ $scholarList = $scholars->getScholars();
                         form.appendChild(input);
                     }
 
-                    // Add update_scholar button
                     const updateButton = document.createElement('input');
                     updateButton.type = 'hidden';
                     updateButton.name = 'update_scholar';
@@ -396,19 +450,6 @@ $scholarList = $scholars->getScholars();
 
                     document.body.appendChild(form);
                     form.submit();
-
-                    // Show success toast
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true
-                    });
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Scholar updated successfully'
-                    });
                 }
             });
         }
@@ -442,80 +483,184 @@ $scholarList = $scholars->getScholars();
             });
         }
 
+        // Add this function to load scholarships
+        async function loadScholarships() {
+            try {
+                const response = await fetch('../includes/getScholarships.php');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const scholarships = await response.json();
+                console.log('Raw scholarship data:', scholarships);
+
+                if (!Array.isArray(scholarships)) {
+                    console.error('Expected array but got:', typeof scholarships);
+                    return [];
+                }
+
+                if (scholarships.length === 0) {
+                    console.warn('No scholarships found');
+                    return [];
+                }
+
+                return scholarships.map(s => ({
+                    id: s.scholarship_id || '',
+                    name: s.name || 'Unnamed Scholarship',
+                    description: s.description || '',
+                    deadline: s.deadline || '',
+                    requirements: s.requirements || ''
+                }));
+            } catch (error) {
+                console.error('Error loading scholarships:', error);
+                return [];
+            }
+        }
+
         // Update the showAddScholarForm function
-        function showAddScholarForm() {
-            Swal.fire({
-                title: 'Add New Scholar',
-                html: `
-                    <form id="addScholarForm">
-                        <div class="form-group">
-                            <label for="sr_code">SR Code</label>
-                            <input type="text" class="form-control" name="sr_code" required>
-                        </div>
-                        <!-- rest of the form fields -->
-                    </form>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Add Scholar',
-                cancelButtonText: 'Cancel',
-                preConfirm: () => {
-                    const form = document.getElementById('addScholarForm');
-                    const formData = new FormData(form);
-                    return Object.fromEntries(formData);
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Check if SR Code exists
-                    const sr_code = result.value.sr_code;
-                    
-                    fetch(`check_sr_code.php?code=${sr_code}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.exists) {
-                            Swal.fire({
-                                title: 'Warning!',
-                                text: 'This SR Code already exists. Please use a different code.',
-                                icon: 'warning',
-                                confirmButtonText: 'Ok'
-                            });
-                        } else {
-                            // Proceed with form submission
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = 'scholars.php';
+        async function showAddScholarForm() {
+            try {
+                const scholarships = await loadScholarships();
+                console.log('Processed scholarships:', scholarships); // Debug log
 
-                            for (const [key, value] of Object.entries(result.value)) {
-                                const input = document.createElement('input');
-                                input.type = 'hidden';
-                                input.name = key;
-                                input.value = value;
-                                form.appendChild(input);
-                            }
-
-                            const addButton = document.createElement('input');
-                            addButton.type = 'hidden';
-                            addButton.name = 'add_scholar';
-                            addButton.value = '1';
-                            form.appendChild(addButton);
-
-                            document.body.appendChild(form);
-                            form.submit();
-
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true
-                            });
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Scholar added successfully'
-                            });
-                        }
+                if (scholarships.length === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No active scholarships available'
                     });
+                    return;
                 }
-            });
+
+                const scholarshipOptions = scholarships.map(s => {
+                    const deadlineInfo = s.deadline ? ` (Deadline: ${new Date(s.deadline).toLocaleDateString()})` : '';
+                    return `<option value="${s.id}">${s.name}${deadlineInfo}</option>`;
+                }).join('');
+
+                console.log('Generated options HTML:', scholarshipOptions); // Debug log
+
+                Swal.fire({
+                    title: 'Add New Scholar',
+                    html: `
+                        <form id="addScholarForm">
+                            <div class="form-group">
+                                <label for="add_sr_code">SR Code (Format: XX-XXXXX) *</label>
+                                <input type="text" class="form-control" id="add_sr_code" name="sr_code" 
+                                       pattern="\\d{2}-\\d{5}" 
+                                       title="Please enter SR code in format: XX-XXXXX (e.g., 23-56748)"
+                                       required>
+                                <small class="form-text text-muted">Example: 23-56748</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_course">Course *</label>
+                                <input type="text" class="form-control" id="add_course" name="course" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_year_level">Year Level *</label>
+                                <input type="text" class="form-control" id="add_year_level" name="year_level" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_scholarship">Scholarship *</label>
+                                <select class="form-control" id="add_scholarship" name="scholarship_id" required>
+                                    <option value="">Select a scholarship</option>
+                                    ${scholarshipOptions}
+                                </select>
+                            </div>
+                            <small class="text-muted">* Required fields</small>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Add Scholar',
+                    cancelButtonText: 'Cancel',
+                    preConfirm: () => {
+                        const form = document.getElementById('addScholarForm');
+                        const sr_code = form.querySelector('#add_sr_code').value.trim();
+                        const course = form.querySelector('#add_course').value.trim();
+                        const year_level = form.querySelector('#add_year_level').value.trim();
+                        const scholarship = form.querySelector('#add_scholarship').value.trim();
+                        
+                        // Check for empty fields
+                        if (!sr_code || !course || !year_level || !scholarship) {
+                            Swal.showValidationMessage('All fields are required');
+                            return false;
+                        }
+                        
+                        // Client-side validation
+                        const srCodePattern = /^\d{2}-\d{5}$/;
+                        if (!srCodePattern.test(sr_code)) {
+                            Swal.showValidationMessage('Invalid SR code format. Must be XX-XXXXX (e.g., 23-56748)');
+                            return false;
+                        }
+
+                        const formData = new FormData(form);
+                        
+                        // Check if SR Code exists and is valid
+                        return fetch(`scholars.php?check_sr_code=${sr_code}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.exists) {
+                                    Swal.showValidationMessage('This SR Code is already registered as a scholar');
+                                    return false;
+                                }
+                                if (data.error) {
+                                    Swal.showValidationMessage(data.error);
+                                    return false;
+                                }
+                                return formData;
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(`Error: ${error.message}`);
+                                return false;
+                            });
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        const formData = result.value;
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = 'scholars.php';
+
+                        for (const [key, value] of formData.entries()) {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = key;
+                            input.value = value;
+                            form.appendChild(input);
+                        }
+
+                        const addButton = document.createElement('input');
+                        addButton.type = 'hidden';
+                        addButton.name = 'add_scholar';
+                        addButton.value = '1';
+                        form.appendChild(addButton);
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            } catch (error) {
+                console.error('Error in showAddScholarForm:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load scholarships'
+                });
+            }
+        }
+
+        function showScholarshipInfo(select) {
+            const option = select.options[select.selectedIndex];
+            const description = option.dataset.description;
+            const requirements = option.dataset.requirements;
+            const infoElement = document.getElementById('scholarshipInfo');
+            
+            if (description || requirements) {
+                let info = '';
+                if (description) info += `Description: ${description}\n`;
+                if (requirements) info += `Requirements: ${requirements}`;
+                infoElement.textContent = info;
+            } else {
+                infoElement.textContent = '';
+            }
         }
     </script>
 </body>

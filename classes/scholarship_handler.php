@@ -1,96 +1,88 @@
 <?php
-require_once "../connection/dbh.classes.php";
+require_once '../connection/dbh.classes.php';
 
 class ScholarshipHandler extends Dbh {
-    public function getScholarships() {
+    private $conn;
+
+    public function __construct() {
         try {
-            $stmt = $this->connect()->prepare("SELECT * FROM scholarships ORDER BY scholarship_id ASC");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error fetching scholarships: " . $e->getMessage());
-            return [];
+            $this->conn = $this->connect();
+            if (!$this->conn) {
+                throw new Exception("Failed to establish database connection");
+            }
+        } catch (Exception $e) {
+            error_log("ScholarshipHandler initialization error: " . $e->getMessage());
+            throw $e;
         }
     }
 
-    public function create($scholarship_id, $name, $description, $requirements, $status) {
+    // Create new scholarship
+    public function createScholarship($name, $description, $deadline, $requirements, $status = 'active') {
         try {
-            $stmt = $this->connect()->prepare("INSERT INTO scholarships (scholarship_id, name, description, requirements, status) 
-                    VALUES (?, ?, ?, ?, ?)");
-            return $stmt->execute([$scholarship_id, $name, $description, $requirements, $status]);
+            $query = "SELECT MAX(CAST(scholarship_id AS UNSIGNED)) as max_id FROM scholarships";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $new_id = ($result['max_id'] ?? 0) + 1;
+            
+            $query = "INSERT INTO scholarships (scholarship_id, name, description, deadline, requirements, status) 
+                      VALUES (:id, :name, :description, :deadline, :requirements, :status)";
+            
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([
+                'id' => $new_id,
+                'name' => $name,
+                'description' => $description,
+                'deadline' => $deadline,
+                'requirements' => $requirements,
+                'status' => $status
+            ]);
         } catch (PDOException $e) {
             error_log("Error creating scholarship: " . $e->getMessage());
-            return false;
+            throw new Exception("Failed to create scholarship: " . $e->getMessage());
         }
     }
 
-    public function update($scholarship_id, $name, $description, $requirements, $status) {
-        try {
-            $stmt = $this->connect()->prepare("UPDATE scholarships 
-                    SET name = ?, description = ?, requirements = ?, status = ? 
-                    WHERE scholarship_id = ?");
-            return $stmt->execute([$name, $description, $requirements, $status, $scholarship_id]);
-        } catch (PDOException $e) {
-            error_log("Error updating scholarship: " . $e->getMessage());
-            return false;
-        }
+    // Read all scholarships
+    public function getScholarships() {
+        $query = "SELECT * FROM scholarships ORDER BY scholarship_id ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function delete($scholarship_id) {
-        try {
-            $stmt = $this->connect()->prepare("DELETE FROM scholarships WHERE scholarship_id = ?");
-            return $stmt->execute([$scholarship_id]);
-        } catch (PDOException $e) {
-            error_log("Error deleting scholarship: " . $e->getMessage());
-            return false;
-        }
+    // Read single scholarship
+    public function getScholarshipById($id) {
+        $sql = "SELECT * FROM scholarships WHERE scholarship_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function checkIdExists($scholarship_id) {
-        try {
-            $stmt = $this->connect()->prepare("SELECT COUNT(*) FROM scholarships WHERE scholarship_id = ?");
-            $stmt->execute([$scholarship_id]);
-            return $stmt->fetchColumn() > 0;
-        } catch (PDOException $e) {
-            error_log("Error checking scholarship ID: " . $e->getMessage());
-            return false;
-        }
+    // Update scholarship
+    public function updateScholarship($id, $name, $description, $deadline, $requirements, $status) {
+        $sql = "UPDATE scholarships 
+                SET name = ?, description = ?, deadline = ?, 
+                    requirements = ?, status = ? 
+                WHERE scholarship_id = ?";
+        
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$name, $description, $deadline, $requirements, $status, $id]);
     }
-}
 
-// Handle form submissions
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $scholarship = new ScholarshipHandler();
-    
-    if (isset($_POST['add_scholarship'])) {
-        $scholarship->create(
-            $_POST['scholarship_id'],
-            $_POST['name'],
-            $_POST['description'],
-            $_POST['requirements'],
-            $_POST['status']
-        );
-        header("Location: ../scholarship.php?status=added");
-        exit();
+    // Delete scholarship
+    public function deleteScholarship($id) {
+        $sql = "DELETE FROM scholarships WHERE scholarship_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$id]);
     }
-    
-    if (isset($_POST['update_scholarship'])) {
-        $scholarship->update(
-            $_POST['scholarship_id'],
-            $_POST['name'],
-            $_POST['description'],
-            $_POST['requirements'],
-            $_POST['status']
-        );
-        header("Location: ../scholarship.php?status=updated");
-        exit();
-    }
-}
 
-// Handle delete requests
-if (isset($_GET['delete_scholarship_id'])) {
-    $scholarship = new ScholarshipHandler();
-    $scholarship->delete($_GET['delete_scholarship_id']);
-    header("Location: ../scholarship.php?status=deleted");
-    exit();
+    // Check if scholarship ID exists
+    public function checkScholarshipExists($id) {
+        $sql = "SELECT COUNT(*) FROM scholarships WHERE scholarship_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetchColumn() > 0;
+    }
 } 

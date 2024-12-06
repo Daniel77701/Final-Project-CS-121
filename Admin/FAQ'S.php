@@ -73,7 +73,7 @@ if (isset($_POST['update'])) {
             <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
-            <a href="settings.html">
+            <a href="settings.php">
                 <img src="icons_admin/white_settings.png" alt="Settings Icon" style="width: 30px; height: 30px; margin-left: 10px;">
             </a> 
         </div>

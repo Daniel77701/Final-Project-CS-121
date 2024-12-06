@@ -51,6 +51,7 @@ try {
     <link rel="preconnect" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/">
     <link rel="preconnect" href="https://code.jquery.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="shortcut icon" href="icons_admin/logo.png" type="image/x-icon">
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,7 +89,7 @@ try {
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3 collapse d-md-block">
+            <nav id="sidebar" class="col-md-3 col-lg-2">
                 <ul class="nav flex-column">
                     <li class="nav-item"><a class="nav-link" href="admin-dashboard.php"><img src="icons_admin/dashboard.png" alt="Dashboard Icon"> Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
@@ -106,30 +107,28 @@ try {
             </nav>
 
             <!-- Main Content -->
-            <div class="col-md-9 col-lg-10">
-                <div id="main-content">
-                    <div class="dashboard-section">
+            <div>
+                <div class="scholarship-section">
+                    <div class="title-box">
                         <h2>Settings</h2>
                         <hr>
                         
                         <?php if(isset($_SESSION['error'])): ?>
                             <div class="alert alert-danger"><?php echo $_SESSION['error']; ?></div>
-                            <?php unset($_SESSION['error']); ?>
+                            <?php unset($_SESSION['error']); // Clear the error message ?>
                         <?php endif; ?>
                         
                         <?php if(isset($_SESSION['success'])): ?>
                             <div class="alert alert-success"><?php echo $_SESSION['success']; ?></div>
-                            <?php unset($_SESSION['success']); ?>
+                            <?php unset($_SESSION['success']); // Clear the success message ?>
                         <?php endif; ?>
 
                         <div class="button-container">
-                            <button class="add-featured" data-toggle="modal" data-target="#setSchoolYearModal">
-                                Set School Year
-                            </button>
+                            <button class="add-featured" data-toggle="modal" data-target="#setSchoolYearModal">Set School Year</button>
                         </div>
 
                         <div class="table-box">
-                            <table>
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>School Year</th>

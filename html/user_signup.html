@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../icons/logo.png" type="image/x-icon">
+    <title> Scholarship Tracker System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../new_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="nav">
+            <div class="nav_logo" style="display: flex; align-items: center;">
+                <img src="../icons/logo.png" alt="Scholarship Tracker System Logo" style="height: 60px; margin-right: 10px;">
+                <span style="color: red; font-size: 30px;">Scholarship Tracker System</span>
+            </div>
+            <div class="nav_item">
+                <a href="index.html" class="nav_link">Home</a> 
+                <a href="about.html" class="nav_link">About</a>
+                <a href="contact us.html" class="nav_link">Contact Us</a>
+                <a href="admin.html" class="nav_link">Admin</a>
+            </div>            
+        </div>
+    </div>
+    
+    <div class="container" id="register">
+        <h1 class="form-title">Register</h1>
+        <form id="registerForm" method="POST">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" 
+                       name="name" 
+                       id="name" 
+                       placeholder="Full Name (e.g., Juan Dela Cruz)" 
+                       required>
+                <label for="name">Full Name</label>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" 
+                       name="email" 
+                       id="email" 
+                       placeholder="Email (e.g., juan@g.batstate-u.edu.ph)" 
+                       pattern="[a-z0-9._%+-]+@g\.batstate-u\.edu\.ph$"
+                       title="Please use a BatState-U email address"
+                       required>
+                <label for="email">Email</label>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-id-card"></i>
+                <input type="text" 
+                       name="sr_code" 
+                       id="sr_code" 
+                       placeholder="SR-Code (e.g., 23-29031)" 
+                       pattern="[0-9]{2}-[0-9]{5}"
+                       title="Format: XX-XXXXX (e.g., 23-29031)"
+                       required>
+                <label for="sr_code">SR-Code</label>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input type="tel" 
+                       name="mobile_number" 
+                       id="mobile_number" 
+                       placeholder="Mobile Number (e.g., 09123456789)" 
+                       pattern="[0-9]{11}"
+                       title="11-digit mobile number"
+                       required>
+                <label for="mobile_number">Mobile Number</label>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" 
+                       name="password" 
+                       id="password" 
+                       placeholder="Password (minimum 8 characters)" 
+                       minlength="8"
+                       required>
+                <label for="password">Password</label>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" 
+                       name="confirm_password" 
+                       id="confirm_password" 
+                       placeholder="Confirm Password"
+                       minlength="8"
+                       required>
+                <label for="confirm_password">Confirm Password</label>
+            </div>
+            <input type="submit" class="btn" value="Register" name="submit">
+        </form>
+        
+        <div class="links">
+            <p>Already have an account?</p>
+            <button onclick="window.location.href='user_login.html';">Login</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Add password match validation
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'Passwords do not match. Please try again.'
+                });
+                return;
+            }
+            
+            const formData = new FormData(this);
+            
+            // Update the fetch URL to use the correct path
+            // Adjust this path based on your project structure
+            fetch('../php/user_register.php', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Plain-Password': 'true'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Server response:', data);
+                
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',    
+                        title: 'Registration Successful!',
+                        text: 'You can now login to your account',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Continue to Login',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer || result.isConfirmed) {
+                            window.location.href = 'user_login.html';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: data.message || 'An error occurred during registration'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred during registration. Please try again.'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

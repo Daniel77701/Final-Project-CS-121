@@ -1,0 +1,315 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: whitesmoke;
+    font-size: 0.95rem;
+}
+
+#header {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: white;
+    color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem;
+    margin-right: 8px; /* Added margin to the right to separate from the main content */
+    /* Optional: you can also add padding-right if you want space inside the sidebar */
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Only apply background color on hover */
+#sidebar .nav-link:hover {
+    background-color: #d1182d; /* Red background on hover */
+    color: white;
+}
+
+/* Apply background color and white text to "Scholars" */
+#sidebar .nav-link.active {
+    background-color: #d1182d; /* Red background */
+    color: white; /* White font */
+    text-decoration: none; /* Remove underline */
+}
+
+#main-content {
+    background-color: #d9dfdb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Scholarship Section */
+.scholarship-section {
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.title-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 200%; /* Ensure title box is full width */
+    max-width: 1200px; /* Optional max-width for a more contained box */
+    margin: 30px auto 20px auto; /* Adjust margin-top to create more space */
+    margin-left: 20px;
+}
+.title-box h2 {
+    color: #333;
+    font-size: 2.0rem;
+    padding-bottom: 15px;
+    margin-bottom: 0;
+}
+
+.title-box hr {
+    border: none;
+    border-top: 2px solid #8C1D1A;
+    margin-top: 0;
+    padding: 0;
+}
+
+/* Add Scholarship Button */
+.add-scholarship {
+    font-size: 1rem;
+    background-color: #d1182d;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-scholarship:hover {
+    background-color: blue;
+}
+
+/* Table Box Styles */
+.table-box {
+    background-color: white;
+    padding: 35px;
+    border-radius: 2px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;
+    width: 200%;
+    overflow-x: auto;
+    margin-left: 20px;
+    margin-right: auto;
+}
+
+/* Table Styles */
+.table-box table {
+    width: 100%; /* Ensures table takes up full container width */
+    border-collapse: collapse; /* Ensures table borders collapse together */
+    font-size: 0.95rem;
+    margin: 0 auto;
+}
+
+/* Table Header */
+.table-box th {
+    background-color: darkred;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid whitesmoke; /* Adds a gray border to table headers */
+}
+
+/* Table Data */
+.table-box td {
+    padding: 12px;
+    border: 1px solid lightgrey; /* Adds a gray border to table data cells */
+}
+
+/* Table Rows */
+.table-box tr {
+    border: 1px solid  #ddd !important; /* Adds a gray border to the entire row */
+}
+
+/* Action Buttons */
+td button {
+    padding: 6px 12px;
+    border-radius: 1px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+
+td button:hover {
+    opacity: 0.8;
+}
+
+td button:first-child {
+    background-color: #4CAF50;
+    color: white;
+}
+
+td button:nth-child(2) {
+    background-color: #f44336;
+    color: white;
+}
+
+td button:nth-child(3) {
+    background-color: #ff9800;
+    color: white;
+}
+
+td button.close-renewal {
+    background-color: #9e9e9e;
+    color: white;
+}
+/* Footer */
+.footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #333;
+} 
+/* Delete and Print Buttons */
+.delete, .print {
+    font-size: 1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px; /* Spacing between buttons */
+}
+
+/* Delete Button Style */
+.delete {
+    background-color: #f44336; /* Red background for delete */
+    color: white;
+}
+
+.delete:hover {
+    background-color: #d1182d; /* Darker red when hovering */
+}
+
+/* Print Button Style */
+.print {
+    background-color: #4CAF50; /* Green background for print */
+    color: white;
+    margin-left: 20px;
+
+}
+
+.print:hover {
+    background-color: #45a049; /* Darker green when hovering */
+}
+/* Action Container: Wrapping both print and search elements */
+.action-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    width: 200%; /* Match the width of your table-box */
+    max-width: 1200px;
+    margin-left: 20px;
+}
+
+/* Search Container: Moves search bar to the right */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Push to the right */
+    margin-right: 20px;
+}
+
+/* Label for Search */
+.search-container label {
+    font-size: 1rem;
+    color: #333;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+/* Search Input Styling */
+.search-container input {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 250px; /* Width of the search input */
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Focus state for the search input */
+.search-container input:focus {
+    border-color: #d1182d;
+}
+
+/* Print Button Style */
+.print {
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: auto; /* Keep print button to the left */
+}
+
+.print:hover {
+    background-color: blue;
+}
+
+/* Search functionality styles */
+#no-results-message td {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    background-color: #f9f9f9;
+}
+
+/* Highlight matching text */
+.highlight {
+    background-color: yellow;
+    padding: 2px;
+}
+
+/* Search input focus state */
+.search-container input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}

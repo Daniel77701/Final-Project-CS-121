@@ -1,0 +1,256 @@
+/* General Styles */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #F7F8FA;
+    font-size: 0.95rem;
+}
+
+#header {
+    background-color: #d1182d;
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+#header .logo {
+    display: flex;
+    align-items: center;
+}
+
+#header .logo img {
+    margin-right: 8px;
+}
+
+#header .logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: white !important;   
+    color: black;
+    height: 100vh;
+    padding-top: 20px;
+    font-size: 0.85rem;
+}
+
+#sidebar .nav-link {
+    color: black;
+    font-size: 1.22rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar .nav-link img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #d1182d; 
+    color: white;
+}
+
+#sidebar .nav-link.active {
+    background-color: #d1182d; 
+    color: white; 
+    text-decoration: none; 
+}
+
+/* Main Content Area */
+.content-wrapper {
+    padding: 20px;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.col-md-9.ms-sm-auto.col-lg-10.px-md-4 {
+    padding: 10px 20px;
+    padding-left: 10px;
+    background-color: #f8f9fa;
+}
+
+/* Section Header - Further adjusted spacing and color */
+.section-header {
+    margin-bottom: 15px;
+    margin-top: 5px; /* Further reduced */
+}
+
+.section-header h2 {
+    color: black; /* Changed to black */
+    margin-bottom: 10px;
+    margin-top: 10px; /* Further reduced */
+    font-weight: 500;
+    font-size: 2.3rem;
+    letter-spacing: 0.5px;
+}
+
+/* Divider */
+.divider {
+    border: 0;
+    height: 2px !important;
+    background-color: darkred;
+    margin: 15px 0;
+    opacity: 1;
+    width: 100%;
+}
+
+/* Table Styles */
+.table-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px; /* Further reduced */
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.table-box-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.table-responsive {
+    padding: 15px;
+    background-color: white;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead th {
+    background-color: darkred !important;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-weight: 500;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: #f2f2f2;
+    transition: background-color 0.3s ease;
+}
+
+/* Button Styles */
+.button-container {
+    margin: 15px 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-container .btn {
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+.button-container .btn i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background-color: #d1182d;
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: blue;
+}
+
+/* Action Buttons */
+.btn-sm {
+    margin: 0 2px;
+    padding: 5px 10px;
+}
+
+.btn-sm i {
+    margin-right: 4px;
+    font-size: 0.9em;
+}
+
+/* Status Badge */
+.badge {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Table Footer */
+.table-footer {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Modal Styles */
+.modal-header {
+    background-color: #d1182d;
+    color: white;
+}
+
+.modal-content {
+    border-radius: 8px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .content-wrapper {
+        margin-left: 0;
+        padding: 10px;
+    }
+    
+    .table-responsive {
+        padding: 10px;
+    }
+    
+    .table td, .table th {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Welcome Section Spacing */
+.welcome span {
+    margin-right: 5px; /* Add small right margin to the Welcome text */
+}
+
+.welcome .fas.fa-user {
+    margin-left: 3px; /* Adjust space between text and user icon */
+}
+
+/* Card Styles */
+.card {
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

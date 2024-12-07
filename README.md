@@ -14,19 +14,6 @@ CRUD Application:
 
 -Delete: Remove outdated scholarship opportunities or applications.
 
-Allocation of Assignments:
-
-Login- Joan
-
-Sign up - Joan
-
-Create - Trisha
-
-Delete - Jezrev
-
-Update - Jezrev
-
-Read - Trisha
 
 • Assignment of Core Functionalities:
 
@@ -36,9 +23,9 @@ Admin Interface (HTML/CSS)- Jezrev & Joan.
 
 User Interface (HTML/CSS)- Trisha & Joan.
 
-Backend Development (PHP and Four Pillars of OOP)- Jezrev.
+Backend Development (PHP and Four Pillars of OOP)- Jezrev & Joan.
 
-Database Connectivity- Trisha & Jezrev.
+Database Connectivity- Trisha, Jezrev & Joan
 
 • Additional Contributions:
 
@@ -46,6 +33,6 @@ Presentation (PPT)- Joan.
 
 Documentation (DOCU)- Joan.
 
-Flowchart- Jezrev, Trisha, Joan.
+Flowchart-Trisha
 
-Entity Relationship Diagram (ERD)- Jezrev, Trisha, Joan.
+Entity Relationship Diagram (ERD)- Jezrev

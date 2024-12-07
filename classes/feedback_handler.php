@@ -4,13 +4,15 @@ require_once '../connection/dbh.classes.php';
 class FeedbackHandler extends Dbh {
     public function getAllFeedbacks() {
         try {
-            $sql = "SELECT id, message, email, created_at FROM feedbacks ORDER BY created_at DESC";
+            $sql = "SELECT id, message, email, created_at 
+                    FROM feedbacks 
+                    ORDER BY created_at DESC";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error in getAllFeedbacks: " . $e->getMessage());
-            throw new Exception("Database error occurred");
+            error_log("Error fetching feedbacks: " . $e->getMessage());
+            return [];
         }
     }
 

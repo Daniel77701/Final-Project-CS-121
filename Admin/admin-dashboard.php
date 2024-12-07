@@ -26,11 +26,6 @@ require_once '../includes/getCount.php';
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center position-relative">
-            <i class="fas fa-bell notification-icon" style="cursor: pointer;"></i>
-            <span class="badge badge-light ml-2 notification-badge">0</span>
-            <div class="dropdown-menu notifications-dropdown">
-                <ul id="notifications-list"></ul>
-            </div>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.php">
@@ -128,7 +123,7 @@ require_once '../includes/getCount.php';
                     .then(response => response.json())
                     .then(data => {
                         let unreadCount = 0;
-                        notificationsList.innerHTML = ''; // Clear the list
+                        notificationsList.innerHTML = ''; 
     
                         data.forEach(notification => {
                             const listItem = document.createElement('li');
@@ -161,10 +156,10 @@ require_once '../includes/getCount.php';
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                }).then(() => fetchNotifications()); // Reload notifications after marking as read
+                }).then(() => fetchNotifications()); 
             }
     
-            fetchNotifications(); // Fetch notifications when the page loads
+            fetchNotifications(); 
         });
     </script>
 
@@ -202,5 +197,4 @@ require_once '../includes/getCount.php';
         });
     </script>
 </body>
-
 </html>

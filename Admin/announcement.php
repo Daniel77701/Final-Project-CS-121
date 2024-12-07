@@ -1,7 +1,7 @@
 <?php
 require_once '../classes/announcement_handler.php';
 session_start();
-// Add any authentication checks here if needed
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +22,7 @@ session_start();
             <img src="icons_admin/logo.png" alt="Logo" width="40">
             <span>Scholarship Tracker System</span>
         </div>
-        <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
+        <div class="welcome d-flex align-items-center position-relative">
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.php">
@@ -97,7 +96,6 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Helper function for security
         function escapeHtml(unsafe) {
             return unsafe
                 .replace(/&/g, "&amp;")
@@ -201,18 +199,18 @@ session_start();
         }
 
         // Edit announcement
-        function editAnnouncement(id, title, content, date) {
+        function editAnnouncement(id, subject, announcement, date) {
             Swal.fire({
                 title: 'Edit Announcement',
                 html: `
                     <form id="editAnnouncementForm">
                         <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" value="${title}" required>
+                            <label for="subject">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" value="${subject}" required>
                         </div>
                         <div class="form-group">
-                            <label for="content">Content</label>
-                            <textarea class="form-control" id="content" name="content" rows="4" required>${content}</textarea>
+                            <label for="announcement">Announcement</label>
+                            <textarea class="form-control" id="announcement" name="announcement" rows="4" required>${announcement}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="date">Date</label>
@@ -226,7 +224,11 @@ session_start();
                 preConfirm: () => {
                     const form = document.getElementById('editAnnouncementForm');
                     const formData = new FormData(form);
-                    return Object.fromEntries(formData);
+                    return {
+                        subject: formData.get('subject'),
+                        announcement: formData.get('announcement'),
+                        date: formData.get('date')
+                    };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -236,21 +238,32 @@ session_start();
                         data: {
                             action: 'edit_announcement',
                             id: id,
-                            ...result.value
+                            subject: result.value.subject,
+                            announcement: result.value.announcement,
+                            date: result.value.date
                         },
                         success: function(response) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Announcement updated successfully',
-                                icon: 'success'
-                            }).then(() => {
-                                location.reload();
-                            });
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Announcement updated successfully',
+                                    icon: 'success'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: response.error || 'Failed to update announcement',
+                                    icon: 'error'
+                                });
+                            }
                         },
-                        error: function() {
+                        error: function(xhr) {
+                            const response = xhr.responseJSON || {};
                             Swal.fire({
                                 title: 'Error!',
-                                text: 'Failed to update announcement',
+                                text: response.error || 'Failed to update announcement',
                                 icon: 'error'
                             });
                         }

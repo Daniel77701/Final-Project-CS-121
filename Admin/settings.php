@@ -67,6 +67,9 @@ try {
     
     <!-- Defer non-critical CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" media="print" onload="this.media='all'">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header Section -->
@@ -76,7 +79,6 @@ try {
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="#" onclick="confirmLogout()" class="ml-3" style="color: white; text-decoration: none;">
@@ -86,10 +88,11 @@ try {
         </div>
     </header>
 
+    <!-- Main Container -->
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav id="sidebar" class="col-md-3 col-lg-2">
+            <nav id="sidebar" class="col-12 col-md-3 col-lg-2 sidebar bg-light p-3 collapse d-md-block">
                 <ul class="nav flex-column">
                     <li class="nav-item"><a class="nav-link" href="admin-dashboard.php"><img src="icons_admin/dashboard.png" alt="Dashboard Icon"> Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="scholars.php"><img src="icons_admin/scholars.png" alt="Scholars Icon"> Scholars</a></li>
@@ -107,7 +110,7 @@ try {
             </nav>
 
             <!-- Main Content -->
-            <div>
+            <main class="col-md-9 col-lg-10 ms-sm-auto px-4">
                 <div class="scholarship-section">
                     <div class="title-box">
                         <h2>Settings</h2>
@@ -115,12 +118,12 @@ try {
                         
                         <?php if(isset($_SESSION['error'])): ?>
                             <div class="alert alert-danger"><?php echo $_SESSION['error']; ?></div>
-                            <?php unset($_SESSION['error']); // Clear the error message ?>
+                            <?php unset($_SESSION['error']); ?>
                         <?php endif; ?>
                         
                         <?php if(isset($_SESSION['success'])): ?>
                             <div class="alert alert-success"><?php echo $_SESSION['success']; ?></div>
-                            <?php unset($_SESSION['success']); // Clear the success message ?>
+                            <?php unset($_SESSION['success']); ?>
                         <?php endif; ?>
 
                         <div class="button-container">
@@ -128,49 +131,69 @@ try {
                         </div>
 
                         <div class="table-box">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>School Year</th>
-                                        <th>Semester</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($settings)): ?>
-                                        <?php foreach ($settings as $setting): ?>
-                                            <tr>
-                                                <td><?php echo htmlspecialchars($setting['school_year']); ?></td>
-                                                <td><?php echo htmlspecialchars($setting['semester']); ?></td>
-                                                <td>
-                                                    <span class="badge <?php echo $setting['status'] === 'Active' ? 'badge-success' : 'badge-secondary'; ?>">
-                                                        <?php echo htmlspecialchars($setting['status']); ?>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <a href="settings.php?delete=<?php echo $setting['id']; ?>" 
-                                                       class="btn btn-danger btn-sm"
-                                                       onclick="return confirmDeleteSetting(event, <?php echo $setting['id']; ?>);">
-                                                        Delete
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead class="thead-dark">
                                         <tr>
-                                            <td colspan="4" class="text-center">No settings found</td>
+                                            <th scope="col" width="5%">#</th>
+                                            <th scope="col" width="35%">School Year</th>
+                                            <th scope="col" width="30%">Semester</th>
+                                            <th scope="col" width="15%">Status</th>
+                                            <th scope="col" width="15%">Actions</th>
                                         </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                            <div class="footer">
-                                Showing <?php echo count($settings); ?> <?php echo count($settings) === 1 ? 'entry' : 'entries'; ?>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (!empty($settings)): ?>
+                                            <?php $counter = 1; ?>
+                                            <?php foreach ($settings as $setting): ?>
+                                                <tr>
+                                                    <td><?php echo $counter++; ?></td>
+                                                    <td><?php echo htmlspecialchars($setting['school_year']); ?></td>
+                                                    <td><?php echo htmlspecialchars($setting['semester']); ?></td>
+                                                    <td>
+                                                        <span class="badge <?php echo $setting['status'] === 'Active' ? 'badge-success' : 'badge-secondary'; ?>">
+                                                            <?php echo htmlspecialchars($setting['status']); ?>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" 
+                                                                    class="btn btn-warning btn-sm edit-btn" 
+                                                                    data-id="<?php echo htmlspecialchars($setting['id']); ?>"
+                                                                    data-school-year="<?php echo htmlspecialchars($setting['school_year']); ?>"
+                                                                    data-semester="<?php echo htmlspecialchars($setting['semester']); ?>">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </button>
+                                                            <button type="button" 
+                                                                    class="btn btn-danger btn-sm" 
+                                                                    onclick="confirmDeleteSetting(event, <?php echo $setting['id']; ?>)">
+                                                                <i class="fas fa-trash"></i> Delete
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="5" class="text-center">No settings found</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="dataTables_info" role="status" aria-live="polite">
+                                            Showing <?php echo count($settings); ?> <?php echo count($settings) === 1 ? 'entry' : 'entries'; ?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 
@@ -242,7 +265,7 @@ try {
                 cancelButtonColor: "#d33"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "html/index.html";
+                    window.location.href = "../html/index.html";
                 }
             });
         }
@@ -312,7 +335,6 @@ try {
         <?php endif; ?>
     </script>
 
-    <!-- Add this JavaScript after your existing scripts -->
     <script>
     $(document).ready(function() {
         // Handle form submission
@@ -384,6 +406,98 @@ try {
         
         return false;
     }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    $(document).ready(function() {
+        // Attach click handler to edit buttons
+        $(document).on('click', '.edit-btn', function() {
+            const id = $(this).data('id');
+            const schoolYear = $(this).data('school-year');
+            const semester = $(this).data('semester');
+
+            Swal.fire({
+                title: 'Edit School Year Setting',
+                html: `
+                    <form id="editSettingForm" class="p-3">
+                        <div class="form-group">
+                            <label for="editSchoolYear">School Year:</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="editSchoolYear" 
+                                   value="${schoolYear}"
+                                   placeholder="YYYY-YYYY" 
+                                   required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="editSemester">Semester:</label>
+                            <select class="form-control" id="editSemester" required>
+                                <option value="1st" ${semester === '1st' ? 'selected' : ''}>1st Semester</option>
+                                <option value="2nd" ${semester === '2nd' ? 'selected' : ''}>2nd Semester</option>
+                                <option value="Summer" ${semester === 'Summer' ? 'selected' : ''}>Summer</option>
+                            </select>
+                        </div>
+                    </form>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    const updatedSchoolYear = Swal.getPopup().querySelector('#editSchoolYear').value;
+                    const updatedSemester = Swal.getPopup().querySelector('#editSemester').value;
+                    
+                    // Only show validation message if fields are actually empty
+                    if (!updatedSchoolYear.trim()) {
+                        Swal.showValidationMessage('School Year is required');
+                        return false;
+                    }
+
+                    return {
+                        id: id,
+                        schoolYear: updatedSchoolYear,
+                        semester: updatedSemester
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '../includes/settings_update.php',
+                        type: 'POST',
+                        data: result.value,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: response.message,
+                                    timer: 1500
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: response.message || 'Failed to update setting'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Failed to connect to server'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
     </script>
 </body>
 </html> 

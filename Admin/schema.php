@@ -1,21 +1,8 @@
 <?php
-require_once '../connection/dbh.classes.php';
+require_once '../classes/schema_handler.php';
 
-class SchemaDisplay extends Dbh {
-    public function getScholarships() {
-        try {
-            $stmt = $this->connect()->prepare("SELECT * FROM scholarship_schema");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error fetching schemas: " . $e->getMessage());
-            return [];
-        }
-    }
-}
-
-$schemaDisplay = new SchemaDisplay();
-$result = $schemaDisplay->getScholarships();
+$schema = new Schema();
+$result = $schema->fetchAll();
 
 ?>
 
@@ -24,6 +11,7 @@ $result = $schemaDisplay->getScholarships();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="icons_admin/logo.png" type="image/x-icon">
     <title>Scholarship Schema</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,7 +29,6 @@ $result = $schemaDisplay->getScholarships();
         <span>Scholarship Tracker System</span>
     </div>
     <div class="welcome d-flex align-items-center">
-        <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
         <span class="ml-4">Welcome, Admin</span>
         <i class="fas fa-user ml-1"></i>
         <a href="settings.php">
@@ -156,7 +143,7 @@ $result = $schemaDisplay->getScholarships();
     <script>
     function viewDetails(schemaId) {
         $.ajax({
-            url: 'includes/schema_operations.php',
+            url: '../includes/schema_operations.php',
             type: 'GET',
             data: { 
                 action: 'get',
@@ -230,7 +217,7 @@ $result = $schemaDisplay->getScholarships();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addSchemaForm" method="POST" action="schema_handler.php">
+                    <form id="addSchemaForm" method="POST" action="../classes/schema_handler.php">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="scholarshipType" class="form-label">Scholarship Type</label>
@@ -308,7 +295,7 @@ $result = $schemaDisplay->getScholarships();
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'includes/schema_operations.php',
+                    url: '../includes/schema_operations.php',
                     type: 'POST',
                     data: {
                         action: 'delete',
@@ -380,7 +367,7 @@ $result = $schemaDisplay->getScholarships();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editSchemaForm" method="POST" action="includes/schema_operations.php">
+                    <form id="editSchemaForm" method="POST" action="../includes/schema_operations.php">
                         <input type="hidden" name="action" value="edit">
                         <input type="hidden" id="editSchemaId" name="schema_id">
                         <div class="row mb-3">

@@ -80,7 +80,6 @@ if (isset($_GET['delete_scholarship_id'])) {
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.html">

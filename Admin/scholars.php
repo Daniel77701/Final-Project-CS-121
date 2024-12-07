@@ -27,14 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 null,  // name will be fetched from students table
                 $_POST['course'],
                 $_POST['year_level'],
-                $_POST['scholarship_id']  // Changed from scholarship to scholarship_id
+                $_POST['scholarship_id']  
             );
             if (!$result) {
                 error_log('Failed to add scholar');
             }
         } catch (Exception $e) {
             error_log('Error adding scholar: ' . $e->getMessage());
-            // You might want to handle this error in the UI
         }
     } elseif (isset($_POST['update_scholar'])) {
         try {
@@ -43,11 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_POST['name'],
                 $_POST['course'],
                 $_POST['year_level'],
-                $_POST['scholarship_id']  // Changed from scholarship to scholarship_id
+                $_POST['scholarship_id']  
             );
         } catch (Exception $e) {
             error_log('Error updating scholar: ' . $e->getMessage());
-            // You might want to handle this error in the UI
         }
     }
     // Redirect to prevent form resubmission
@@ -87,7 +85,6 @@ $scholarList = $scholars->getScholars();
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.php">
@@ -125,15 +122,8 @@ $scholarList = $scholars->getScholars();
                     <hr>
                     <div class="row mb-4">
                         <div class="col-12">
-                            <div class="table-controls d-flex justify-content-between align-items-center">
-                                <div class="form-select-container">
-                                    <label for="file-upload" class="form-label">Choose file</label>
-                                    <input type="file" id="file-upload" class="form-control mb-2" />
-                                </div>
-                                <div class="button-group">
-                                    <button class="btn btn-primary">Import</button>
-                                    <button class="btn btn-secondary" onclick="showAddScholarForm()">Add Scholar</button>
-                                </div>
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-secondary" onclick="showAddScholarForm()">Add Scholar</button>
                             </div>
                         </div>
                     </div>
@@ -520,7 +510,7 @@ $scholarList = $scholars->getScholars();
         async function showAddScholarForm() {
             try {
                 const scholarships = await loadScholarships();
-                console.log('Processed scholarships:', scholarships); // Debug log
+                console.log('Processed scholarships:', scholarships);
 
                 if (scholarships.length === 0) {
                     Swal.fire({
@@ -536,8 +526,6 @@ $scholarList = $scholars->getScholars();
                     return `<option value="${s.id}">${s.name}${deadlineInfo}</option>`;
                 }).join('');
 
-                console.log('Generated options HTML:', scholarshipOptions); // Debug log
-
                 Swal.fire({
                     title: 'Add New Scholar',
                     html: `
@@ -549,6 +537,7 @@ $scholarList = $scholars->getScholars();
                                        title="Please enter SR code in format: XX-XXXXX (e.g., 23-56748)"
                                        required>
                                 <small class="form-text text-muted">Example: 23-56748</small>
+                                <small class="form-text text-danger">Note: Must be a registered student</small>
                             </div>
                             <div class="form-group">
                                 <label for="add_course">Course *</label>
@@ -602,7 +591,7 @@ $scholarList = $scholars->getScholars();
                                     return false;
                                 }
                                 if (data.error) {
-                                    Swal.showValidationMessage(data.error);
+                                    Swal.showValidationMessage('Student not found. Please ensure the student is registered.');
                                     return false;
                                 }
                                 return formData;

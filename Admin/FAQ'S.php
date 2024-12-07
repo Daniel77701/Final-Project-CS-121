@@ -2,52 +2,67 @@
 session_start();
 require_once "../classes/FAQ'S_handler.php";
 
-// Get all FAQs for display
-$faqs = $faq->getFAQs();
+// Initialize FAQ object
+$faq = new FAQ();
 
-// Handle adding FAQ via form submission
-if (isset($_POST['add'])) {
-    $question = trim($_POST['question']);
-    $answer = trim($_POST['answer']);
-    
-    if (!empty($question) && !empty($answer)) {
-        if ($faq->addFAQ($question, $answer)) {
-            $_SESSION['success'] = "FAQ added successfully!";
+// At the top of your file, after session_start()
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Before form handling
+error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("POST Data: " . print_r($_POST, true));
+
+// Handle form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add'])) {
+        $question = trim($_POST['question'] ?? '');
+        $answer = trim($_POST['answer'] ?? '');
+        
+        // Debug
+        error_log("Adding FAQ - Question: " . $question . ", Answer: " . $answer);
+        
+        $result = $faq->addFAQ($question, $answer);
+        if ($result['success']) {
+            $_SESSION['success'] = $result['message'];
         } else {
-            $_SESSION['error'] = "Failed to add FAQ";
+            $_SESSION['error'] = $result['message'];
         }
-    } else {
-        $_SESSION['error'] = "Question and answer are required";
+        header("Location: FAQ'S.php");
+        exit();
     }
-    
+
+    if (isset($_POST['update'])) {
+        $id = $_POST['id'] ?? '';
+        $question = trim($_POST['question'] ?? '');
+        $answer = trim($_POST['answer'] ?? '');
+        
+        $result = $faq->updateFAQ($id, $question, $answer);
+        if ($result['success']) {
+            $_SESSION['success'] = $result['message'];
+        } else {
+            $_SESSION['error'] = $result['message'];
+        }
+        header("Location: FAQ'S.php");
+        exit();
+    }
+}
+
+// Handle delete request
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $result = $faq->deleteFAQ($id);
+    if ($result['success']) {
+        $_SESSION['success'] = $result['message'];
+    } else {
+        $_SESSION['error'] = $result['message'];
+    }
     header("Location: FAQ'S.php");
     exit();
 }
 
-// Handle delete action
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    $faq->deleteFAQ($id);
-    header("Location: FAQ'S.php"); 
-    exit();
-}
-
-// Handle edit action
-if (isset($_GET['edit'])) {
-    $id = $_GET['edit'];
-    // Fetch the FAQ to edit
-    $faqItem = $faq->getFAQById($id);
-}
-
-// Handle updating FAQ
-if (isset($_POST['update'])) {
-    $id = $_POST['id'];
-    $question = $_POST['question'];
-    $answer = $_POST['answer'];
-    $faq->updateFAQ($id, $question, $answer);
-    header("Location: FAQ'S.php"); 
-    exit();
-}
+// Get all FAQs for display
+$faqs = $faq->getFAQs();
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +85,6 @@ if (isset($_POST['update'])) {
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.php">
@@ -138,65 +152,46 @@ if (isset($_POST['update'])) {
                 <!-- FAQ Section -->
                 <div class="faq-title-box">
                     <div class="accordion-container">
-                        <?php if (!empty($faqs)): ?>
-                            <?php foreach ($faqs as $faqItem): ?>
+                        <?php 
+                        if (empty($faqs)) {
+                            error_log("No FAQs available for display");
+                        }
+                        if (!empty($faqs)): 
+                            foreach ($faqs as $faqItem): 
+                                // Debug each FAQ item
+                                error_log("Processing FAQ: " . print_r($faqItem, true));
+                        ?>
                             <div class="faq-item">
                                 <button class="accordion">
-                                        <?php echo htmlspecialchars($faqItem['question']); ?>
+                                    <span class="question-text"><?php echo htmlspecialchars($faqItem['question']); ?></span>
                                     <i class="fas fa-chevron-down"></i>
                                 </button>
                                 <div class="panel">
-                                        <p><?php echo htmlspecialchars($faqItem['answer']); ?></p>
+                                    <div class="panel-content">
+                                        <?php echo $faqItem['formatted_answer']; ?>
                                         <div class="action-buttons">
                                             <button class="btn btn-warning btn-sm" 
                                                     onclick="editFAQ(<?php echo $faqItem['id']; ?>, '<?php echo addslashes($faqItem['question']); ?>', '<?php echo addslashes($faqItem['answer']); ?>')">
-                                               <i class="fas fa-edit"></i> Edit
+                                                <i class="fas fa-edit"></i> Edit
                                             </button>
                                             <button class="btn btn-danger btn-sm" 
                                                     onclick="deleteFAQ(<?php echo $faqItem['id']; ?>)">
-                                               <i class="fas fa-trash"></i> Delete
+                                                <i class="fas fa-trash"></i> Delete
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
+                            </div>
+                        <?php 
+                            endforeach; 
+                        else: 
+                        ?>
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle"></i> No FAQs available yet. Click "Add Question" to create your first FAQ.
                             </div>
                         <?php endif; ?>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add FAQ Modal -->
-    <div class="modal fade" id="addFAQModal" tabindex="-1" role="dialog" aria-labelledby="addFAQModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addFAQModalLabel">Add New FAQ</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" action="FAQ'S.php">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="question">Question</label>
-                            <input type="text" class="form-control" id="question" name="question" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="answer">Answer</label>
-                            <textarea class="form-control" id="answer" name="answer" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" name="add" class="btn btn-primary">Save FAQ</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -310,41 +305,41 @@ if (isset($_POST['update'])) {
             cancelButtonText: 'Cancel',
             preConfirm: () => {
                 const form = document.getElementById('addFAQForm');
-                const formData = new FormData(form);
-                return Object.fromEntries(formData);
+                if (!form.checkValidity()) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                    return false;
+                }
+                return {
+                    question: form.querySelector('#question').value.trim(),
+                    answer: form.querySelector('#answer').value.trim()
+                };
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                // Submit form data
                 $.ajax({
-                    url: 'faq_handler.php',
+                    url: '../includes/faq_handler.php',
                     type: 'POST',
                     data: {
                         action: 'add',
-                        ...result.value
+                        question: result.value.question,
+                        answer: result.value.answer
                     },
                     success: function(response) {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'FAQ added successfully',
-                            icon: 'success'
-                        }).then(() => {
-                            location.reload();
-                        });
+                        if (response.success) {
+                            Swal.fire('Success!', response.message, 'success')
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
                     },
                     error: function() {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Failed to add FAQ',
-                            icon: 'error'
-                        });
+                        Swal.fire('Error!', 'Failed to connect to server', 'error');
                     }
                 });
             }
         });
     }
 
-    // Edit FAQ function
     function editFAQ(id, question, answer) {
         Swal.fire({
             title: 'Edit FAQ',
@@ -365,41 +360,43 @@ if (isset($_POST['update'])) {
             cancelButtonText: 'Cancel',
             preConfirm: () => {
                 const form = document.getElementById('editFAQForm');
-                const formData = new FormData(form);
-                return Object.fromEntries(formData);
+                if (!form.checkValidity()) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                    return false;
+                }
+                return {
+                    id: id,
+                    question: form.querySelector('#question').value.trim(),
+                    answer: form.querySelector('#answer').value.trim()
+                };
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'faq_handler.php',
+                    url: '../includes/faq_handler.php',
                     type: 'POST',
                     data: {
                         action: 'edit',
-                        id: id,
-                        ...result.value
+                        id: result.value.id,
+                        question: result.value.question,
+                        answer: result.value.answer
                     },
                     success: function(response) {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'FAQ updated successfully',
-                            icon: 'success'
-                        }).then(() => {
-                            location.reload();
-                        });
+                        if (response.success) {
+                            Swal.fire('Success!', response.message, 'success')
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
                     },
                     error: function() {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Failed to update FAQ',
-                            icon: 'error'
-                        });
+                        Swal.fire('Error!', 'Failed to connect to server', 'error');
                     }
                 });
             }
         });
     }
 
-    // Delete FAQ function
     function deleteFAQ(id) {
         Swal.fire({
             title: 'Are you sure?',
@@ -412,27 +409,22 @@ if (isset($_POST['update'])) {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'faq_handler.php',
+                    url: '../includes/faq_handler.php',
                     type: 'POST',
                     data: {
                         action: 'delete',
                         id: id
                     },
                     success: function(response) {
-                        Swal.fire(
-                            'Deleted!',
-                            'FAQ has been deleted.',
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
+                        if (response.success) {
+                            Swal.fire('Deleted!', response.message, 'success')
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
                     },
                     error: function() {
-                        Swal.fire(
-                            'Error!',
-                            'Failed to delete FAQ.',
-                            'error'
-                        );
+                        Swal.fire('Error!', 'Failed to connect to server', 'error');
                     }
                 });
             }

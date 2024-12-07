@@ -9,7 +9,7 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="icons_admin/logo.png" type="image/x-icon">
     <title>Scholarship Tracker System</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -23,7 +23,6 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.php">
@@ -93,11 +92,11 @@ $feedbacks = $feedbackHandler->getAllFeedbacks();
                                         <td><?= htmlspecialchars($feedback['email']); ?></td>
                                         <td><?= date('M d, Y', strtotime($feedback['created_at'])); ?></td>
                                         <td>
-                                            <form method="POST" action="includes/delete_feedback.php" style="display: inline;">
+                                            <form method="POST" action="../includes/delete_feedback.php" style="display: inline;">
                                                 <input type="hidden" name="id" value="<?= $feedback['id']; ?>">
                                                 <button type="submit" class="btn btn-danger btn-sm" 
                                                         onclick="return confirm('Are you sure you want to delete this feedback?')">
-                                                    Delete
+                                                    <i class="fas fa-trash"></i> Delete
                                                 </button>
                                             </form>
                                         </td>

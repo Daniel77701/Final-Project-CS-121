@@ -4,172 +4,172 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once '../connection/dbh.classes.php';
+require_once __DIR__ . '/../connection/dbh.classes.php';
 
 class FAQ extends Dbh {
+    private $conn;
 
-    // Method to add FAQ to the database
+    public function __construct() {
+        try {
+            $this->conn = $this->connect();
+            // Start transaction by default
+            $this->conn->beginTransaction();
+        } catch (PDOException $e) {
+            error_log("Connection error: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    // Method to add FAQ
     public function addFAQ($question, $answer) {
         try {
-            $sql = "INSERT INTO faqs (question, answer) VALUES (:question, :answer)";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':question', $question);
-            $stmt->bindParam(':answer', $answer);
-            $stmt->execute();
+            // Validate inputs
+            if (empty($question) || empty($answer)) {
+                return ['success' => false, 'message' => 'Question and answer are required'];
+            }
 
-            // Add notification after adding FAQ
-            $this->addNotification("New FAQ added: $question");
-        } catch (PDOException $e) {
-            echo "Error adding FAQ: " . $e->getMessage();
-        }
-    }
+            // Check for duplicate question
+            $checkStmt = $this->conn->prepare(
+                "SELECT id FROM faqs 
+                 WHERE LOWER(question) = LOWER(?) 
+                 AND status = 'Active'"
+            );
+            $checkStmt->execute([trim($question)]);
+            
+            if ($checkStmt->fetch()) {
+                $this->conn->rollBack();
+                return ['success' => false, 'message' => 'This question already exists'];
+            }
 
-    // Method to fetch all FAQs
-    public function getFAQs() {
-        try {
-            $sql = "SELECT * FROM faqs";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll(); 
-        } catch (PDOException $e) {
-            echo "Error fetching FAQs: " . $e->getMessage();
-        }
-    }
+            // Insert new FAQ
+            $stmt = $this->conn->prepare(
+                "INSERT INTO faqs (question, answer, status, created_at) 
+                 VALUES (?, ?, 'Active', CURRENT_TIMESTAMP)"
+            );
+            
+            if (!$stmt->execute([trim($question), trim($answer)])) {
+                $this->conn->rollBack();
+                return ['success' => false, 'message' => 'Failed to add FAQ'];
+            }
 
-    // Method to fetch a FAQ by its ID
-    public function getFAQById($id) {
-        try {
-            $sql = "SELECT * FROM faqs WHERE id = :id";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-            return $stmt->fetch(); 
+            $this->conn->commit();
+            return ['success' => true, 'message' => 'FAQ added successfully!'];
+            
         } catch (PDOException $e) {
-            echo "Error fetching FAQ by ID: " . $e->getMessage();
+            $this->conn->rollBack();
+            error_log("Database error in addFAQ: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Database error occurred'];
         }
     }
 
     // Method to update FAQ
     public function updateFAQ($id, $question, $answer) {
         try {
-            $sql = "UPDATE faqs SET question = :question, answer = :answer WHERE id = :id";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':question', $question);
-            $stmt->bindParam(':answer', $answer);
-            $stmt->execute();
+            // Validate inputs
+            if (empty($id) || empty($question) || empty($answer)) {
+                return ['success' => false, 'message' => 'All fields are required'];
+            }
 
-            // Add notification after updating FAQ
-            $this->addNotification("FAQ updated: $question");
+            // Check for duplicate question excluding current FAQ
+            $checkStmt = $this->conn->prepare(
+                "SELECT id FROM faqs 
+                 WHERE LOWER(question) = LOWER(?) 
+                 AND id != ? 
+                 AND status = 'Active'"
+            );
+            $checkStmt->execute([trim($question), $id]);
+            
+            if ($checkStmt->fetch()) {
+                $this->conn->rollBack();
+                return ['success' => false, 'message' => 'This question already exists'];
+            }
+
+            // Update FAQ
+            $stmt = $this->conn->prepare(
+                "UPDATE faqs 
+                 SET question = ?, answer = ? 
+                 WHERE id = ? AND status = 'Active'"
+            );
+            
+            if (!$stmt->execute([trim($question), trim($answer), $id])) {
+                $this->conn->rollBack();
+                return ['success' => false, 'message' => 'Failed to update FAQ'];
+            }
+
+            $this->conn->commit();
+            return ['success' => true, 'message' => 'FAQ updated successfully!'];
+            
         } catch (PDOException $e) {
-            echo "Error updating FAQ: " . $e->getMessage();
+            $this->conn->rollBack();
+            error_log("Database error in updateFAQ: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Database error occurred'];
         }
     }
 
-    // Method to delete FAQ
+    // Method to delete FAQ (soft delete)
     public function deleteFAQ($id) {
         try {
-            $faq = $this->getFAQById($id);
-            $question = $faq['question']; // Get the question text
+            if (empty($id)) {
+                return ['success' => false, 'message' => 'Invalid FAQ ID'];
+            }
 
-            $sql = "DELETE FROM faqs WHERE id = :id";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
+            $stmt = $this->conn->prepare(
+                "UPDATE faqs 
+                 SET status = 'Inactive' 
+                 WHERE id = ? AND status = 'Active'"
+            );
+            
+            if (!$stmt->execute([$id])) {
+                $this->conn->rollBack();
+                return ['success' => false, 'message' => 'Failed to delete FAQ'];
+            }
 
-            // Add notification after deleting FAQ
-            $this->addNotification("FAQ deleted: $question");
+            $this->conn->commit();
+            return ['success' => true, 'message' => 'FAQ deleted successfully!'];
+            
         } catch (PDOException $e) {
-            echo "Error deleting FAQ: " . $e->getMessage();
+            $this->conn->rollBack();
+            error_log("Database error in deleteFAQ: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Database error occurred'];
         }
     }
 
-    // Method to add a notification
-    public function addNotification($message) {
+    // Method to fetch all active FAQs
+    public function getFAQs() {
         try {
-            $sql = "INSERT INTO notifications (message, status) VALUES (:message, 'unread')";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':message', $message);
+            $stmt = $this->conn->prepare(
+                "SELECT id, question, answer, created_at 
+                 FROM faqs 
+                 WHERE status = 'Active' 
+                 ORDER BY created_at DESC"
+            );
             $stmt->execute();
+            $faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Format each FAQ with HTML structure
+            foreach ($faqs as &$faq) {
+                $faq['formatted_answer'] = '<div class="faq-answer" style="margin-left: 10px; padding: 8px; border-left: 2px solid #ddd;">' . 
+                                         htmlspecialchars($faq['answer']) . 
+                                         '</div>';
+            }
+            
+            return $faqs;
         } catch (PDOException $e) {
-            echo "Error adding notification: " . $e->getMessage();
+            error_log("Error fetching FAQs: " . $e->getMessage());
+            return [];
         }
     }
 
-    // Method to fetch all unread notifications
-    public function getUnreadNotificationsCount() {
+    // Destructor to ensure clean transaction handling
+    public function __destruct() {
         try {
-            $sql = "SELECT COUNT(*) FROM notifications WHERE status = 'unread'";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchColumn();
+            if ($this->conn && $this->conn->inTransaction()) {
+                $this->conn->rollBack();
+            }
         } catch (PDOException $e) {
-            echo "Error fetching notification count: " . $e->getMessage();
+            error_log("Error in destructor: " . $e->getMessage());
         }
     }
-
-    // Method to fetch all notifications
-    public function getNotifications() {
-        try {
-            $sql = "SELECT * FROM notifications ORDER BY created_at DESC";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll();
-        } catch (PDOException $e) {
-            echo "Error fetching notifications: " . $e->getMessage();
-        }
-    }
-
-    // Method to mark a notification as read
-    public function markNotificationAsRead($id) {
-        try {
-            $sql = "UPDATE notifications SET status = 'read' WHERE id = :id";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            echo "Error marking notification as read: " . $e->getMessage();
-        }
-    }
-}
-
-// Instantiate FAQ object to use methods
-$faq = new FAQ();
-
-// Handle Add FAQ (redirects to avoid resubmitting after refresh)
-if (isset($_POST['add'])) {
-    $question = $_POST['question'];
-    $answer = $_POST['answer'];
-    $faq->addFAQ($question, $answer);
-    header("Location: FAQ'S.php"); // Redirect after adding FAQ
-    exit();
-}
-
-// Handle Delete FAQ
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    $faq->deleteFAQ($id);
-    header("Location: FAQ'S.php"); // Redirect after deleting FAQ
-    exit();
-}
-
-// Handle Update FAQ (redirects after updating)
-if (isset($_POST['update'])) {
-    $id = $_POST['id'];
-    $question = $_POST['question'];
-    $answer = $_POST['answer'];
-    $faq->updateFAQ($id, $question, $answer);
-    header("Location: FAQ'S.php"); // Redirect after updating FAQ
-    exit();
-}
-
-// Get all FAQs
-$faqs = $faq->getFAQs();
-
-// Check if there's an edit request
-if (isset($_GET['edit'])) {
-    $id = $_GET['edit'];
-    $faqItem = $faq->getFAQById($id); // Get the FAQ to be edited
 }
 
 ?>

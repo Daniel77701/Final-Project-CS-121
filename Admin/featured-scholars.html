@@ -20,7 +20,6 @@
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.html">
@@ -268,10 +267,10 @@
                     type: 'GET',
                     data: { action: 'get_scholars_list' },
                     success: function(response) {
-                        console.log('Response from server:', response); // Debug log
+                        console.log('Response from server:', response); 
                         if (response.status === 'success') {
                             window.scholarsList = response.scholars;
-                            console.log('Scholars list:', window.scholarsList); // Debug log
+                            console.log('Scholars list:', window.scholarsList); 
                         } else {
                             console.error('Failed to load scholars:', response);
                         }
@@ -368,7 +367,7 @@
                             type: 'POST',
                             data: {
                                 action: 'delete_scholar',
-                                id: id  // Changed from scholar_id to id to match the handler
+                                id: id  
                             },
                             success: function(response) {
                                 if (response.status === 'success') {

@@ -8,14 +8,82 @@ $loginTracker = new LoginTracker();
 $db = new Dbh();
 $conn = $db->connect();
 
-// Modified query to join with students table to get more information
-$query = "SELECT ul.*, s.name, s.sr_code 
-          FROM user_logs ul
-          JOIN students s ON s.id = ul.student_id
-          ORDER BY ul.login_time DESC";
+if (!isset($_SESSION['last_activity_check'])) {
+    $_SESSION['last_activity_check'] = time();
+}
+
+function updateActiveSessions($loginTracker, $conn) {
+    $query = "SELECT ul.*, s.name, s.sr_code 
+              FROM user_logs ul
+              JOIN students s ON s.id = ul.student_id
+              WHERE ul.logout_time IS NULL";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $activeSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($activeSessions as $session) {
+        $duration = time() - strtotime($session['login_time']);
+        $query = "UPDATE user_logs SET duration = ? WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$duration, $session['id']]);
+    }
+}
+
+function cleanupStaleSessions($conn) {
+    try {
+        $query = "UPDATE user_logs 
+                 SET logout_time = NOW(), 
+                     duration = TIMESTAMPDIFF(SECOND, login_time, NOW())
+                 WHERE logout_time IS NULL 
+                 AND TIMESTAMPDIFF(HOUR, login_time, NOW()) > 24";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        
+        error_log("Cleaned up " . $stmt->rowCount() . " stale sessions");
+    } catch (PDOException $e) {
+        error_log("Error cleaning stale sessions: " . $e->getMessage());
+    }
+}
+
+cleanupStaleSessions($conn);
+
+updateActiveSessions($loginTracker, $conn);
+
+// Update the query to join with the correct student record
+$query = "SELECT 
+    ul.id, 
+    ul.login_time, 
+    ul.logout_time, 
+    ul.duration,
+    ul.student_id,
+    s.sr_code,
+    s.name,
+    CASE 
+        WHEN ul.logout_time IS NULL THEN 'Active'
+        ELSE 'Completed'
+    END as status
+    FROM user_logs ul
+    LEFT JOIN students s ON s.id = ul.student_id
+    WHERE ul.student_id IS NOT NULL
+    ORDER BY ul.login_time DESC";
+
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Get statistics
+$statsQuery = "SELECT 
+    COUNT(DISTINCT student_id) as total_students,
+    COUNT(*) as total_sessions,
+    SEC_TO_TIME(AVG(duration)) as avg_duration
+    FROM user_logs 
+    WHERE logout_time IS NOT NULL";
+$statsStmt = $conn->query($statsQuery);
+$stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
+
+error_log("Total Students: " . $stats['total_students']);
+error_log("Total Sessions: " . $stats['total_sessions']);
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +106,6 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <span>Scholarship Tracker System</span>
         </div>
         <div class="welcome d-flex align-items-center">
-            <i class="fas fa-bell"></i> <span class="badge badge-light ml-2">1</span>
             <span class="ml-4">Welcome, Admin</span>
             <i class="fas fa-user ml-2"></i>
             <a href="settings.php">
@@ -70,47 +137,85 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     <main>
         <div class="title-box">
-            <h1>User Logs <a href="settings.html">
-                <img src="icons_admin/setting.png" alt="Settings Icon" style="width: 30px; height: 30px;">
-            </a></h1>
-            <hr>
-            <button class="delete" id="deleteSelected">Delete Selected</button>
+            <h1>User Logs</h1>
+            <div class="right-content">
+                <div class="button-group">
+                    <button class="delete" id="deleteSelected">Delete Selected</button>
+                    <button class="print" onclick="printTable()">
+                        <i class="fas fa-print"></i> Print Logs
+                    </button>
+                </div>
+                <div class="stats-group">
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div class="card-title">Total Students</div>
+                            <div class="card-text"><?php echo $stats['total_students']; ?></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div class="card-title">Total Sessions</div>
+                            <div class="card-text"><?php echo $stats['total_sessions']; ?></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div class="card-title">Average Duration</div>
+                            <div class="card-text"><?php echo $stats['avg_duration']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="action-container">
-            <button class="print" onclick="window.print()">Print</button>
             <div class="search-container">
                 <label for="search">Search:</label>
                 <input type="text" id="search" placeholder="Search...">
             </div>
-        </div>                
+        </div>
+
         <div class="table-box">
-            <table id="logsTable">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAll"></th>
-                        <th>SR Code</th>
-                        <th>Name</th>
-                        <th>Login Time</th>
-                        <th>Logout Time</th>
-                        <th>Duration</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($logs as $log): 
-                        $duration = $loginTracker->formatDuration($log['duration'] ?? 0);
-                    ?>
-                    <tr>
-                        <td><input type="checkbox" class="log-checkbox" value="<?php echo $log['id']; ?>"></td>
-                        <td><?php echo htmlspecialchars($log['sr_code']); ?></td>
-                        <td><?php echo htmlspecialchars($log['name']); ?></td>
-                        <td><?php echo date('M d, Y h:i A', strtotime($log['login_time'])); ?></td>
-                        <td><?php echo $log['logout_time'] ? date('M d, Y h:i A', strtotime($log['logout_time'])) : 'Active'; ?></td>
-                        <td><?php echo $duration; ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="logsTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>SR Code</th>
+                            <th>Name</th>
+                            <th>Login Time</th>
+                            <th>Logout Time</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($logs)): ?>
+                            <?php foreach ($logs as $log): 
+                                $duration = $loginTracker->formatDuration($log['duration'] ?? 0);
+                            ?>
+                                <tr>
+                                    <td><input type="checkbox" class="log-checkbox" value="<?php echo $log['id']; ?>"></td>
+                                    <td><?php echo htmlspecialchars($log['sr_code']); ?></td>
+                                    <td><?php echo htmlspecialchars($log['name']); ?></td>
+                                    <td><?php echo date('M d, Y h:i A', strtotime($log['login_time'])); ?></td>
+                                    <td><?php echo $log['logout_time'] ? date('M d, Y h:i A', strtotime($log['logout_time'])) : 'Active'; ?></td>
+                                    <td><?php echo $duration; ?></td>
+                                    <td>
+                                        <span class="badge <?php echo $log['status'] === 'Active' ? 'badge-success' : 'badge-secondary'; ?>">
+                                            <?php echo $log['status']; ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7" class="text-center">No logs found</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -185,20 +290,126 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     if(selectedLogs.length > 0) {
                         $.ajax({
-                            url: 'includes/delete_logs.php',
+                            url: '../includes/delete_logs.php',
                             type: 'POST',
                             data: {logs: selectedLogs},
                             success: function(response) {
-                                location.reload();
+                                try {
+                                    const result = JSON.parse(response);
+                                    if (result.success) {
+                                        location.reload();
+                                    } else {
+                                        alert('Error: ' + (result.error || 'Unknown error occurred'));
+                                    }
+                                } catch (e) {
+                                    alert('Error processing server response');
+                                }
                             },
                             error: function() {
-                                alert('Error deleting logs');
+                                alert('Error connecting to server');
                             }
                         });
                     }
                 }
             });
         });
+    </script>
+
+    <script>
+    function updateActiveDurations() {
+        $('.table-active').each(function() {
+            const row = $(this);
+            const loginTime = new Date(row.find('.duration').data('login-time')).getTime();
+            const now = new Date().getTime();
+            const durationSeconds = Math.floor((now - loginTime) / 1000);
+            
+            // Format duration
+            let duration = '';
+            if (durationSeconds < 60) {
+                duration = durationSeconds + ' seconds';
+            } else if (durationSeconds < 3600) {
+                duration = Math.floor(durationSeconds / 60) + ' minutes';
+            } else if (durationSeconds < 86400) {
+                const hours = Math.floor(durationSeconds / 3600);
+                const minutes = Math.floor((durationSeconds % 3600) / 60);
+                duration = hours + ' hours ' + minutes + ' minutes';
+            } else {
+                const days = Math.floor(durationSeconds / 86400);
+                const hours = Math.floor((durationSeconds % 86400) / 3600);
+                duration = days + ' days ' + hours + ' hours';
+            }
+            
+            row.find('.duration').text('Active (' + duration + ')');
+        });
+    }
+
+    // Update active sessions every 30 seconds
+    setInterval(updateActiveDurations, 30000);
+    updateActiveDurations(); // Initial update
+
+    // Refresh the page every 5 minutes to catch any new sessions
+    setInterval(() => {
+        location.reload();
+    }, 300000);
+    </script>
+
+    <script>
+    function printTable() {
+        // Create a window for printing
+        const printWindow = window.open('', '_blank');
+        
+        // Add the content to be printed
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>User Logs Report</title>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                <style>
+                    body { padding: 20px; }
+                    .stats-container {
+                        display: flex;
+                        justify-content: space-around;
+                        margin-bottom: 20px;
+                    }
+                    .stat-item {
+                        text-align: center;
+                        padding: 10px;
+                    }
+                    .table { margin-top: 20px; }
+                    @media print {
+                        .no-print { display: none; }
+                    }
+                </style>
+            </head>
+            <body>
+                <h2 class="text-center mb-4">User Logs Report</h2>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <h5>Total Students</h5>
+                        <p>${document.querySelector('.stat-card:nth-child(1) .card-text').textContent}</p>
+                    </div>
+                    <div class="stat-item">
+                        <h5>Total Sessions</h5>
+                        <p>${document.querySelector('.stat-card:nth-child(2) .card-text').textContent}</p>
+                    </div>
+                    <div class="stat-item">
+                        <h5>Average Duration</h5>
+                        <p>${document.querySelector('.stat-card:nth-child(3) .card-text').textContent}</p>
+                    </div>
+                </div>
+                ${document.querySelector('.table-responsive').outerHTML}
+            </body>
+            </html>
+        `);
+        
+        // Print the window
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 250);
+    }
     </script>
 </body>
 </html>

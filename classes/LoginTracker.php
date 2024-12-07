@@ -2,139 +2,72 @@
 require_once '../connection/dbh.classes.php';
 
 class LoginTracker extends Dbh {
-    // Start tracking login session
-    public function startLoginSession($sr_code) {
+    private $conn;
+
+    public function __construct() {
+        $this->conn = $this->connect();
+    }
+
+    public function logLogin($studentId) {
         try {
-            // First get the student's ID using sr_code
-            $query = "SELECT id FROM students WHERE sr_code = ?";
-            $stmt = $this->connect()->prepare($query);
-            $stmt->execute([$sr_code]);
-            $student = $stmt->fetch();
-            
-            if (!$student) {
-                return false;
+            // Check for existing active session
+            $query = "SELECT COUNT(*) as active_count FROM user_logs WHERE student_id = ? AND logout_time IS NULL";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$studentId]);
+            $activeCount = $stmt->fetchColumn();
+
+            if ($activeCount > 0) {
+                // If there is already an active session, return false or handle accordingly
+                return false; // Or throw an exception
             }
 
-            $studentId = $student['id'];
-            $loginTime = date('Y-m-d H:i:s');
-            
-            $query = "INSERT INTO user_logs (student_id, login_time) VALUES (?, ?)";
-            $stmt = $this->connect()->prepare($query);
-            $stmt->execute([$studentId, $loginTime]);
-            
-            // Store the login ID and student info in session
-            $_SESSION['login_id'] = $this->connect()->lastInsertId();
-            $_SESSION['login_time'] = $loginTime;
-            $_SESSION['student_id'] = $studentId;
-            
-            return true;
+            // If no active session, log the new login
+            $query = "INSERT INTO user_logs (student_id, login_time) VALUES (?, NOW())";
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([$studentId]);
         } catch (PDOException $e) {
-            error_log("Error starting login session: " . $e->getMessage());
+            error_log("Error logging login: " . $e->getMessage());
             return false;
         }
     }
 
-    // End tracking login session
-    public function endLoginSession($sr_code) {
+    public function logLogout($studentId) {
         try {
-            if (isset($_SESSION['login_id']) && isset($_SESSION['student_id'])) {
-                $logoutTime = date('Y-m-d H:i:s');
-                $loginId = $_SESSION['login_id'];
-                $studentId = $_SESSION['student_id'];
-                
-                // Calculate duration in seconds
-                $duration = strtotime($logoutTime) - strtotime($_SESSION['login_time']);
-                
-                $query = "UPDATE user_logs 
-                         SET logout_time = ?, duration = ? 
-                         WHERE id = ? AND student_id = ?";
-                
-                $stmt = $this->connect()->prepare($query);
-                $stmt->execute([$logoutTime, $duration, $loginId, $studentId]);
-                
-                // Clear session variables
-                unset($_SESSION['login_id']);
-                unset($_SESSION['login_time']);
-                unset($_SESSION['student_id']);
-                
-                return true;
-            }
-            return false;
+            $query = "UPDATE user_logs 
+                     SET logout_time = NOW(),
+                         duration = TIMESTAMPDIFF(SECOND, login_time, NOW())
+                     WHERE student_id = ? 
+                     AND logout_time IS NULL";
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([$studentId]);
         } catch (PDOException $e) {
-            error_log("Error ending login session: " . $e->getMessage());
+            error_log("Error logging logout: " . $e->getMessage());
             return false;
         }
     }
 
-    // Get total login duration for a student
-    public function getTotalLoginDuration($sr_code) {
-        try {
-            $query = "SELECT SUM(ul.duration) as total_duration 
-                     FROM user_logs ul
-                     JOIN students s ON s.id = ul.student_id
-                     WHERE s.sr_code = ? 
-                     AND ul.duration IS NOT NULL";
-            
-            $stmt = $this->connect()->prepare($query);
-            $stmt->execute([$sr_code]);
-            $result = $stmt->fetch();
-            
-            return $result['total_duration'] ?? 0;
-        } catch (PDOException $e) {
-            error_log("Error getting total duration: " . $e->getMessage());
-            return 0;
-        }
-    }
-
-    // Get login history for a student
-    public function getLoginHistory($sr_code) {
-        try {
-            $query = "SELECT ul.*, s.name, s.sr_code 
-                     FROM user_logs ul
-                     JOIN students s ON s.id = ul.student_id
-                     WHERE s.sr_code = ? 
-                     ORDER BY ul.login_time DESC";
-            
-            $stmt = $this->connect()->prepare($query);
-            $stmt->execute([$sr_code]);
-            return $stmt->fetchAll();
-        } catch (PDOException $e) {
-            error_log("Error getting login history: " . $e->getMessage());
-            return [];
-        }
-    }
-
-    // Get current session duration
-    public function getCurrentSessionDuration($sr_code) {
-        if (isset($_SESSION['login_time'])) {
-            $currentTime = time();
-            $loginTime = strtotime($_SESSION['login_time']);
-            return $currentTime - $loginTime;
-        }
-        return 0;
-    }
-
-    // Format duration into readable time
     public function formatDuration($seconds) {
         if ($seconds < 60) {
             return $seconds . " seconds";
+        } elseif ($seconds < 3600) {
+            $minutes = floor($seconds / 60);
+            return $minutes . " minute" . ($minutes != 1 ? "s" : "");
+        } elseif ($seconds < 86400) {
+            $hours = floor($seconds / 3600);
+            $minutes = floor(($seconds % 3600) / 60);
+            return $hours . " hour" . ($hours != 1 ? "s" : "") . 
+                   ($minutes > 0 ? " " . $minutes . " minute" . ($minutes != 1 ? "s" : "") : "");
+        } else {
+            $days = floor($seconds / 86400);
+            $hours = floor(($seconds % 86400) / 3600);
+            return $days . " day" . ($days != 1 ? "s" : "") . 
+                   ($hours > 0 ? " " . $hours . " hour" . ($hours != 1 ? "s" : "") : "");
         }
-        
-        $minutes = floor($seconds / 60);
-        if ($minutes < 60) {
-            return $minutes . " minutes";
-        }
-        
-        $hours = floor($minutes / 60);
-        $remainingMinutes = $minutes % 60;
-        
-        if ($hours < 24) {
-            return $hours . " hours " . $remainingMinutes . " minutes";
-        }
-        
-        $days = floor($hours / 24);
-        $remainingHours = $hours % 24;
-        
-        return $days . " days " . $remainingHours . " hours";
+    }
+
+    public function endLoginSession($studentId) {
+        $query = "UPDATE user_logs SET logout_time = NOW() WHERE student_id = ? AND logout_time IS NULL";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([$studentId]);
     }
 }

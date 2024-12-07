@@ -1,0 +1,17 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Load profile data for header
+    const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+    if (savedProfile) {
+        // Update header name
+        const headerFullName = document.querySelector('.welcome span.ml-4');
+        if (headerFullName) {
+            headerFullName.textContent = savedProfile.fullName;
+        }
+        
+        // Update header profile picture
+        const headerProfilePic = document.querySelector('.welcome img');
+        if (headerProfilePic && savedProfile.profilePic) {
+            headerProfilePic.src = savedProfile.profilePic;
+        }
+    }
+}); 

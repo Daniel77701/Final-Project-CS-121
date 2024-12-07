@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../icons/logo.png" type="image/x-icon">
+    <title>Scholarship Tracker System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../new_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="nav">
+            <div class="nav_logo" style="display: flex; align-items: center;">
+                <img src="../icons/logo.png" alt="Scholarship Tracker System Logo" style="height: 60px; margin-right: 10px;">
+                <span style="color: red; font-size: 30px;">Scholarship Tracker System</span>
+            </div>
+            <div class="nav_item">
+                <a href="index.html" class="nav_link">Home</a> 
+                <a href="about.html" class="nav_link">About</a>
+                <a href="../contact us.html " class="nav_link">Contact Us</a>
+                <a href="admin.html" class="nav_link">Admin</a>
+            </div>            
+        </div>
+    </div>
+    <div class="container" id="login">
+        <h1 class="form-title">Login</h1>
+        <form action="../php/login.inc.php" method="POST">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="login_id" id="login_id" placeholder=" " required>
+                <label for="login_id">SR Code or Email</label>
+                <small class="error-message" id="loginError"></small>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="pwd" id="pwd" placeholder=" " required>
+                <label for="pwd">Password</label>
+            </div>
+            <div class="forgot-password">
+                <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+            </div>
+            <button type="submit" name="submit" class="btn">Login</button>
+        </form>
+        
+        <div class="links">
+            <p>Don't have an account?</p>
+            <button onclick="window.location.href='user_signup.html';">Sign Up</button>
+        </div>
+    </div>
+
+    <script>
+        // Update the validation function
+        document.getElementById('login_id').addEventListener('input', function() {
+            const value = this.value.trim();
+            const error = document.getElementById('loginError');
+            
+            // Check if it's a BatState-U email or SR code
+            const isValidEmail = value.endsWith('@g.batstate-u.edu.ph');
+            const isSRCode = /^\d{2}-\d{5}$/.test(value);
+            
+            if (!isValidEmail && !isSRCode) {
+                if (value.includes('@')) {
+                    error.textContent = 'Email must be a valid BatState-U email (@g.batstate-u.edu.ph)';
+                } else {
+                    error.textContent = 'Please enter a valid SR code (XX-XXXXX) or BatState-U email';
+                }
+                error.style.color = 'red';
+                this.setCustomValidity('Invalid format');
+            } else {
+                error.textContent = '';
+                this.setCustomValidity('');
+            }
+        });
+
+        // Show error messages from URL parameters
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            
+            if (error) {
+                let message = '';
+                switch(error) {
+                    case 'empty':
+                        message = 'Please fill in all fields';
+                        break;
+                    case 'invalid':
+                        message = 'Invalid SR Code or password';
+                        break;
+                    case 'system':
+                        message = 'System error occurred. Please try again';
+                        break;
+                    default:
+                        message = 'An error occurred';
+                }
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: message
+                });
+            }
+        };
+
+        // Keep the forgot password functionality
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            Swal.fire({
+                title: 'Reset Password',
+                input: 'email',
+                inputPlaceholder: 'Enter your email',
+                showCancelButton: true,
+                confirmButtonText: 'Reset',
+                confirmButtonColor: '#ff0000',
+                cancelButtonColor: '#999',
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                preConfirm: (email) => {
+                    if (!email) {
+                        Swal.showValidationMessage('Please enter your email');
+                        return false;
+                    }
+                    
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({
+                                status: 'success',
+                                message: 'Reset link sent'
+                            });
+                        }, 1000); 
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Reset Link Sent!',
+                        text: 'Check your email',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

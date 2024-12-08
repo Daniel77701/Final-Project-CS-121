@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Scholarship Tracker System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #dc2626;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo {
+            width: 48px;
+            height: 48px;
+        }
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .notification {
+            position: relative;
+            cursor: pointer;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: white;
+            color: #dc2626;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            min-height: calc(100vh - 80px);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 1rem;
+        }
+        .sidebar li {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .sidebar li.active {
+            background-color: #dc2626;
+            color: white;
+        }
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .profile-content {
+            display: flex;
+            gap: 2rem;
+        }
+        .profile-image-large {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+        }
+        .profile-details {
+            flex: 1;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+        }
+        .btn {
+            background-color: #4b5563;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #374151;
+        }
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <img src="/placeholder.svg?height=48&width=48" alt="Logo" class="logo">
+            <h1>Scholarship Tracker System</h1>
+        </div>
+        <div class="user-section">
+            <div class="notification">
+                🔔
+                <span class="notification-badge">2</span>
+            </div>
+            <img src="/placeholder.svg?height=40&width=40" alt="Profile" class="profile-image">
+            <div>
+                <span>Welcome</span>
+                <h2>John Doe</h2>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li>🎛️ Dash Board</li>
+                    <li>📄 View Schema</li>
+                    <li>📝 Application History</li>
+                    <li class="active">👤 Profile</li>
+                    <li>⚙️ Settings</li>
+                    <li>🚪 Logout</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="card">
+                <h2 class="card-title">Profile</h2>
+                <div class="profile-content">
+                    <img src="/placeholder.svg?height=128&width=128" alt="Profile" class="profile-image-large">
+                    <div class="profile-details">
+                        <div class="grid grid-cols-2">
+                            <div class="form-group">
+                                <label for="fullName">Full name:</label>
+                                <input type="text" id="fullName">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactNumber">Contact Number:</label>
+                                <input type="tel" id="contactNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username">
+                            </div>
+                            <div class="form-group">
+                                <label for="registrationDate">Registration Date:</label>
+                                <input type="date" id="registrationDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email">
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <button class="btn">🔒 Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2">
+                <div class="card">
+                    <h2 class="card-title">Exam Result</h2>
+                    <p>Congratulations, you passed the exam!</p>
+                </div>
+                <div class="card">
+                    <h2 class="card-title">Feedback</h2>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" rows="4" placeholder="Type your feedback here..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

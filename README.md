@@ -21,4 +21,4 @@ Documentation (DOCU)- Joan.
 
 Flowchart- Trisha
 
-Entity Relationship Diagram (ERD)/Schema- Jezrev, Trisha, Joan.
+Entity Relationship Diagram (ERD)/Schema- Jezrev, Joan.

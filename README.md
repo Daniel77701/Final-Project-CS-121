@@ -9,7 +9,7 @@ Admin Interface (HTML/CSS)- Jezrev & Joan.
 
 User Interface (HTML/CSS)- Trisha & Joan.
 
-Backend Development (PHP and Four Pillars of OOP)- Jezrev, Joan.
+Backend Development (PHP and Four Pillars of OOP)- Jezrev & Joan.
 
 Database Connectivity- Trisha & Jezrev.
 
@@ -21,4 +21,4 @@ Documentation (DOCU)- Joan.
 
 Flowchart- Trisha.
 
-Entity Relationship Diagram (ERD)/Schema- Jezrev, Joan.
+Entity Relationship Diagram (ERD)/Schema- Jezrev & Joan.
